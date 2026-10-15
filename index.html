@@ -194,6 +194,50 @@ main{max-width:1240px;margin:0 auto}
 .split{font-size:13.5px;color:var(--dust)}
 .art.cov .glyph,.art.cov::after{display:none}
 a.btn{text-decoration:none;color:inherit}
+.posts{display:grid;gap:12px;padding:0 22px;max-width:720px}
+.post{padding:16px;border-radius:16px;background:rgba(16,24,52,.78);border:1px solid var(--line);display:grid;gap:10px}
+.post-head{display:flex;align-items:center;gap:10px}
+.post-head .art{width:38px;height:38px;border-radius:50%;--gs:40px;flex:none}
+.post-head .who{flex:1;min-width:0}
+.post-head .who b{display:block;font-size:14.5px}
+.post-head .who span{font-size:12.5px;color:var(--dust)}
+.post-body{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.5}
+.post-acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.post-acts button{height:34px;padding:0 12px;border-radius:999px;border:1px solid var(--line);font-size:13.5px;display:inline-flex;align-items:center;gap:6px}
+.post-acts button.on{border-color:rgba(232,165,75,.6);color:var(--gold)}
+.post-acts svg{width:16px;height:16px}
+.dots{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--dust)}
+.dots:hover{background:var(--bark-2)}
+.cmts{display:grid;gap:8px;border-top:1px solid var(--line);padding-top:10px}
+.cmt{display:flex;gap:8px;align-items:flex-start;font-size:14px}
+.cmt .body{flex:1;min-width:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.cmt .body b{margin-right:6px}
+.cmt .meta2{font-size:12px;color:var(--dust)}
+.cmt-form{display:flex;gap:8px}
+.cmt-form input{flex:1;min-width:0;height:38px;background:var(--bark-2);border:1px solid var(--line);border-radius:999px;padding:0 14px}
+.cmt-form button{height:38px;padding:0 14px;border-radius:999px;background:var(--bark-3);font-weight:600;font-size:13.5px}
+.composer{padding:0 22px;max-width:720px;margin-bottom:12px}
+.composer .form{margin:0;max-width:none}
+.composer textarea{min-height:80px;background:var(--bark-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;resize:vertical;width:100%;box-sizing:border-box}
+.menu-list{display:grid;gap:8px}
+.menu-list button{text-align:left;padding:14px;border-radius:12px;background:var(--bark-2);font-weight:600}
+.menu-list button.danger{color:#ffb3b3}
+.reasons{display:grid;gap:8px}
+.reasons label{display:flex;gap:10px;align-items:center;padding:12px;border-radius:10px;background:var(--bark-2);cursor:pointer}
+.legal{padding:0 22px;max-width:760px}
+.legal h2{font-family:var(--display);font-size:19px;margin:22px 0 6px}
+.legal p{color:#c9d2ee;margin:0;line-height:1.6}
+.legal .upd{color:var(--dust);font-size:13px}
+.legal-links{display:flex;gap:14px;flex-wrap:wrap;padding:24px 22px 0;font-size:13px}
+.legal-links button{color:var(--dust);text-decoration:underline;text-underline-offset:2px}
+.agree{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#c9d2ee}
+.agree input{margin-top:3px;width:18px;height:18px;flex:none}
+.agree button{color:var(--gold);text-decoration:underline;text-underline-offset:2px}
+.rep{padding:16px;border-radius:14px;background:rgba(16,24,52,.78);border:1px solid var(--line);display:grid;gap:8px}
+.rep .q{white-space:pre-wrap;overflow-wrap:anywhere;padding:10px 12px;border-radius:10px;background:var(--bark-2);font-size:14px}
+.rep .meta2{font-size:13px;color:var(--dust)}
+.blist{display:grid;gap:8px}
+.blist div{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:var(--bark-2)}
 .merch-note{font-size:13px;color:var(--dust);margin:0}
 .drop{cursor:pointer}
 .drop.has{border-style:solid;border-color:rgba(127,178,255,.45);color:#cfe0ff}
@@ -727,6 +771,11 @@ const I = {
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
   help:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .9-1 1.6v.6M12 17h.01"/></svg>',
+  heart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  heartOn:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
+  shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6z"/></svg>',
   bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg>'
 };
 
@@ -816,7 +865,7 @@ const art = (p,letter,cls='') => `<div class="art ${cls}${String(p).startsWith('
 /* ---------- nav ---------- */
 const TABS = [['home','Home',I.home],['music','Music',I.music],['videos','Videos',I.video],['library','Library',I.lib],['studio','Studio',I.studio],['help','Help',I.help]];
 function renderNav(){
-  const html = TABS.map(([id,label,ic])=>`<button class="tab" data-action="tab" data-tab="${id}" ${S.tab===id&&!S.artist?'aria-current="page"':''}>${ic}<span>${label}</span></button>`).join('');
+  const html = (S.isAdmin?[...TABS,['admin','Admin',I.shield]]:TABS).map(([id,label,ic])=>`<button class="tab" data-action="tab" data-tab="${id}" ${S.tab===id&&!S.artist?'aria-current="page"':''}>${ic}<span>${label}</span></button>`).join('');
   document.getElementById('tabbar').innerHTML = html;
   document.getElementById('sidetabs').innerHTML = html;
   document.getElementById('acct').innerHTML = S.user
@@ -878,7 +927,9 @@ function viewHome(){
     <div class="tracks two">${tracks.map(trow).join('')}</div></section>
   <section class="section"><div class="section-head"><h2>Live sessions and short films</h2></div>
     <div class="rail">${videos.filter(v=>v.form==='long'&&v.kind!=='Music video').map(vcard).join('')}</div></section>
-  <p class="note">Prototype with sample artists and placeholder artwork. Purchases and uploads are simulated.</p>`;
+  ${S.user&&S.follows.size?postsSection('feed','From Stars you follow','No updates yet from the Stars you follow.'):postsSection('all','Latest from the Stars','')}
+  ${SHOW_SAMPLES?'<p class="note">Some artists shown are samples while StarTier gets ready to launch.</p>':''}
+  ${legalLinks()}`;
 }
 
 function viewMusic(){
@@ -925,7 +976,7 @@ function viewDiscover(){
 }
 
 function viewLibrary(){
-  const ov = videos.filter(v=>S.owned.has(v.id)), ot = tracks.filter(t=>S.owned.has(t.id)), fa = artists.filter(a=>S.following.has(a.id));
+  const ov = videos.filter(v=>S.owned.has(v.id)), ot = tracks.filter(t=>S.owned.has(t.id)), fa = artists.filter(a=>following(a.id));
   return `<h1 class="page-title">Your library</h1>
   ${!ov.length&&!ot.length?`<div class="empty"><b>Nothing here yet</b>Videos and tracks you buy show up here to watch and play anytime.<br><button class="btn btn-gold" data-action="tab" data-tab="home">Browse premieres</button></div>`:''}
   ${ov.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>Videos you own</h2></div><div class="rail">${ov.map(vcard).join('')}</div></section>`:''}
@@ -950,6 +1001,7 @@ function viewStudio(){
   ${S.user.pro
     ? `<div class="fee-note" style="margin:0 22px 18px;max-width:640px"><b>Star Pro is on.</b> Your Featured badge, higher placement in search, and homepage promo spots are active.</div>`
     : `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Star Pro</h3><p>Get a Featured badge, show up higher in search, and get homepage and social promo spots. ${money(PRO_PRICE)} a month.</p></div><button class="btn btn-gold" data-action="upgrade">Upgrade</button></div>`}
+  <section class="section" style="padding-top:0"><div class="section-head"><h2>Post an update</h2><button class="link" data-action="mypage">View my page</button></div></section>${composer()}
   <div class="form" style="margin-bottom:18px">
     <h3>Your merch store</h3>
     <label class="field">Link to your store (Shopify, Printful, Etsy, Big Cartel…)<input id="merchUrl" type="url" maxlength="300" placeholder="https://yourstore.com" value="${esc(S.user.merch||'')}"></label>
@@ -986,23 +1038,28 @@ function viewStudio(){
 }
 
 function viewArtist(){
-  const a = A(S.artist), f = S.following.has(a.id);
+  const a = A(S.artist); if(!a){ S.artist=null; return viewHome(); }
+  const f = following(a.id), mine = S.user&&S.user.id===a.id;
+  if(a.real && !(a.id in S.fcount)) loadFollowerCount(a.id);
+  const fol = a.real ? (S.fcount[a.id]||0) : a.followers+(f?1:0);
   const av = videos.filter(v=>v.artist===a.id&&v.form==='long'), as2 = videos.filter(v=>v.artist===a.id&&v.form==='short'), at = tracks.filter(t=>t.artist===a.id);
   return `<div class="banner"><div class="hero-bg" style="background-image:url(${SKIES[artists.indexOf(a)%3]})"></div><div class="shade"></div>
     <button class="back" data-action="tab" data-tab="${S.tab}" aria-label="Back">${I.back}</button></div>
   <div class="artist-head">${art(a.p,a.name[0])}
     <div><h1>${esc(a.name)}</h1><div class="s">${makesLabel(a.makes)}, ${esc(a.city)}</div></div></div>
   <div class="taglist">${[...(a.genres||[]),...(a.cats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
-  <div class="stats"><div><b>${k(a.followers+(f?1:0))}</b><span>Followers</span></div>${a.makes!=='music'?`<div><b>${av.length+as2.length}</b><span>Videos</span></div>`:''}${a.makes!=='video'?`<div><b>${at.length}</b><span>Songs</span></div>`:''}</div>
+  <div class="stats"><div><b>${k(fol)}</b><span>Followers</span></div>${a.makes!=='music'?`<div><b>${av.length+as2.length}</b><span>Videos</span></div>`:''}${a.makes!=='video'?`<div><b>${at.length}</b><span>Songs</span></div>`:''}</div>
   <div class="row-btns" style="padding:0 22px">
-    <button class="btn ${f?'btn-ghost':'btn-gold'}" data-action="follow" data-id="${a.id}">${f?'Following':'Follow'}</button>
+    ${mine?`<button class="btn btn-gold" data-action="tab" data-tab="studio">Your studio</button>`:`<button class="btn ${f?'btn-ghost':'btn-gold'}" data-action="follow" data-id="${a.id}">${f?'Following':'Follow'}</button>`}
     <button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button>
     ${a.merch?`<a class="btn btn-ghost" href="${esc(a.merch)}" target="_blank" rel="noopener noreferrer nofollow" data-action="merch">${I.bag}Shop merch</a>`:''}
+    ${a.real?`<button class="dots" style="width:46px;height:46px;border:1px solid var(--line)" data-action="amenu" data-id="${a.id}" aria-label="More options">${I.dots}</button>`:''}
   </div>
   <p class="bio">${esc(a.bio)}</p>
   ${at.length?`<section class="section"><div class="section-head"><h2>Music</h2></div><div class="tracks">${at.map(trow).join('')}</div></section>`:''}
   ${av.length?`<section class="section"><div class="section-head"><h2>Videos</h2></div><div class="rail">${av.map(vcard).join('')}</div></section>`:''}
-  ${as2.length?`<section class="section"><div class="section-head"><h2>Shorts</h2></div><div class="rail">${as2.map(vcard).join('')}</div></section>`:''}`;
+  ${as2.length?`<section class="section"><div class="section-head"><h2>Shorts</h2></div><div class="rail">${as2.map(vcard).join('')}</div></section>`:''}
+  ${a.real?(mine?`<section class="section"><div class="section-head"><h2>Updates</h2></div></section>${composer()}`:'')+postsSection('a:'+a.id, mine?'':'Updates', mine?'Your updates will show here.':''):''}`;
 }
 
 function viewJoin(){
@@ -1045,6 +1102,7 @@ function viewJoinStar(){
       <button type="button" class="plan" data-action="plan" data-plan="pro" aria-pressed="${plan==='pro'}"><span class="tag">More reach</span><b>Star Pro</b><span class="pr">${money(PRO_PRICE)}<small> /month</small></span><ul><li>Everything in Free</li><li>Featured badge, higher in search</li><li>Homepage and social promo spots</li><li>Detailed fan and sales stats</li></ul></button>
     </div>
     <div class="fee-note">On every plan you keep 85% of each sale. StarTier keeps 15%.</div>
+    <label class="agree"><input type="checkbox" name="agree"><span>I'm at least 13, and I agree to the <button type="button" data-action="legal" data-doc="terms">Terms</button>, <button type="button" data-action="legal" data-doc="guidelines">Community Guidelines</button> and <button type="button" data-action="legal" data-doc="privacy">Privacy Policy</button>.</span></label>
     <button class="btn btn-gold full" type="submit">Create my Star account</button>
     <p class="small">Already have an account? <button type="button" class="link" data-action="tab" data-tab="login">Log in</button><br>Are you a fan? <button type="button" class="link" data-action="tab" data-tab="join-supporter">Sign up as a Supporter</button></p>
   </form>`;
@@ -1065,6 +1123,7 @@ function viewJoinSupporter(){
       <button type="button" class="plan" data-action="plan" data-plan="free" aria-pressed="${plan==='free'}"><b>Free</b><span class="pr">$0<small> /month</small></span><ul><li>Browse and discover by genre</li><li>30-second previews</li><li>Buy songs and videos to keep</li><li>Follow and tip artists</li></ul></button>
       <button type="button" class="plan" data-action="plan" data-plan="pass" aria-pressed="${plan==='pass'}"><span class="tag">Best value</span><b>StarPass</b><span class="pr">${money(PASS_PRICE)}<small> /month</small></span><ul><li>Stream every song and video in full</li><li>20% off every download</li><li>Early access to premieres</li><li>Cancel anytime</li></ul></button>
     </div>
+    <label class="agree"><input type="checkbox" name="agree"><span>I'm at least 13, and I agree to the <button type="button" data-action="legal" data-doc="terms">Terms</button>, <button type="button" data-action="legal" data-doc="guidelines">Community Guidelines</button> and <button type="button" data-action="legal" data-doc="privacy">Privacy Policy</button>.</span></label>
     <button class="btn btn-gold full" type="submit">Create my account</button>
     <p class="small">Already have an account? <button type="button" class="link" data-action="tab" data-tab="login">Log in</button><br>Are you an artist? <button type="button" class="link" data-action="tab" data-tab="join-star">Sign up as a Star</button></p>
   </form>`;
@@ -1110,7 +1169,7 @@ function viewHelp(){
     <label class="field">Topic<select name="topic">${['Account','Payments and payouts','Uploads','Copyright or report','Something else'].map(t=>`<option ${S.contactTopic===t?'selected':''}>${t}</option>`).join('')}</select></label>
     <label class="field">Message<textarea name="message" maxlength="5000">${esc(S.contactDraft||'')}</textarea></label>
     <button class="btn btn-gold full" type="submit">Send message</button>
-  </form></div>`;
+  </form></div>${legalLinks()}`;
 }
 async function sendSupport({name,email,topic,message,source}){
   if(!sb) return {error:{message:'Messages are not connected yet'}};
@@ -1212,13 +1271,13 @@ async function loadCatalog(){
   let profs=[];
   if(ids.length){ const r2=await sb.from('profiles').select('id,display_name,city,creator_type,genres,video_categories,is_pro,merch_url').in('id',ids); profs=r2.data||[]; }
   for(const arr of [artists,videos,tracks]) for(let i=arr.length-1;i>=0;i--) if(arr[i].real||!SHOW_SAMPLES) arr.splice(i,1);
-  artists.unshift(...profs.map(artistFromProfile));
+  artists.unshift(...profs.filter(p=>!S.blocked.has(p.id)).map(artistFromProfile));
   const nv=[],nt=[];
-  for(const r of rels){ if(!profs.some(p=>p.id===r.artist_id)) continue; const o=releaseToItem(r); (r.kind==='song'?nt:nv).push(o); }
+  for(const r of rels){ if(!profs.some(p=>p.id===r.artist_id)||S.blocked.has(r.artist_id)) continue; const o=releaseToItem(r); (r.kind==='song'?nt:nv).push(o); }
   videos.unshift(...nv); tracks.unshift(...nt);
 }
 async function loadMine(){
-  S.mine=[]; if(!sb||!S.user||S.user.role!=='star') return;
+  S.mine=[]; await loadSocial(); if(!sb||!S.user||S.user.role!=='star') return;
   const {data}=await sb.from('releases').select(REL_COLS).eq('artist_id',S.user.id).neq('status','removed').order('created_at',{ascending:false});
   S.mine=data||[];
 }
@@ -1259,7 +1318,7 @@ function openRealVideo(v){
     <div class="lockmsg" id="vmsg">Loading video…</div></div>
   <div class="sheet-body"><h2>${esc(v.title)}</h2><div class="s">${[esc(v.kind),esc(v.len),v.price?money(v.price):'free'].filter(Boolean).join(', ')}</div>${v.desc?`<p>${esc(v.desc)}</p>`:''}
     <button class="byline" data-action="artist" data-id="${a.id}">${art(a.p,a.name[0])}<div><b>${esc(a.name)}</b><div class="s">${esc(makesLabel(a.makes))}</div></div></button>
-    <div class="row-btns"><button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button></div>
+    <div class="row-btns"><button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button>${mine?'':`<button class="btn btn-ghost" data-action="report" data-id="${v.id}">Report</button>`}</div>
   </div>`);
   (async()=>{
     const msg=()=>document.getElementById('vmsg');
@@ -1388,6 +1447,222 @@ async function relAction(action,id){
   }
 }
 
+const LEGAL = { name:'StarTier', site:'startier.kingjordanapps.com', email:'support@kingjordanapps.com', updated:'October 15, 2026', state:'Florida', county:'Miami-Dade County' };
+const LEGAL_DOCS = {
+terms: { title:'Terms of Service', body:[
+['Welcome to StarTier', `These Terms are an agreement between you and StarTier ("we", "us"). By creating an account or using StarTier at ${LEGAL.site}, you agree to these Terms, our Privacy Policy, our Community Guidelines and our Copyright Policy. If you don't agree, please don't use StarTier.`],
+['Who can use StarTier', `You must be at least 13 years old to use StarTier. If you are under 18, you need permission from a parent or guardian, and they agree to these Terms for you. You're responsible for keeping your password safe and for everything that happens on your account. Give us true information when you sign up.`],
+['Stars and Supporters', `Stars are artists and creators who upload music and videos. Supporters are fans who discover, stream, buy and tip. Either kind of account can follow Stars, like and comment on posts, and report content.`],
+['Your content stays yours', `If you're a Star, you keep ownership of everything you upload. By uploading, you give StarTier a non-exclusive, worldwide, royalty-free license to host, store, copy, stream, display, sell (at the price you set) and promote your content on and off StarTier, only so we can run and grow the service. This license ends when you delete the content, except for copies fans already bought, backups kept for a short time, and anything we must keep by law.`],
+['You need the rights to what you upload', `Only upload work you created or have permission to share. That includes the beats, samples, lyrics, footage and images in it. You're responsible for getting any licenses, clearances and permissions, and for paying anyone you owe, like producers, featured artists or collaborators.`],
+['Sales, prices and our fee', `Stars set their own prices, including free. When paid sales and tips are switched on, StarTier keeps 15% of each sale and tip, and the Star gets the rest, minus any payment processing or tax amounts the law requires. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
+['Paid plans', `Star Pro and StarPass are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
+['Merch and outside links', `Stars can link to their own merch stores. Those stores are run by the Star or by other companies, not StarTier. Any purchase you make there is between you and that store, including shipping, returns and refunds. We aren't responsible for outside websites.`],
+['Rules', `Follow our Community Guidelines. Don't break the law, steal other people's work, harass people, spam, scrape or copy StarTier, try to get around locks on paid content, upload viruses, or interfere with how StarTier works.`],
+['What we can do', `We can remove content, turn off features, or suspend or close accounts that break these Terms or put others at risk. We can also change or stop parts of StarTier. If we close your account for a reason that isn't your fault, we'll try to give you a chance to download your content first.`],
+['No guarantees', `StarTier is provided "as is." We work hard to keep it running, but we can't promise it will always be available, error-free or secure. To the fullest extent the law allows, StarTier is not liable for indirect or consequential losses, lost profits or lost data, and our total liability to you is limited to the greater of the amount you paid us in the last 12 months or $50.`],
+['Your responsibility', `If your content or actions cause a legal claim against StarTier, you agree to cover the reasonable costs, as far as the law allows.`],
+['Disputes', `These Terms are governed by the laws of the State of ${LEGAL.state}. Before going to court, contact us so we can try to fix things. Any court case will be in ${LEGAL.county}, ${LEGAL.state}, unless the law says otherwise.`],
+['Changes', `We may update these Terms. If the changes are important, we'll let you know in the app or by email. Using StarTier after changes means you accept them.`],
+['Contact', `Questions? Email ${LEGAL.email} or use the contact form on the Help page.`]
+]},
+privacy: { title:'Privacy Policy', body:[
+['The short version', `We collect only what we need to run StarTier. We don't sell your personal information. You can ask us to delete your account at any time.`],
+['What we collect', `Account details: your email, password (stored securely, we can't see it), name, and whether you're a Star or Supporter. Profile details you add: artist name, city, genres, video categories and merch link. Content you post: songs, videos, cover art, descriptions, posts, comments and likes. Activity: who you follow, who you block, and reports you send. Messages you send to our help chat or contact form. Basic technical data our providers record, like your IP address, browser type and errors, to keep the service secure and working. When payments switch on, our payment partner collects your payment details. We don't store full card numbers.`],
+['How we use it', `To run your account and show your content; to stream and sell music and videos; to send account emails like confirmations and password resets; to answer help requests; to keep StarTier safe, investigate reports and enforce our rules; and to improve the service.`],
+['What other people can see', `Your Star profile, releases, posts, followers count and comments are public. Your display name shows next to your comments. Your email, password, blocks and reports are private.`],
+['Companies that help us', `We use trusted providers to run StarTier: Supabase (accounts, database and file storage), Hetzner (our server), Cloudflare (domain and security), Bunny.net (video hosting and streaming), Resend (sending emails), Anthropic (the AI that powers our help chat, which receives your chat messages to answer them), and, when payments launch, Stripe (payments and payouts). They can only use your information to provide their services to us.`],
+['When we share information', `We share information only with the providers above, when the law requires it, to protect people's safety or StarTier's rights, or as part of a business sale or merger (and we'd tell you).`],
+['How long we keep it', `We keep your information while your account is open. When you delete your account, we delete or anonymize your personal information within a reasonable time, except what we must keep for legal, tax, safety or fraud reasons.`],
+['Your choices and rights', `You can update your profile, delete your releases and posts, and block people at any time. To get a copy of your information, fix it, or delete your account, email ${LEGAL.email}. Depending on where you live, you may have more rights under your local law, and we'll honor them.`],
+['Kids', `StarTier is not for children under 13. If we learn we've collected information from a child under 13, we'll delete it. If you believe that's happened, contact us.`],
+['Security', `We use encryption, secure logins and access rules to protect your information, but no system is perfectly secure.`],
+['Changes and contact', `We'll update this policy as StarTier grows and tell you about important changes. Questions? Email ${LEGAL.email}.`]
+]},
+copyright: { title:'Copyright Policy', body:[
+['We respect artists\' rights', `StarTier is built for artists, so we take copyright seriously. Only upload work you own or have permission to share.`],
+['Report stolen work', `If you believe something on StarTier uses your work without permission, tap Report on it and choose "Stolen work or copyright," or send a notice to ${LEGAL.email} with: your name and contact information; a description of your work; a link to the content on StarTier; a statement that you believe in good faith the use isn't authorized by you, your agent or the law; a statement that the information is accurate and, under penalty of perjury, that you are the owner or authorized to act for the owner; and your physical or electronic signature.`],
+['What happens next', `We'll review the notice, remove or disable the content if it's valid, and let the uploader know.`],
+['If your content was removed by mistake', `You can send a counter-notice to ${LEGAL.email} with your name and contact information; the content that was removed and where it was; a statement under penalty of perjury that you believe it was removed by mistake; your consent to the jurisdiction of the federal court for your area; and your signature. We may restore the content unless the person who complained tells us they've filed a court action.`],
+['Repeat infringers', `We close the accounts of people who repeatedly upload work that isn't theirs.`],
+['False claims', `Knowingly sending a false notice or counter-notice can make you legally responsible for damages.`]
+]},
+guidelines: { title:'Community Guidelines', body:[
+['Keep it real and respectful', `StarTier is a place to discover and support rising artists. Treat people the way you'd want your own fans treated.`],
+['Not allowed', `Uploading work that isn't yours. Harassment, bullying, threats or hate based on who someone is. Sexual content involving minors, ever, and anything sexually explicit. Graphic violence or content that encourages it. Spam, scams, fake accounts or pretending to be someone else. Sharing other people's private information. Anything illegal.`],
+['Use the tools', `If you see something wrong, tap Report. If someone is bothering you, tap Block: they won't be able to see your posts, follow you or comment on your posts, and you won't see theirs.`],
+['What we do', `We review reports and may remove content, limit features, or ban accounts. Serious or repeated problems lead to a permanent ban.`]
+]}
+};
+
+function viewLegal(){
+  const doc=LEGAL_DOCS[S.legal]||LEGAL_DOCS.terms;
+  return `<h1 class="page-title">${esc(doc.title)}</h1>
+  <div class="legal"><p class="upd">Last updated ${esc(LEGAL.updated)}</p>${doc.body.map(([t,p])=>`<h2>${esc(t)}</h2><p>${esc(p)}</p>`).join('')}</div>${legalLinks()}`;
+}
+function legalLinks(){ return `<div class="legal-links">${[['terms','Terms'],['privacy','Privacy'],['copyright','Copyright'],['guidelines','Community Guidelines']].map(([k2,l])=>`<button data-action="legal" data-doc="${k2}">${l}</button>`).join('')}</div>`; }
+
+/* ---------- social: follows, blocks, posts ---------- */
+Object.assign(S,{ follows:new Set(), blocked:new Set(), isAdmin:false, fcount:{}, posts:{}, plike:{}, pcomments:{}, names:{}, openCmts:new Set(), loading:{} });
+const isReal = id => !!(A(id)&&A(id).real);
+const following = id => isReal(id) ? S.follows.has(id) : S.following.has(id);
+function ago(ts){ const s=(Date.now()-Date.parse(ts))/1000; if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m'; if(s<86400) return Math.floor(s/3600)+'h'; if(s<604800) return Math.floor(s/86400)+'d'; return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
+async function loadSocial(){
+  S.follows=new Set(); S.blocked=new Set(); S.isAdmin=false; S.posts={};
+  if(!sb||!S.user) return;
+  const [f,b,ad]=await Promise.all([
+    sb.from('follows').select('followee_id').eq('follower_id',S.user.id),
+    sb.from('blocks').select('blocked_id').eq('blocker_id',S.user.id),
+    sb.rpc('is_admin')]);
+  S.follows=new Set((f.data||[]).map(r=>r.followee_id)); S.blocked=new Set((b.data||[]).map(r=>r.blocked_id)); S.isAdmin=ad.data===true;
+}
+function needLogin(what){ if(S.user) return false; toast(`Log in or join free to ${what}`); S.artist=null; S.tab='join'; if(scrim.classList.contains('open')) closeSheet(); render(); return true; }
+async function toggleFollow(id){
+  const a=A(id); if(!a) return;
+  if(!isReal(id)){ S.following.has(id)?S.following.delete(id):S.following.add(id); render(true); toast(S.following.has(id)?`Following ${a.name}`:`Unfollowed ${a.name}`); return; }
+  if(needLogin('follow Stars')) return;
+  if(S.user.id===id){ toast("That's you!"); return; }
+  const on=S.follows.has(id);
+  const {error}= on ? await sb.from('follows').delete().eq('follower_id',S.user.id).eq('followee_id',id)
+                    : await sb.from('follows').insert({followee_id:id});
+  if(error){ toast("Couldn't do that right now"); return; }
+  on?S.follows.delete(id):S.follows.add(id); S.fcount[id]=(S.fcount[id]||0)+(on?-1:1); delete S.posts.feed;
+  toast(on?`Unfollowed ${a.name}`:`Following ${a.name}`); render(true);
+}
+async function loadFollowerCount(id){
+  if(!sb||S.loading['fc'+id]) return; S.loading['fc'+id]=1;
+  const {count}=await sb.from('follows').select('follower_id',{count:'exact',head:true}).eq('followee_id',id);
+  S.fcount[id]=count||0; delete S.loading['fc'+id]; if(S.artist===id) render(true);
+}
+async function fetchNames(ids){
+  const need=[...new Set(ids)].filter(x=>x&&!S.names[x]&&!(A(x)&&A(x).real)); if(!need.length) return;
+  const {data}=await sb.rpc('names_for',{ids:need.slice(0,500)}); (data||[]).forEach(r=>S.names[r.id]=r);
+}
+const nameOf = id => (A(id)&&A(id).real&&A(id).name) || (S.names[id]&&S.names[id].display_name) || 'Member';
+async function loadPosts(key){
+  if(!sb||S.loading[key]) return; S.loading[key]=1;
+  let q=sb.from('posts').select('id,author_id,body,created_at').eq('status','live').order('created_at',{ascending:false}).limit(40);
+  if(key==='feed'){ const ids=[...S.follows]; if(!ids.length){ S.posts[key]=[]; delete S.loading[key]; return; } q=q.in('author_id',ids); }
+  else if(key.startsWith('a:')) q=q.eq('author_id',key.slice(2));
+  const {data,error}=await q; const posts=error?[]:(data||[]).filter(p=>!S.blocked.has(p.author_id));
+  const ids=posts.map(p=>p.id);
+  if(ids.length){
+    const [lk,cm]=await Promise.all([
+      sb.from('post_likes').select('post_id,user_id').in('post_id',ids).limit(5000),
+      sb.from('comments').select('id,post_id,author_id,body,created_at').in('post_id',ids).eq('status','live').order('created_at').limit(2000)]);
+    ids.forEach(i=>{ S.plike[i]={n:0,me:false}; S.pcomments[i]=[]; });
+    (lk.data||[]).forEach(r=>{ const o=S.plike[r.post_id]; o.n++; if(S.user&&r.user_id===S.user.id) o.me=true; });
+    (cm.data||[]).filter(c=>!S.blocked.has(c.author_id)).forEach(c=>S.pcomments[c.post_id].push(c));
+    await fetchNames([...posts.map(p=>p.author_id),...(cm.data||[]).map(c=>c.author_id)]);
+  }
+  S.posts[key]=posts; delete S.loading[key]; render(true);
+}
+function postsFor(key){ if(!(key in S.posts)){ loadPosts(key); return null; } return S.posts[key]; }
+function postCard(p){
+  const a=A(p.author_id), lk=S.plike[p.id]||{n:0,me:false}, cm=S.pcomments[p.id]||[], open=S.openCmts.has(p.id);
+  const av = a ? art(a.p,a.name[0]) : `<div class="art" style="--g:${P.night}"><span class="glyph">${esc(nameOf(p.author_id)[0]||'?')}</span></div>`;
+  return `<article class="post">
+    <div class="post-head">${av}<button class="who" style="text-align:left" data-action="artist" data-id="${p.author_id}"><b>${esc(nameOf(p.author_id))}</b><span>${ago(p.created_at)}</span></button>
+      <button class="dots" data-action="pmenu" data-kind="post" data-id="${p.id}" data-owner="${p.author_id}" aria-label="More options">${I.dots}</button></div>
+    <div class="post-body">${esc(p.body)}</div>
+    <div class="post-acts"><button class="${lk.me?'on':''}" data-action="like" data-id="${p.id}" aria-pressed="${lk.me}">${lk.me?I.heartOn:I.heart}${lk.n||''} Like</button>
+      <button data-action="cmts" data-id="${p.id}" aria-expanded="${open}">${I.chat}${cm.length||''} Comment${cm.length===1?'':'s'}</button></div>
+    ${open?`<div class="cmts">${cm.map(c=>`<div class="cmt"><div class="body"><b>${esc(nameOf(c.author_id))}</b>${esc(c.body)}<div class="meta2">${ago(c.created_at)}</div></div>
+      <button class="dots" data-action="pmenu" data-kind="comment" data-id="${c.id}" data-owner="${c.author_id}" data-post-owner="${p.author_id}" aria-label="Comment options">${I.dots}</button></div>`).join('')}
+      ${S.user?`<form class="cmt-form" data-post="${p.id}"><input name="c" maxlength="500" placeholder="Add a comment" aria-label="Add a comment"><button type="submit">Send</button></form>`:`<button class="link" data-action="tab" data-tab="join">Join free to comment</button>`}</div>`:''}
+  </article>`;
+}
+function postsSection(key,title,emptyMsg){
+  const list=postsFor(key);
+  if(list===null) return `<section class="section"><div class="section-head"><h2>${esc(title)}</h2></div><div class="posts"><div class="empty">Loading…</div></div></section>`;
+  if(!list.length&&!emptyMsg) return '';
+  return `<section class="section"><div class="section-head"><h2>${esc(title)}</h2></div><div class="posts">${list.length?list.map(postCard).join(''):`<div class="empty">${emptyMsg}</div>`}</div></section>`;
+}
+function composer(){
+  return `<div class="composer"><form class="form" id="postForm"><textarea name="body" maxlength="1000" placeholder="Share an update with your fans… new drop, show, behind the scenes" aria-label="Post an update"></textarea>
+    <div class="row-btns" style="justify-content:flex-end"><button class="btn btn-gold btn-sm" type="submit">Post update</button></div></form></div>`;
+}
+async function toggleLike(id){
+  if(needLogin('like posts')) return;
+  const o=S.plike[id]||(S.plike[id]={n:0,me:false});
+  const {error}= o.me ? await sb.from('post_likes').delete().eq('post_id',id).eq('user_id',S.user.id) : await sb.from('post_likes').insert({post_id:id});
+  if(error){ toast("Couldn't do that right now"); return; }
+  o.me=!o.me; o.n+=o.me?1:-1; render(true);
+}
+function openPostMenu(d){
+  const mine=S.user&&S.user.id===d.owner, onMyPost=S.user&&S.user.id===d.postOwner;
+  const items=[];
+  if(mine||(d.kind==='comment'&&onMyPost)) items.push(['delpost','Delete','danger']);
+  if(!mine){ items.push(['report','Report']); items.push(['block',`Block ${nameOf(d.owner)}`,'danger']); }
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${d.kind==='post'?'Post':'Comment'}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <div class="menu-list">${items.map(([a2,l,c])=>`<button class="${c||''}" data-action="pm-${a2}" data-kind="${d.kind}" data-id="${d.id}" data-owner="${d.owner}">${esc(l)}</button>`).join('')}</div></div>`);
+}
+function openArtistMenu(id){
+  const a=A(id); const mine=S.user&&S.user.id===id;
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${esc(a.name)}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <div class="menu-list">${mine?`<button data-action="tab" data-tab="studio">Go to your studio</button>`:`<button data-action="pm-report" data-kind="profile" data-id="${id}" data-owner="${id}">Report ${esc(a.name)}</button>
+      <button class="danger" data-action="pm-block" data-owner="${id}">Block ${esc(a.name)}</button>`}</div></div>`);
+}
+const REASONS=[['copyright','Stolen work or copyright'],['spam','Spam or scam'],['harassment','Harassment or bullying'],['hate','Hate speech'],['sexual','Sexual content'],['violence','Violence or threats'],['other','Something else']];
+function openReport(kind,id,label){
+  if(needLogin('report content')) return;
+  S.reportTarget={kind,id};
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Report</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>${label?`What's wrong with “${esc(label)}”?`:"What's wrong?"} Reports are private.</p>
+    <form id="reportForm" class="reasons">${REASONS.map(([v2,l],i)=>`<label><input type="radio" name="reason" value="${v2}" ${i===0?'':''}>${esc(l)}</label>`).join('')}
+      <label class="field" style="background:none;padding:0;display:grid;cursor:default">More details (optional)<textarea name="details" maxlength="1000" rows="3" style="background:var(--bark-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px"></textarea></label>
+      <button class="btn btn-clay full" type="submit">Send report</button></form></div>`);
+}
+async function blockUser(id){
+  if(needLogin('block people')) return;
+  if(!confirm(`Block ${nameOf(id)}? You won't see each other's posts or comments, and any follows between you are removed.`)) return;
+  const {error}=await sb.from('blocks').insert({blocked_id:id});
+  if(error&&!/duplicate/i.test(error.message||'')){ toast("Couldn't block right now"); return; }
+  S.blocked.add(id); S.follows.delete(id); S.posts={}; closeSheet(); if(S.artist===id){ S.artist=null; S.tab='home'; }
+  toast(`Blocked ${nameOf(id)}`); await refreshAll();
+}
+async function unblockUser(id){
+  const {error}=await sb.from('blocks').delete().eq('blocker_id',S.user.id).eq('blocked_id',id);
+  if(error){ toast("Couldn't unblock right now"); return; }
+  S.blocked.delete(id); S.posts={}; toast(`Unblocked ${nameOf(id)}`); closeSheet(); await refreshAll();
+}
+async function deleteItem(kind,id){
+  if(!confirm(kind==='post'?'Delete this post?':'Delete this comment?')) return;
+  const {error}=await sb.from(kind==='post'?'posts':'comments').delete().eq('id',id);
+  if(error){ toast("Couldn't delete that"); return; }
+  closeSheet(); S.posts={}; toast('Deleted'); render(true);
+}
+
+/* ---------- admin ---------- */
+const REASON_LABEL=Object.fromEntries(REASONS);
+async function loadReports(){ if(S.loading.rep) return; S.loading.rep=1; const {data,error}=await sb.rpc('admin_reports'); S.reports=error?[]:(data||[]); delete S.loading.rep; render(true); }
+function viewAdmin(){
+  if(!S.isAdmin) return `<h1 class="page-title">Admin</h1><p class="lead">This page is only for StarTier admins.</p>`;
+  if(!S.reports){ loadReports(); return `<h1 class="page-title">Admin</h1><div class="empty">Loading reports…</div>`; }
+  return `<h1 class="page-title">Reports</h1>
+  <p class="lead">${S.reports.length?`${S.reports.length} open report${S.reports.length===1?'':'s'}. Newest first.`:'No open reports. All clear.'} <button class="link" data-action="admin-refresh">Refresh</button></p>
+  <div class="posts">${S.reports.map(r=>`<div class="rep">
+    <div><span class="pill">${esc(r.target_type)}</span> <b>${esc(REASON_LABEL[r.reason]||r.reason)}</b></div>
+    <div class="meta2">Reported by ${esc(r.reporter||'a member')} · ${ago(r.created_at)} · Owner: ${esc(r.owner_name||'unknown')}</div>
+    <div class="q">${esc(r.preview||'(already deleted)')}</div>
+    ${r.details?`<div class="meta2">Details: ${esc(r.details)}</div>`:''}
+    <div class="row-btns">${r.target_type!=='profile'?`<button class="btn btn-clay btn-sm" data-action="admin-act" data-op="remove" data-id="${r.id}">Remove it</button>`:''}
+      ${r.owner_id?`<button class="btn btn-ghost btn-sm" data-action="admin-act" data-op="ban" data-id="${r.id}">Ban ${esc(r.owner_name||'member')}</button>`:''}
+      <button class="btn btn-ghost btn-sm" data-action="admin-act" data-op="dismiss" data-id="${r.id}">Dismiss</button></div></div>`).join('')}</div>
+  <p class="note">Help messages from the contact form and chat arrive in your email.</p>`;
+}
+async function adminAct(op,id){
+  const r=(S.reports||[]).find(x=>x.id===id); if(!r) return;
+  if(op==='ban'&&!confirm(`Ban ${r.owner_name||'this member'}? This removes all their releases, posts and comments.`)) return;
+  if(op==='remove'&&!confirm('Remove this content? Fans will no longer see it.')) return;
+  const {error}=await sb.rpc('admin_act',{p_report:id,p_action:op});
+  if(error){ toast("Couldn't do that: "+(error.message||'').slice(0,80)); return; }
+  toast(op==='dismiss'?'Dismissed':op==='ban'?'Member banned':'Removed'); S.reports=null; S.posts={}; await refreshAll();
+}
+
 function viewLogin(){
   return `<h1 class="page-title">Log in</h1>
   <p class="lead">Welcome back to StarTier.</p>
@@ -1411,6 +1686,7 @@ function viewReset(){
     <button class="btn btn-gold full" type="submit">Save new password</button>
   </form>`;
 }
+async function openAccountNames(){ if(sb&&S.blocked.size){ await fetchNames([...S.blocked]); } openAccount(); }
 function openAccount(){
   const u = S.user, paid = u.role==='star' ? u.pro : u.pass;
   const planName = u.role==='star' ? (u.pro?'Star Pro':'Free plan') : (u.pass?'StarPass':'Free plan');
@@ -1419,7 +1695,8 @@ function openAccount(){
     <div class="s">${u.role==='star'?'Star':'Supporter'} account, ${planName}</div>
     ${!paid && u.wanted && u.wanted!=='free' ? `<div class="fee-note" style="margin-bottom:12px">You picked ${u.wanted==='pro'?'Star Pro':'StarPass'}. Paid plans switch on soon; you're on the Free plan until then.</div>` : ''}
     ${paid?'':`<button class="btn btn-gold full" style="margin-bottom:10px" data-action="upgrade">${u.role==='star'?`Upgrade to Star Pro, ${money(PRO_PRICE)}/mo`:`Get StarPass, ${money(PASS_PRICE)}/mo`}</button>`}
-    ${u.role==='star'?`<button class="btn btn-ghost full" style="margin-bottom:10px" data-action="tab" data-tab="studio">Go to your studio</button>`:''}
+    ${u.role==='star'?`<button class="btn btn-ghost full" style="margin-bottom:10px" data-action="tab" data-tab="studio">Go to your studio</button><button class="btn btn-ghost full" style="margin-bottom:10px" data-action="mypage">View my page</button>`:''}
+    ${S.blocked.size?`<h3 style="margin:14px 0 8px;font-size:16px">Blocked</h3><div class="blist" style="margin-bottom:12px">${[...S.blocked].map(id=>`<div><span>${esc(nameOf(id))}</span><button class="btn btn-ghost btn-sm" data-action="unblock" data-id="${id}">Unblock</button></div>`).join('')}</div>`:''}
     <button class="btn btn-ghost full" data-action="signout">Sign out</button>
   </div>`);
 }
@@ -1427,7 +1704,7 @@ function openAccount(){
 function render(keepScroll){
   const y = window.scrollY;
   const v = document.getElementById('view');
-  v.innerHTML = S.artist ? viewArtist() : {home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,'check-email':viewCheckEmail,reset:viewReset}[S.tab]();
+  v.innerHTML = S.artist ? viewArtist() : {home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset}[S.tab]();
   renderNav();
   if(keepScroll) window.scrollTo(0,y); else window.scrollTo(0,0);
   if(!S.artist && S.tab==='studio') updateSplit();
@@ -1536,7 +1813,7 @@ document.addEventListener('click',e=>{
     case 'tab': if(scrim.classList.contains('open')) closeSheet(); S.artist=null; S.tab=d.tab; if(d.plan) S.signupPlan=d.plan; render(); break;
     case 'plan': S.signupPlan=d.plan; el.parentElement.querySelectorAll('.plan').forEach(b=>b.setAttribute('aria-pressed', b===el)); break;
     case 'favgenre': el.setAttribute('aria-pressed', el.getAttribute('aria-pressed')!=='true'); break;
-    case 'account': openAccount(); break;
+    case 'account': openAccountNames(); break;
     case 'upgrade':
       if(!S.user){ S.artist=null; S.tab='join-supporter'; S.signupPlan='pass'; if(scrim.classList.contains('open')) closeSheet(); render(); break; }
       if(sb){ toast('Paid plans are coming soon. You are on the Free plan for now.'); if(scrim.classList.contains('open')) closeSheet(); break; }
@@ -1557,7 +1834,7 @@ document.addEventListener('click',e=>{
       if(!sb){ toast('Accounts are not connected yet'); break; }
       sb.auth.resetPasswordForEmail(em.trim(),{redirectTo:location.origin}).then(({error})=>toast(error?error.message:'Check your email for a reset link'));
       break; }
-    case 'signout': S.su={makes:null,vform:null}; S.mine=[]; audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
+    case 'signout': S.su={makes:null,vform:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
     case 'hero': S.hero=d.id; render(true); break;
     case 'video': openVideo(d.id, d.autoplay==='1'); break;
     case 'trailer': startTrailer(); break;
@@ -1567,7 +1844,20 @@ document.addEventListener('click',e=>{
     case 'buy': openBuy(d.kind,d.id); break;
     case 'confirm': S.owned.add(d.id); closeSheet(); render(true); updateMini(); toast('Purchased. It’s in your library.'); break;
     case 'close': closeSheet(); break;
-    case 'follow': S.following.has(d.id)?S.following.delete(d.id):S.following.add(d.id); render(true); toast(S.following.has(d.id)?`Following ${A(d.id).name}`:`Unfollowed ${A(d.id).name}`); break;
+    case 'follow': toggleFollow(d.id); break;
+    case 'legal': if(scrim.classList.contains('open')) closeSheet(); S.legal=d.doc; S.artist=null; S.tab='legal'; render(); break;
+    case 'like': toggleLike(Number(d.id)); break;
+    case 'cmts': { const id=Number(d.id); S.openCmts.has(id)?S.openCmts.delete(id):S.openCmts.add(id); render(true); break; }
+    case 'pmenu': openPostMenu({kind:d.kind,id:Number(d.id),owner:d.owner,postOwner:d.postOwner}); break;
+    case 'amenu': openArtistMenu(d.id); break;
+    case 'pm-report': { const lbl=d.kind==='profile'?nameOf(d.id):''; openReport(d.kind,d.id,lbl); break; }
+    case 'pm-block': blockUser(d.owner); break;
+    case 'pm-delpost': deleteItem(d.kind,Number(d.id)); break;
+    case 'unblock': unblockUser(d.id); break;
+    case 'mypage': closeSheet(); S.artist=S.user.id; if(!A(S.user.id)) { S.artist=null; toast('Your page shows once you publish your first release'); } render(); break;
+    case 'report': { const it=T(d.id)||V(d.id); if(it&&it.real) openReport('release',String(it.rid),it.title); else toast("Thanks. We'll take a look."); break; }
+    case 'admin-act': adminAct(d.op,Number(d.id)); break;
+    case 'admin-refresh': S.reports=null; render(true); break;
     case 'tip': openTip(d.id); break;
     case 'tipamt': S.tipAmt=+d.n; sheet.querySelectorAll('[data-action="tipamt"]').forEach(b=>b.setAttribute('aria-pressed',b===el)); document.getElementById('tipGo').textContent=`Send $${d.n} tip`; break;
     case 'sendtip': closeSheet(); toast(`Tip sent to ${A(d.id).name}`); break;
@@ -1653,6 +1943,24 @@ document.addEventListener('submit',async e=>{
     await loadProfile(data.user); await loadMine(); S.artist=null; S.tab=S.user.role==='star'?'studio':'home'; render(); updateMini();
     toast(`Welcome back, ${S.user.name.split(' ')[0]}`); return;
   }
+  if(f.id==='postForm'){
+    e.preventDefault(); const body=(f.elements.body.value||'').trim(); if(!body){ toast('Write something first'); return; }
+    busy(f,true); const {error}=await sb.from('posts').insert({body:body.slice(0,1000)}); busy(f,false);
+    if(error){ toast("Couldn't post that. Try again."); return; }
+    f.elements.body.value=''; S.posts={}; toast('Posted'); render(true); return;
+  }
+  if(f.classList&&f.classList.contains('cmt-form')){
+    e.preventDefault(); const body=(f.elements.c.value||'').trim(); if(!body) return; const pid=Number(f.dataset.post);
+    const {error}=await sb.from('comments').insert({post_id:pid,body:body.slice(0,500)});
+    if(error){ toast("Couldn't comment on that"); return; }
+    f.elements.c.value=''; S.openCmts.add(pid); S.posts={}; render(true); return;
+  }
+  if(f.id==='reportForm'){
+    e.preventDefault(); const r=f.querySelector('input[name=reason]:checked'); if(!r){ toast('Pick a reason'); return; }
+    const t=S.reportTarget||{}; const {error}=await sb.from('reports').insert({target_type:t.kind,target_id:String(t.id),reason:r.value,details:(f.elements.details.value||'').trim().slice(0,1000)||null});
+    if(error){ toast("Couldn't send that report. Try again."); return; }
+    closeSheet(); toast("Thanks. We'll review it."); return;
+  }
   if(f.id==='botForm'){
     e.preventDefault(); const i=document.getElementById('botIn'); const t=i.value.trim(); if(!t||bot.busy) return; i.value=''; askBot(t); return;
   }
@@ -1678,6 +1986,7 @@ document.addEventListener('submit',async e=>{
   if(!/^\S+@\S+\.\S+$/.test(v('email'))){ toast('Add a valid email'); f.elements.email.focus(); return; }
   if(v('pw').length<8){ toast('Password needs at least 8 characters'); f.elements.pw.focus(); return; }
   let sc=null; if(f.id==='starForm'){ sc=checkStar(f); if(!sc) return; }
+  if(!f.elements.agree||!f.elements.agree.checked){ toast('Please check the box to agree to the Terms'); return; }
   if(sb){
     const star=f.id==='starForm';
     const meta={ role:star?'star':'supporter', name:v('name'), plan:S.signupPlan||'free',
@@ -1691,7 +2000,7 @@ document.addEventListener('submit',async e=>{
     if(error){ toast(friendly(error)); return; }
     if(data.user && Array.isArray(data.user.identities) && data.user.identities.length===0){ toast('That email already has an account. Try logging in.'); return; }
     S.artist=null;
-    if(data.session){ await loadProfile(data.user); S.tab=star?'studio':'home'; render(); updateMini(); toast(`Welcome to StarTier, ${S.user.name.split(' ')[0]}`); }
+    if(data.session){ await loadProfile(data.user); await loadMine(); S.tab=star?'studio':'home'; render(); updateMini(); toast(`Welcome to StarTier, ${S.user.name.split(' ')[0]}`); }
     else { S.pendingEmail=v('email'); S.tab='check-email'; render(); }
     return;
   }
