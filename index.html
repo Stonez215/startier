@@ -140,6 +140,27 @@ main{max-width:1240px;margin:0 auto}
 .chip[aria-pressed="true"]{background:var(--clay);border-color:var(--clay)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px 14px;padding:0 22px}
 .grid .vcard{width:auto}
+.vcard.short{width:clamp(130px,34vw,170px)}
+.vcard.short .art{aspect-ratio:9/16}
+.grid.shorts{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.grid .vcard,.grid.shorts .vcard{width:auto;align-self:start}
+.badge.free{background:var(--gold);color:#1a1206;left:auto;right:10px}
+.badge.form{left:10px;top:10px;bottom:auto;background:rgba(7,11,26,.72)}
+.seg{display:flex;gap:6px;padding:0 22px 14px;flex-wrap:wrap}
+.seg button{height:38px;padding:0 16px;border-radius:999px;background:var(--bark);border:1px solid var(--line);font-weight:600;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--bone);color:var(--soil);border-color:var(--bone)}
+.makes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.makes button{padding:14px 10px;border-radius:12px;background:var(--bark-2);border:1.5px solid var(--line);display:grid;gap:4px;justify-items:center;text-align:center;font-weight:600}
+.makes button small{font-weight:400;color:var(--dust);font-size:12.5px}
+.makes button[aria-pressed="true"]{border-color:var(--clay-2);box-shadow:0 0 0 3px rgba(127,178,255,.16)}
+.makes svg{width:24px;height:24px;color:var(--clay-2)}
+.subq{display:grid;gap:8px}
+.subq[hidden]{display:none}
+.subq .lbl{font-size:14px;color:var(--dust)}
+.taglist{display:flex;gap:6px;flex-wrap:wrap;padding:8px 22px 0}
+.taglist span{font-size:12.5px;padding:3px 10px;border-radius:999px;background:rgba(127,178,255,.12);color:#cfe0ff}
+.field[hidden]{display:none}
+@media (max-width:560px){.tabbar .tab{font-size:10.5px}.tabbar .tab svg{width:20px;height:20px}}
 .empty{margin:20px 22px;padding:28px 22px;border-radius:14px;background:var(--bark);text-align:center;color:var(--dust)}
 .empty b{display:block;color:var(--bone);font-size:17px;margin-bottom:4px}
 .empty .btn{margin-top:14px}
@@ -366,6 +387,9 @@ const sb = (window.supabase && /^https:\/\//.test(SUPABASE_URL)) ? window.supaba
 const I = {
   home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg>',
   search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  music:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>',
+  video:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="13" height="14" rx="2"/><path d="m16 10 5-3v10l-5-3z"/></svg>',
+  both:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.6 5.6 6.1.7-4.5 4.1 1.2 6L12 16.4 6.6 19.4l1.2-6L3.3 9.3l6.1-.7z"/></svg>',
   lib:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4v16M9 4v16M14 4l6 16"/></svg>',
   studio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>',
   play:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5v15l13-7.5z"/></svg>',
@@ -391,14 +415,20 @@ const SKIES = ['data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFB
 
 /* ---------- sample data ---------- */
 const artists = [
-  {id:'nala',pro:true,name:'Nala Okoro',genre:'Afrobeats',city:'Miami, FL',p:'clay',followers:18400,bio:'Lagos-born, Miami-raised. Writes love songs over talking drum and 808s. Debut EP came out of a laundromat studio in Little Haiti.'},
-  {id:'kid',name:'Kid Sabbath',genre:'Hip hop',city:'Atlanta, GA',p:'night',followers:9200,bio:'Storyteller from Southwest Atlanta. Every video is shot on one lens with friends from the block.'},
-  {id:'yemaya',pro:true,name:'Yemaya Blue',genre:'Latin soul',city:'San Juan, PR',p:'moss',followers:12750,bio:'Bolero voice, bomba rhythm, modern R&B production. Sings in Spanish and English, sometimes in the same bar.'},
-  {id:'drum',name:'Drumline Theory',genre:'Afro-Latin',city:'Brooklyn, NY',p:'gold',followers:6300,bio:'A seven-piece percussion collective. Live sessions recorded in one take, no click track.'},
-  {id:'mareo',pro:true,name:'Saint Mareo',genre:'Dancehall',city:'Kingston, JM',p:'ember',followers:21100,bio:'Sound-system kid turned producer. Riddims first, lyrics second, crowd always.'},
-  {id:'tomas',name:'Tomás Rey',genre:'Salsa urbana',city:'Hialeah, FL',p:'dusk',followers:4800,bio:'Trumpet player who started rapping over his own horn lines. Hialeah to the world.'},
-  {id:'ivy',name:'Ivy Carrera',genre:'R&B',city:'Houston, TX',p:'forest',followers:7600,bio:'Late-night R&B made at home, mixed in the car. Her short films are the album art in motion.'}
+  {id:'nala',pro:true,makes:'both',genres:['Afrobeats','R&B'],cats:['Music videos','Dance'],name:'Nala Okoro',genre:'Afrobeats',city:'Miami, FL',p:'clay',followers:18400,bio:'Lagos-born, Miami-raised. Writes love songs over talking drum and 808s. Debut EP came out of a laundromat studio in Little Haiti.'},
+  {id:'kid',makes:'both',genres:['Hip hop'],cats:['Short films','Music videos'],name:'Kid Sabbath',genre:'Hip hop',city:'Atlanta, GA',p:'night',followers:9200,bio:'Storyteller from Southwest Atlanta. Every video is shot on one lens with friends from the block.'},
+  {id:'yemaya',pro:true,makes:'both',genres:['Latin soul','R&B'],cats:['Music videos'],name:'Yemaya Blue',genre:'Latin soul',city:'San Juan, PR',p:'moss',followers:12750,bio:'Bolero voice, bomba rhythm, modern R&B production. Sings in Spanish and English, sometimes in the same bar.'},
+  {id:'drum',makes:'both',genres:['Afro-Latin'],cats:['Live sessions'],name:'Drumline Theory',genre:'Afro-Latin',city:'Brooklyn, NY',p:'gold',followers:6300,bio:'A seven-piece percussion collective. Live sessions recorded in one take, no click track.'},
+  {id:'mareo',pro:true,makes:'both',genres:['Dancehall','Reggae'],cats:['Documentaries','Behind the scenes'],name:'Saint Mareo',genre:'Dancehall',city:'Kingston, JM',p:'ember',followers:21100,bio:'Sound-system kid turned producer. Riddims first, lyrics second, crowd always.'},
+  {id:'tomas',makes:'both',genres:['Salsa urbana','Hip hop'],cats:['Music videos','Comedy'],name:'Tomás Rey',genre:'Salsa urbana',city:'Hialeah, FL',p:'dusk',followers:4800,bio:'Trumpet player who started rapping over his own horn lines. Hialeah to the world.'},
+  {id:'ivy',makes:'both',genres:['R&B'],cats:['Short films'],name:'Ivy Carrera',genre:'R&B',city:'Houston, TX',p:'forest',followers:7600,bio:'Late-night R&B made at home, mixed in the car. Her short films are the album art in motion.'}
 ];
+const MUSIC_GENRES = ['Hip hop','R&B','Afrobeats','Afro-Latin','Latin soul','Salsa urbana','Dancehall','Reggae','Gospel','Pop','Rock','Electronic','Jazz','Country','Other'];
+const VIDEO_CATS = ['Music videos','Short films','Comedy','Vlogs','Documentaries','Live sessions','Dance','Behind the scenes','Animation','Other'];
+artists.push(
+  {id:'lex',makes:'video',genres:[],cats:['Comedy','Vlogs'],name:'Lex Lenz',genre:'Comedy',city:'Miami Gardens, FL',p:'night',followers:15300,bio:'Sketch comedy shot in the corner store, the barbershop and the back of the bus. New short every week.'},
+  {id:'kaya',makes:'music',genres:['Reggae','Gospel'],cats:[],name:'Kaya Sol',genre:'Reggae',city:'Fort Lauderdale, FL',p:'forest',followers:3900,bio:'Roots reggae with a church choir upbringing. Songs about home, faith and Sunday dinners.'}
+);
 const videos = [
   {id:'v1',title:'Salt Water Gospel',artist:'nala',kind:'Music video',len:'4:12',price:2.99,p:'clay',desc:'Shot at sunrise on Haulover Beach with a 40-voice choir from her mother’s church. The single that broke her first 100k plays.'},
   {id:'v2',title:'Concrete Psalms',artist:'kid',kind:'Short film',len:'14:38',price:4.99,p:'night',desc:'Three days in the life of a corner store, told through one rapper’s window. Official selection, two local film festivals.'},
@@ -408,6 +438,15 @@ const videos = [
   {id:'v6',title:'Hialeah Horns',artist:'tomas',kind:'Music video',len:'3:41',price:2.49,p:'dusk',desc:'Trumpet lines, a lowrider and a bakery at 6am. The most Hialeah thing ever filmed.'},
   {id:'v7',title:'Night Drive Tapes',artist:'ivy',kind:'Short film',len:'9:50',price:3.99,p:'forest',desc:'Five songs, one car, one night across Houston. A visual album in a single shot.'}
 ];
+videos.forEach(v=>{ v.form='long'; v.cat={'Music video':'Music videos','Short film':'Short films','Live session':'Live sessions','Documentary':'Documentaries'}[v.kind]||'Other'; });
+videos.push(
+  {id:'s1',form:'short',cat:'Comedy',title:'Bodega Bits #12',artist:'lex',kind:'Comedy short',len:'0:48',price:0,p:'night',desc:'The guy who pays for a 50 cent bag of chips with a hundred. Every corner store has one.'},
+  {id:'s2',form:'short',cat:'Dance',title:'Salt Water Dance Break',artist:'nala',kind:'Dance short',len:'0:38',price:0,p:'clay',desc:'The choreography from the music video, slowed down so you can learn it.'},
+  {id:'s3',form:'short',cat:'Behind the scenes',title:'Riddim in 60 Seconds',artist:'mareo',kind:'Studio short',len:'0:59',price:0.99,p:'ember',desc:'One beat built from nothing to finished in a minute flat.'},
+  {id:'s4',form:'short',cat:'Comedy',title:'Abuela Reviews My Trumpet',artist:'tomas',kind:'Comedy short',len:'1:12',price:0,p:'dusk',desc:'She has notes. Many notes.'},
+  {id:'s5',form:'short',cat:'Vlogs',title:'Barbershop Debate: Best Miami Rapper',artist:'lex',kind:'Vlog short',len:'2:10',price:0.99,p:'gold',desc:'Five barbers, one chair, zero agreement.'},
+  {id:'s6',form:'short',cat:'Music videos',title:'Southwest Sermon (Vertical Cut)',artist:'kid',kind:'Music video short',len:'1:30',price:0,p:'night',desc:'The hook, shot on a phone, on the block where the song was written.'}
+);
 const tracks = [
   {id:'t1',title:'Small Hours',artist:'nala',len:198,price:1.29,p:'clay'},
   {id:'t2',title:'Southwest Sermon',artist:'kid',len:224,price:1.29,p:'night'},
@@ -416,20 +455,24 @@ const tracks = [
   {id:'t5',title:'Pressure Drop Riddim',artist:'mareo',len:187,price:1.29,p:'ember'},
   {id:'t6',title:'Pan Cubano',artist:'tomas',len:205,price:0.99,p:'dusk'},
   {id:'t7',title:'Westheimer',artist:'ivy',len:233,price:1.29,p:'forest'},
-  {id:'t8',title:'Mama’s Choir',artist:'nala',len:176,price:1.29,p:'clay'}
+  {id:'t8',title:'Mama’s Choir',artist:'nala',len:176,price:1.29,p:'clay'},
+  {id:'t9',title:'Sunday Dinner',artist:'kaya',len:214,price:0.99,p:'forest'},
+  {id:'t10',title:'Higher Ground Riddim',artist:'kaya',len:229,price:0,p:'moss'}
 ];
 const A = id => artists.find(a=>a.id===id);
 const FEE = 0.15, PASS_PRICE = 5.99, PASS_OFF = 0.20, PRO_PRICE = 9.99;
-const GENRES = [...new Set(artists.map(a=>a.genre)),'Gospel','Rock','Pop','Electronic','Other'];
+const GENRES = MUSIC_GENRES;
+const tGenre = t => (A(t.artist).genres||[])[0] || A(t.artist).genre;
+const makesLabel = m => m==='both'?'Music and video':m==='video'?'Video creator':'Music maker';
 const V = id => videos.find(v=>v.id===id);
 const T = id => tracks.find(t=>t.id===id);
 
 /* ---------- state ---------- */
-const S = {tab:'home',artist:null,hero:'v1',genre:'All',q:'',owned:new Set(['t4']),following:new Set(['drum']),
+const S = {tab:'home',artist:null,hero:'v1',genre:'All',q:'',vform:'all',vcat:'All',vq:'',mgenre:'All',mq:'',su:{makes:null,vform:null},owned:new Set(['t4']),following:new Set(['drum']),
   now:null,playing:false,pos:0,timer:null,trailer:null,user:null,signupPlan:'free'};
 const hasPass = () => !!(S.user && S.user.role==='supporter' && S.user.pass);
 const priceOf = item => hasPass() ? item.price*(1-PASS_OFF) : item.price;
-const priceTag = item => hasPass() ? `<span class="strike">${money(item.price)}</span>${money(priceOf(item))}` : money(item.price);
+const priceTag = item => !item.price ? 'Free' : hasPass() ? `<span class="strike">${money(item.price)}</span>${money(priceOf(item))}` : money(item.price);
 const sortedArtists = () => [...artists].sort((a,b)=>(b.pro?1:0)-(a.pro?1:0));
 const initials = n => n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
@@ -441,7 +484,7 @@ const mmss = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
 const art = (p,letter,cls='') => `<div class="art ${cls}" style="--g:${P[p]}"><span class="glyph" aria-hidden="true">${esc(letter)}</span></div>`;
 
 /* ---------- nav ---------- */
-const TABS = [['home','Home',I.home],['discover','Discover',I.search],['library','Library',I.lib],['studio','Studio',I.studio],['help','Help',I.help]];
+const TABS = [['home','Home',I.home],['music','Music',I.music],['videos','Videos',I.video],['library','Library',I.lib],['studio','Studio',I.studio],['help','Help',I.help]];
 function renderNav(){
   const html = TABS.map(([id,label,ic])=>`<button class="tab" data-action="tab" data-tab="${id}" ${S.tab===id&&!S.artist?'aria-current="page"':''}>${ic}<span>${label}</span></button>`).join('');
   document.getElementById('tabbar').innerHTML = html;
@@ -454,12 +497,12 @@ function renderNav(){
 /* ---------- pieces ---------- */
 function vcard(v){
   const owned = S.owned.has(v.id);
-  return `<button class="vcard" data-action="video" data-id="${v.id}">
-    <div class="art" style="--g:${P[v.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(v.title[0])}</span><span class="badge">${v.len}</span>${owned?'<span class="badge owned">Owned</span>':''}</div>
+  return `<button class="vcard${v.form==='short'?' short':''}" data-action="video" data-id="${v.id}">
+    <div class="art" style="--g:${P[v.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(v.title[0])}</span><span class="badge">${v.len}</span>${owned?'<span class="badge owned">Owned</span>':!v.price?'<span class="badge free">Free</span>':''}</div>
     <div class="t">${esc(v.title)}</div><div class="s">${esc(A(v.artist).name)}, ${v.kind.toLowerCase()}</div></button>`;
 }
 function acard(a){
-  return `<button class="acard" data-action="artist" data-id="${a.id}">${a.pro?'<span class="feat">Featured</span>':''}${art(a.p,a.name[0])}<div class="t">${esc(a.name)}</div><div class="s">${esc(a.genre)}</div></button>`;
+  return `<button class="acard" data-action="artist" data-id="${a.id}">${a.pro?'<span class="feat">Featured</span>':''}${art(a.p,a.name[0])}<div class="t">${esc(a.name)}</div><div class="s">${esc(a.genre)}${a.makes==='both'?' · music + video':a.makes==='video'?' · video':''}</div></button>`;
 }
 function trow(t,i){
   const a = A(t.artist), on = S.now===t.id && S.playing, owned = S.owned.has(t.id);
@@ -493,17 +536,46 @@ function viewHome(){
     ${videos.slice(0,5).map(v=>`<button data-action="hero" data-id="${v.id}" aria-pressed="${v.id===S.hero}">${art(v.p,v.title[0])}${esc(v.title)}</button>`).join('')}
   </div>
   ${!hasPass() && !(S.user && S.user.role==='star') ? `<div class="pass"><div><h3>StarPass</h3><p>Stream every song and video on StarTier for ${money(PASS_PRICE)} a month, and get 20% off anything you download to keep.</p></div><button class="btn btn-gold" data-action="${S.user?'upgrade':'tab'}" data-tab="join-supporter" data-plan="pass">Get StarPass</button></div>` : ''}
-  <section class="section"><div class="section-head"><h2>Premiering this week</h2><button class="link" data-action="tab" data-tab="discover">See all</button></div>
-    <div class="rail">${videos.map(vcard).join('')}</div></section>
-  <section class="section"><div class="section-head"><h2>Featured Stars</h2><button class="link" data-action="tab" data-tab="discover">Browse by genre</button></div>
+  <section class="section"><div class="section-head"><h2>Premiering this week</h2><button class="link" data-action="tab" data-tab="videos">See all videos</button></div>
+    <div class="rail">${videos.filter(v=>v.form==='long').map(vcard).join('')}</div></section>
+  <section class="section"><div class="section-head"><h2>Quick hits</h2><button class="link" data-action="vform" data-f="short" data-go="1">See all shorts</button></div>
+    <div class="rail">${videos.filter(v=>v.form==='short').map(vcard).join('')}</div></section>
+  <section class="section"><div class="section-head"><h2>Featured Stars</h2><button class="link" data-action="tab" data-tab="music">Browse music by genre</button></div>
     <div class="rail">${sortedArtists().map(acard).join('')}</div></section>
-  <section class="section"><div class="section-head"><h2>Tracks fans are buying</h2></div>
+  <section class="section"><div class="section-head"><h2>Tracks fans are buying</h2><button class="link" data-action="tab" data-tab="music">See all music</button></div>
     <div class="tracks two">${tracks.map(trow).join('')}</div></section>
   <section class="section"><div class="section-head"><h2>Live sessions and short films</h2></div>
-    <div class="rail">${videos.filter(v=>v.kind!=='Music video').map(vcard).join('')}</div></section>
+    <div class="rail">${videos.filter(v=>v.form==='long'&&v.kind!=='Music video').map(vcard).join('')}</div></section>
   <p class="note">Prototype with sample artists and placeholder artwork. Purchases and uploads are simulated.</p>`;
 }
 
+function viewMusic(){
+  const q=S.mq.toLowerCase().trim(), g=S.mgenre;
+  const used=MUSIC_GENRES.filter(x=>artists.some(a=>a.makes!=='video'&&(a.genres||[]).includes(x)));
+  const aOk=a=>a.makes!=='video'&&(g==='All'||(a.genres||[]).includes(g));
+  const ts=tracks.filter(t=>{const a=A(t.artist);return aOk(a)&&(!q||t.title.toLowerCase().includes(q)||a.name.toLowerCase().includes(q));});
+  const as=sortedArtists().filter(a=>aOk(a)&&(!q||a.name.toLowerCase().includes(q)));
+  return `<h1 class="page-title">Music</h1>
+  <label class="search">${I.search}<input id="mq" type="search" placeholder="Search songs and artists" value="${esc(S.mq)}" aria-label="Search music"></label>
+  <div class="chips">${['All',...used].map(x=>`<button class="chip" data-action="mgenre" data-g="${esc(x)}" aria-pressed="${x===g}">${esc(x)}</button>`).join('')}</div>
+  ${!ts.length&&!as.length?`<div class="empty"><b>No music matches${q?` “${esc(S.mq)}”`:''}</b>Try another genre or search word.</div>`:''}
+  ${as.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>${g==='All'?'Music makers':esc(g)+' artists'}</h2></div><div class="rail">${as.map(acard).join('')}</div></section>`:''}
+  ${ts.length?`<section class="section"><div class="section-head"><h2>Songs</h2></div><div class="tracks two">${ts.map(trow).join('')}</div></section>`:''}`;
+}
+function viewVideos(){
+  const q=S.vq.toLowerCase().trim(), c=S.vcat, f=S.vform;
+  const pool=videos.filter(v=>f==='all'||v.form===f);
+  const used=VIDEO_CATS.filter(x=>pool.some(v=>v.cat===x));
+  const vs=pool.filter(v=>(c==='All'||v.cat===c)&&(!q||v.title.toLowerCase().includes(q)||A(v.artist).name.toLowerCase().includes(q)));
+  const sh=vs.filter(v=>v.form==='short'), lo=vs.filter(v=>v.form==='long');
+  return `<h1 class="page-title">Videos</h1>
+  <label class="search">${I.search}<input id="vq" type="search" placeholder="Search videos and creators" value="${esc(S.vq)}" aria-label="Search videos"></label>
+  <div class="seg" role="group" aria-label="Video length">${[['all','All videos'],['short','Short-form'],['long','Long-form']].map(([k2,l])=>`<button data-action="vform" data-f="${k2}" aria-pressed="${f===k2}">${l}</button>`).join('')}</div>
+  <div class="chips">${['All',...used].map(x=>`<button class="chip" data-action="vcat" data-g="${esc(x)}" aria-pressed="${x===c}">${esc(x)}</button>`).join('')}</div>
+  ${!vs.length?`<div class="empty"><b>No videos match${q?` “${esc(S.vq)}”`:''}</b>Try another category or switch to All videos.</div>`:''}
+  ${sh.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>Short-form</h2></div><div class="grid shorts">${sh.map(vcard).join('')}</div></section>`:''}
+  ${lo.length?`<section class="section"><div class="section-head"><h2>Long-form</h2></div><div class="grid">${lo.map(vcard).join('')}</div></section>`:''}`;
+}
 function viewDiscover(){
   const genres = ['All',...new Set(artists.map(a=>a.genre))];
   const q = S.q.toLowerCase();
@@ -535,7 +607,12 @@ function viewStudio(){
     <p class="lead">This is where Stars upload music and videos, set prices, and see what they earn. Joining is free.</p>
     <div style="padding:0 22px"><button class="btn btn-gold" data-action="tab" data-tab="join-star">Become a Star</button></div>`;
   const mine = sb ? [] : [['Salt Water Gospel','Music video',41],['Small Hours','Track',128],['Mama’s Choir','Track',57]];
+  const mk = S.user.makes || 'both';
+  const kinds = mk==='music'?[['song','Song']]:mk==='video'?[['video','Video']]:[['song','Song'],['video','Video']];
+  const myG = (S.user.genres&&S.user.genres.length?S.user.genres:MUSIC_GENRES), myC = (S.user.cats&&S.user.cats.length?S.user.cats:VIDEO_CATS);
+  const k0 = kinds[0][0];
   return `<h1 class="page-title">${esc(S.user.name)}'s studio</h1>
+  <div class="taglist" style="margin:-8px 0 16px"><span>${makesLabel(mk)}</span>${[...(S.user.genres||[]),...(S.user.cats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
   <div class="earn"><div><div class="s">Your earnings this month</div><div class="big">${sb?'$0.00':'$412.60'}</div><div class="s">${sb?'Your sales and tips will show up here':'From 226 sales and 14 tips'}</div></div>
     <button class="btn btn-ghost btn-sm">Cash out</button></div>
   ${S.user.pro
@@ -543,11 +620,16 @@ function viewStudio(){
     : `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Star Pro</h3><p>Get a Featured badge, show up higher in search, and get homepage and social promo spots. ${money(PRO_PRICE)} a month.</p></div><button class="btn btn-gold" data-action="upgrade">Upgrade</button></div>`}
   <div class="form">
     <h3>Upload a release</h3>
-    <div class="drop" data-action="pick" role="button" tabindex="0" id="drop"><b>Choose a video or audio file</b>MP4, MOV, WAV or MP3</div>
+    <div class="two-col">
+      <label class="field">What are you uploading?<select id="upKind">${kinds.map(([k2,l])=>`<option value="${k2}">${l}</option>`).join('')}</select></label>
+      <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Video length<select id="upForm"><option value="short">Short-form (under 3 min)</option><option value="long">Long-form (3 min or more)</option></select></label>
+      <label class="field" data-up="song" ${k0==='song'?'':'hidden'}>Genre<select id="upGenre">${myG.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
+    </div>
+    <div class="drop" data-action="pick" role="button" tabindex="0" id="drop"><b id="dropT">${k0==='song'?'Choose an audio file':'Choose a video file'}</b><span id="dropS">${k0==='song'?'MP3 or WAV':'MP4 or MOV'}</span></div>
     <label class="field">Title<input id="upTitle" placeholder="What’s it called?"></label>
     <div class="two-col">
-      <label class="field">Type<select><option>Music video</option><option>Track</option><option>Short film</option><option>Live session</option></select></label>
-      <label class="field">Price (USD)<input id="upPrice" type="number" min="0.99" step="0.5" value="2.99"></label>
+      <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Category<select id="upCat">${myC.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
+      <label class="field">Your price (USD)<input id="upPrice" type="number" min="0" step="0.01" value="${k0==='song'?'0.99':'2.99'}"></label>
     </div>
     <div class="split" id="split"></div>
     <button class="btn btn-gold full" data-action="publish">Publish</button>
@@ -558,19 +640,21 @@ function viewStudio(){
 
 function viewArtist(){
   const a = A(S.artist), f = S.following.has(a.id);
-  const av = videos.filter(v=>v.artist===a.id), at = tracks.filter(t=>t.artist===a.id);
+  const av = videos.filter(v=>v.artist===a.id&&v.form==='long'), as2 = videos.filter(v=>v.artist===a.id&&v.form==='short'), at = tracks.filter(t=>t.artist===a.id);
   return `<div class="banner"><div class="hero-bg" style="background-image:url(${SKIES[artists.indexOf(a)%3]})"></div><div class="shade"></div>
     <button class="back" data-action="tab" data-tab="${S.tab}" aria-label="Back">${I.back}</button></div>
   <div class="artist-head">${art(a.p,a.name[0])}
-    <div><h1>${esc(a.name)}</h1><div class="s">${esc(a.genre)}, ${esc(a.city)}</div></div></div>
-  <div class="stats"><div><b>${k(a.followers+(f?1:0))}</b><span>Followers</span></div><div><b>${av.length}</b><span>Videos</span></div><div><b>${at.length}</b><span>Tracks</span></div></div>
+    <div><h1>${esc(a.name)}</h1><div class="s">${makesLabel(a.makes)}, ${esc(a.city)}</div></div></div>
+  <div class="taglist">${[...(a.genres||[]),...(a.cats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+  <div class="stats"><div><b>${k(a.followers+(f?1:0))}</b><span>Followers</span></div>${a.makes!=='music'?`<div><b>${av.length+as2.length}</b><span>Videos</span></div>`:''}${a.makes!=='video'?`<div><b>${at.length}</b><span>Songs</span></div>`:''}</div>
   <div class="row-btns" style="padding:0 22px">
     <button class="btn ${f?'btn-ghost':'btn-gold'}" data-action="follow" data-id="${a.id}">${f?'Following':'Follow'}</button>
     <button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button>
   </div>
   <p class="bio">${esc(a.bio)}</p>
+  ${at.length?`<section class="section"><div class="section-head"><h2>Music</h2></div><div class="tracks">${at.map(trow).join('')}</div></section>`:''}
   ${av.length?`<section class="section"><div class="section-head"><h2>Videos</h2></div><div class="rail">${av.map(vcard).join('')}</div></section>`:''}
-  ${at.length?`<section class="section"><div class="section-head"><h2>Tracks</h2></div><div class="tracks">${at.map(trow).join('')}</div></section>`:''}`;
+  ${as2.length?`<section class="section"><div class="section-head"><h2>Shorts</h2></div><div class="rail">${as2.map(vcard).join('')}</div></section>`:''}`;
 }
 
 function viewJoin(){
@@ -590,9 +674,22 @@ function viewJoinStar(){
     <label class="field">Artist or creator name<input name="name" autocomplete="nickname" placeholder="The name fans know you by"></label>
     <label class="field">Email<input name="email" type="email" autocomplete="email"></label>
     <label class="field">Password<input name="pw" type="password" autocomplete="new-password" placeholder="At least 8 characters"></label>
-    <div class="two-col">
-      <label class="field">Main genre<select name="genre">${GENRES.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
-      <label class="field">City<input name="city" autocomplete="address-level2"></label>
+    <label class="field">City<input name="city" autocomplete="address-level2" placeholder="Where you rep"></label>
+    <h3>What do you create?</h3>
+    <div class="makes" role="group" aria-label="What you create">
+      <button type="button" data-action="makes" data-m="music" aria-pressed="${S.su.makes==='music'}">${I.music}Music<small>Songs, beats, albums</small></button>
+      <button type="button" data-action="makes" data-m="video" aria-pressed="${S.su.makes==='video'}">${I.video}Video<small>Shorts and long-form</small></button>
+      <button type="button" data-action="makes" data-m="both" aria-pressed="${S.su.makes==='both'}">${I.both}Both<small>Music and video</small></button>
+    </div>
+    <div class="subq" data-sec="music" ${S.su.makes==='music'||S.su.makes==='both'?'':'hidden'}>
+      <span class="lbl">Your music genres (pick up to 5)</span>
+      <div class="chips wrap">${MUSIC_GENRES.map(g=>`<button type="button" class="chip" data-action="sgenre" aria-pressed="false">${esc(g)}</button>`).join('')}</div>
+    </div>
+    <div class="subq" data-sec="video" ${S.su.makes==='video'||S.su.makes==='both'?'':'hidden'}>
+      <span class="lbl">What kind of videos do you make?</span>
+      <div class="seg" style="padding:0" role="group" aria-label="Video length">${[['short','Short-form'],['long','Long-form'],['both','Both']].map(([k2,l])=>`<button type="button" data-action="suvform" data-f="${k2}" aria-pressed="${S.su.vform===k2}">${l}</button>`).join('')}</div>
+      <span class="lbl" style="margin-top:6px">Your video categories (pick up to 5)</span>
+      <div class="chips wrap">${VIDEO_CATS.map(g=>`<button type="button" class="chip" data-action="scat" aria-pressed="false">${esc(g)}</button>`).join('')}</div>
     </div>
     <h3>Choose your plan</h3>
     <div class="plans">
@@ -613,7 +710,8 @@ function viewJoinSupporter(){
     <label class="field">Your name<input name="name" autocomplete="name"></label>
     <label class="field">Email<input name="email" type="email" autocomplete="email"></label>
     <label class="field">Password<input name="pw" type="password" autocomplete="new-password" placeholder="At least 8 characters"></label>
-    <div class="field">Genres you love<div class="chips wrap">${GENRES.filter(g=>g!=='Other').map(g=>`<button type="button" class="chip" data-action="favgenre" aria-pressed="false">${esc(g)}</button>`).join('')}</div></div>
+    <div class="field">Music you love<div class="chips wrap">${MUSIC_GENRES.filter(g=>g!=='Other').map(g=>`<button type="button" class="chip" data-action="favgenre" aria-pressed="false">${esc(g)}</button>`).join('')}</div></div>
+    <div class="field">Videos you love<div class="chips wrap">${VIDEO_CATS.filter(g=>g!=='Other').map(g=>`<button type="button" class="chip" data-action="favgenre" aria-pressed="false">${esc(g)}</button>`).join('')}</div></div>
     <h3>Choose your plan</h3>
     <div class="plans">
       <button type="button" class="plan" data-action="plan" data-plan="free" aria-pressed="${plan==='free'}"><b>Free</b><span class="pr">$0<small> /month</small></span><ul><li>Browse and discover by genre</li><li>30-second previews</li><li>Buy songs and videos to keep</li><li>Follow and tip artists</li></ul></button>
@@ -776,7 +874,7 @@ function openAccount(){
 function render(keepScroll){
   const y = window.scrollY;
   const v = document.getElementById('view');
-  v.innerHTML = S.artist ? viewArtist() : {home:viewHome,discover:viewDiscover,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,'check-email':viewCheckEmail,reset:viewReset}[S.tab]();
+  v.innerHTML = S.artist ? viewArtist() : {home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,'check-email':viewCheckEmail,reset:viewReset}[S.tab]();
   renderNav();
   if(keepScroll) window.scrollTo(0,y); else window.scrollTo(0,0);
   if(!S.artist && S.tab==='studio') updateSplit();
@@ -789,7 +887,7 @@ function openSheet(html){ lastFocus = document.activeElement; sheet.innerHTML = 
 function closeSheet(){ stopTrailer(); scrim.classList.remove('open'); document.body.style.overflow=''; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
 
 function openVideo(id,autoplay){
-  const v = V(id), a = A(v.artist), owned = S.owned.has(id), full = owned || hasPass();
+  const v = V(id), a = A(v.artist), owned = S.owned.has(id), full = owned || hasPass() || !v.price;
   openSheet(`<div class="player" id="player">${art(v.p,v.title[0])}
     <button class="close" data-action="close" aria-label="Close">${I.close}</button>
     <span class="live">${full?'Playing full video':'Trailer preview, 0:45'}</span>
@@ -797,7 +895,7 @@ function openVideo(id,autoplay){
     <div class="bar"><i id="tbar"></i></div></div>
   <div class="sheet-body"><h2>${esc(v.title)}</h2><div class="s">${v.kind}, ${v.len}</div><p>${esc(v.desc)}</p>
     <button class="byline" data-action="artist" data-id="${a.id}">${art(a.p,a.name[0])}<div><b>${esc(a.name)}</b><div class="s">${esc(a.genre)}, ${k(a.followers)} followers</div></div></button>
-    ${owned?`<button class="btn btn-gold full" data-action="trailer">${I.play}Watch full video</button>`
+    ${owned||!v.price?`<div class="row-btns"><button class="btn btn-gold" data-action="trailer">${I.play}Watch${v.price?' full video':', it\'s free'}</button>${!owned?`<button class="btn btn-ghost" data-action="buy" data-kind="video" data-id="${v.id}">Save to library</button>`:''}<button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button></div>`
       :hasPass()?`<div class="row-btns"><button class="btn btn-gold" data-action="trailer">${I.play}Stream with StarPass</button><button class="btn btn-clay" data-action="buy" data-kind="video" data-id="${v.id}">${I.bag}Download ${priceTag(v)}</button></div>`
       :`<button class="btn btn-clay full" data-action="buy" data-kind="video" data-id="${v.id}">${I.bag}Buy and own it for ${money(v.price)}</button>
         <button class="btn btn-ghost full" style="margin-top:10px" data-action="${S.user?'upgrade':'tab'}" data-tab="join-supporter" data-plan="pass">Or stream everything with StarPass, ${money(PASS_PRICE)}/mo</button>`}
@@ -814,6 +912,7 @@ function stopTrailer(){ clearInterval(S.trailer); S.trailer=null; }
 
 function openBuy(kind,id){
   const item = kind==='video'?V(id):T(id), a = A(item.artist);
+  if(!item.price){ S.owned.add(id); render(true); updateMini(); if(scrim.classList.contains('open')) closeSheet(); toast(`Added “${item.title}” to your library. It's free.`); return; }
   const paid = priceOf(item), artistCut = paid*(1-FEE), fee = paid-artistCut;
   openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Checkout</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
@@ -852,11 +951,11 @@ function updateMini(){
   document.getElementById('miniArt').style.setProperty('--g',P[t.p]);
   document.getElementById('miniArt').innerHTML = `<span class="glyph">${esc(t.title[0])}</span>`;
   document.getElementById('miniT').textContent = t.title;
-  document.getElementById('miniS').textContent = a.name + ((S.owned.has(t.id)||hasPass())?'':', 30-second preview');
+  document.getElementById('miniS').textContent = a.name + ((S.owned.has(t.id)||hasPass()||!t.price)?'':', 30-second preview');
   const b = document.getElementById('miniBtn'); b.innerHTML = S.playing?I.pause:I.play; b.setAttribute('aria-label',S.playing?'Pause':'Play');
   clearInterval(S.timer);
   if(S.playing) S.timer = setInterval(()=>{
-    const max = (S.owned.has(t.id)||hasPass())?t.len:30; S.pos += .25;
+    const max = (S.owned.has(t.id)||hasPass()||!t.price)?t.len:30; S.pos += .25;
     if(S.pos>=max){ S.pos=0; S.playing=false; updateMini(); render(true); return; }
     document.getElementById('miniProg').style.width = (S.pos/max*100)+'%';
   },250);
@@ -867,7 +966,7 @@ let toastT;
 function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
 function updateSplit(){
   const el=document.getElementById('split'), pr=parseFloat((document.getElementById('upPrice')||{}).value)||0;
-  if(el) el.innerHTML = `You get <b>${money(pr*0.85)}</b> per sale. StarTier keeps 15%.`;
+  if(el) el.innerHTML = pr>0 ? `You get <b>${money(pr*0.85)}</b> per sale. StarTier keeps 15%. Type 0 to make it free.` : `This one is <b>free</b> for fans. They can still tip you, and you keep 85% of tips.`;
 }
 
 /* ---------- events ---------- */
@@ -899,7 +998,7 @@ document.addEventListener('click',e=>{
       if(!sb){ toast('Accounts are not connected yet'); break; }
       sb.auth.resetPasswordForEmail(em.trim(),{redirectTo:location.origin}).then(({error})=>toast(error?error.message:'Check your email for a reset link'));
       break; }
-    case 'signout': if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
+    case 'signout': S.su={makes:null,vform:null}; if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
     case 'hero': S.hero=d.id; render(true); break;
     case 'video': openVideo(d.id, d.autoplay==='1'); break;
     case 'trailer': startTrailer(); break;
@@ -914,7 +1013,15 @@ document.addEventListener('click',e=>{
     case 'tipamt': S.tipAmt=+d.n; sheet.querySelectorAll('[data-action="tipamt"]').forEach(b=>b.setAttribute('aria-pressed',b===el)); document.getElementById('tipGo').textContent=`Send $${d.n} tip`; break;
     case 'sendtip': closeSheet(); toast(`Tip sent to ${A(d.id).name}`); break;
     case 'genre': S.genre=d.g; render(true); break;
-    case 'pick': el.innerHTML='<b>new-video-final.mp4</b>Ready to upload, 248 MB'; break;
+    case 'mgenre': S.mgenre=d.g; render(true); break;
+    case 'vcat': S.vcat=d.g; render(true); break;
+    case 'vform': S.vform=d.f; S.vcat='All'; if(d.go){ S.artist=null; S.tab='videos'; render(); } else render(true); break;
+    case 'makes': { S.su.makes=d.m; const f=el.closest('form'); f.querySelectorAll('[data-action=makes]').forEach(b=>b.setAttribute('aria-pressed',b===el));
+      f.querySelector('[data-sec=music]').hidden=!(d.m==='music'||d.m==='both'); f.querySelector('[data-sec=video]').hidden=!(d.m==='video'||d.m==='both'); break; }
+    case 'suvform': S.su.vform=d.f; el.parentElement.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b===el)); break;
+    case 'sgenre': case 'scat': { const on=el.getAttribute('aria-pressed')==='true'; const n=el.parentElement.querySelectorAll('[aria-pressed=true]').length;
+      if(!on&&n>=5){ toast('Pick up to 5'); break; } el.setAttribute('aria-pressed',!on); break; }
+    case 'pick': { const song=(document.getElementById('upKind')||{}).value==='song'; el.innerHTML=song?'<b>new-song-master.wav</b>Ready to upload, 42 MB':'<b>new-video-final.mp4</b>Ready to upload, 248 MB'; break; }
     case 'publish': {
       const t=(document.getElementById('upTitle').value||'').trim();
       if(!t){ toast('Add a title before publishing'); document.getElementById('upTitle').focus(); break; }
@@ -924,6 +1031,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{
   if(e.target.id==='q'){ S.q=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('q'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='upPrice') updateSplit();
+  if(e.target.id==='mq'||e.target.id==='vq'){ S[e.target.id]=e.target.value; const id=e.target.id, pos=e.target.selectionStart; render(true); const q=document.getElementById(id); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='helpQ'){ S.helpQ=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('helpQ'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.closest&&e.target.closest('#contactForm')&&e.target.name==='message') S.contactDraft=e.target.value;
 });
@@ -934,7 +1042,28 @@ async function loadProfile(user){
   let p=null;
   try{ const r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(); p=r.data; }catch(_){}
   S.user={ id:user.id, email:user.email, role:(p&&p.role)||md.role||'supporter', name:(p&&p.display_name)||md.name||'Member',
-    genre:(p&&p.genre)||md.genre, city:(p&&p.city)||md.city, pro:!!(p&&p.is_pro), pass:!!(p&&p.has_pass), wanted:(p&&p.wanted_plan)||md.plan };
+    genre:(p&&p.genre)||md.genre, city:(p&&p.city)||md.city, pro:!!(p&&p.is_pro), pass:!!(p&&p.has_pass), wanted:(p&&p.wanted_plan)||md.plan,
+    makes:(p&&p.creator_type)||md.creator_type||null, genres:(p&&p.genres&&p.genres.length?p.genres:md.music_genres)||[], cats:(p&&p.video_categories&&p.video_categories.length?p.video_categories:md.video_categories)||[] };
+}
+document.addEventListener('change',e=>{
+  if(e.target.id==='upKind'){ const song=e.target.value==='song';
+    document.querySelectorAll('[data-up=video]').forEach(x=>x.hidden=song); document.querySelectorAll('[data-up=song]').forEach(x=>x.hidden=!song);
+    const t=document.getElementById('dropT'), s2=document.getElementById('dropS'); if(t&&!/Ready/.test(document.getElementById('drop').textContent)){ t.textContent=song?'Choose an audio file':'Choose a video file'; s2.textContent=song?'MP3 or WAV':'MP4 or MOV'; }
+    const p=document.getElementById('upPrice'); if(p){ p.value=song?'0.99':'2.99'; updateSplit(); } }
+});
+function starChoices(f){
+  const pick=a=>[...f.querySelectorAll(`[data-action=${a}][aria-pressed=true]`)].map(b=>b.textContent);
+  return { makes:S.su.makes, genres:pick('sgenre'), cats:pick('scat'), vform:S.su.vform };
+}
+function checkStar(f){
+  const c=starChoices(f);
+  if(!c.makes){ toast('Choose what you create: Music, Video, or Both'); return null; }
+  const music=c.makes!=='video', video=c.makes!=='music';
+  if(music&&!c.genres.length){ toast('Pick at least one music genre'); return null; }
+  if(video&&!c.vform){ toast('Choose short-form, long-form, or both'); return null; }
+  if(video&&!c.cats.length){ toast('Pick at least one video category'); return null; }
+  if(!music){ c.genres=[]; } if(!video){ c.cats=[]; c.vform=null; }
+  return c;
 }
 document.addEventListener('submit',async e=>{
   const f=e.target; const v=n=>(f.elements[n]&&f.elements[n].value||'').trim();
@@ -972,10 +1101,13 @@ document.addEventListener('submit',async e=>{
   if(!v('name')){ toast('Add your name'); f.elements.name.focus(); return; }
   if(!/^\S+@\S+\.\S+$/.test(v('email'))){ toast('Add a valid email'); f.elements.email.focus(); return; }
   if(v('pw').length<8){ toast('Password needs at least 8 characters'); f.elements.pw.focus(); return; }
+  let sc=null; if(f.id==='starForm'){ sc=checkStar(f); if(!sc) return; }
   if(sb){
     const star=f.id==='starForm';
     const meta={ role:star?'star':'supporter', name:v('name'), plan:S.signupPlan||'free',
-      genre:star?v('genre'):null, city:star?v('city'):null,
+      genre:star?(sc.genres[0]||sc.cats[0]||null):null, city:star?v('city'):null,
+      creator_type:star?sc.makes:null, music_genres:star?sc.genres:[], video_categories:star?sc.cats:[],
+      video_formats:star?(sc.vform==='both'?['short','long']:sc.vform?[sc.vform]:[]):[],
       genres:star?[]:[...f.querySelectorAll('[data-action="favgenre"][aria-pressed="true"]')].map(b=>b.textContent) };
     busy(f,true);
     const {data,error}=await sb.auth.signUp({email:v('email'),password:f.elements.pw.value,options:{data:meta,emailRedirectTo:location.origin}});
@@ -988,7 +1120,7 @@ document.addEventListener('submit',async e=>{
     return;
   }
   if(f.id==='starForm'){
-    S.user={role:'star',name:v('name'),email:v('email'),genre:v('genre'),city:v('city'),pro:S.signupPlan==='pro'};
+    S.user={role:'star',name:v('name'),email:v('email'),genre:sc.genres[0]||sc.cats[0],city:v('city'),pro:S.signupPlan==='pro',makes:sc.makes,genres:sc.genres,cats:sc.cats};
     S.tab='studio';
   } else {
     S.user={role:'supporter',name:v('name'),email:v('email'),pass:S.signupPlan==='pass',genres:[...f.querySelectorAll('[data-action="favgenre"][aria-pressed="true"]')].map(b=>b.textContent)};
