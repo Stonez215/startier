@@ -193,6 +193,8 @@ main{max-width:1240px;margin:0 auto}
 .drop b{color:var(--bone);display:block}
 .split{font-size:13.5px;color:var(--dust)}
 .art.cov .glyph,.art.cov::after{display:none}
+a.btn{text-decoration:none;color:inherit}
+.merch-note{font-size:13px;color:var(--dust);margin:0}
 .drop{cursor:pointer}
 .drop.has{border-style:solid;border-color:rgba(127,178,255,.45);color:#cfe0ff}
 .up-row{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:stretch}
@@ -948,6 +950,12 @@ function viewStudio(){
   ${S.user.pro
     ? `<div class="fee-note" style="margin:0 22px 18px;max-width:640px"><b>Star Pro is on.</b> Your Featured badge, higher placement in search, and homepage promo spots are active.</div>`
     : `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Star Pro</h3><p>Get a Featured badge, show up higher in search, and get homepage and social promo spots. ${money(PRO_PRICE)} a month.</p></div><button class="btn btn-gold" data-action="upgrade">Upgrade</button></div>`}
+  <div class="form" style="margin-bottom:18px">
+    <h3>Your merch store</h3>
+    <label class="field">Link to your store (Shopify, Printful, Etsy, Big Cartel…)<input id="merchUrl" type="url" maxlength="300" placeholder="https://yourstore.com" value="${esc(S.user.merch||'')}"></label>
+    <p class="merch-note">A <b>Shop merch</b> button shows on your page. Fans buy on your store, and your store handles orders, shipping and returns.</p>
+    <div class="row-btns"><button class="btn btn-ghost btn-sm" data-action="savemerch">Save link</button>${S.user.merch?'<button class="btn btn-ghost btn-sm" data-action="savemerch" data-clear="1">Remove</button>':''}</div>
+  </div>
   <div class="form">
     <h3>Upload a release</h3>
     <div class="two-col">
@@ -989,6 +997,7 @@ function viewArtist(){
   <div class="row-btns" style="padding:0 22px">
     <button class="btn ${f?'btn-ghost':'btn-gold'}" data-action="follow" data-id="${a.id}">${f?'Following':'Follow'}</button>
     <button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button>
+    ${a.merch?`<a class="btn btn-ghost" href="${esc(a.merch)}" target="_blank" rel="noopener noreferrer nofollow" data-action="merch">${I.bag}Shop merch</a>`:''}
   </div>
   <p class="bio">${esc(a.bio)}</p>
   ${at.length?`<section class="section"><div class="section-head"><h2>Music</h2></div><div class="tracks">${at.map(trow).join('')}</div></section>`:''}
@@ -1181,11 +1190,12 @@ const PATH_OK = /^[0-9a-f-]{36}\/[A-Za-z0-9_-]+\.[a-z0-9]{1,5}$/;
 const pubUrl = (bucket,path) => sb.storage.from(bucket).getPublicUrl(path).data.publicUrl;
 const PALS = ['clay','moss','gold','night','dusk','forest','ember'];
 function covKey(r){ if(!r.cover_path||!PATH_OK.test(r.cover_path)) return PALS[r.id%7]; const k='c_'+r.id; P[k]=`url('${pubUrl('covers',r.cover_path).replace(/['"()\\\s]/g,encodeURIComponent)}') center/cover`; return k; }
+function safeUrl(u){ try{ const x=new URL(String(u||'').trim()); return x.protocol==='https:'&&x.href.length<=300?x.href:''; }catch(_){ return ''; } }
 function artistFromProfile(p){
   let n=0; for(const ch of p.id) n=(n*31+ch.charCodeAt(0))%997;
   return { id:p.id, real:true, makes:p.creator_type||'both', genres:p.genres||[], cats:p.video_categories||[],
     name:p.display_name||'Star', genre:(p.genres||[])[0]||(p.video_categories||[])[0]||'', city:p.city||'',
-    p:PALS[n%7], followers:0, pro:!!p.is_pro, bio:'' };
+    p:PALS[n%7], followers:0, pro:!!p.is_pro, bio:'', merch:safeUrl(p.merch_url) };
 }
 function releaseToItem(r){
   const base={ id:'r'+r.id, rid:r.id, real:true, title:r.title, artist:r.artist_id, price:(r.price_cents||0)/100, p:covKey(r), status:r.status };
@@ -1200,7 +1210,7 @@ async function loadCatalog(){
   if(error||!rels) return;
   const ids=[...new Set(rels.map(r=>r.artist_id))];
   let profs=[];
-  if(ids.length){ const r2=await sb.from('profiles').select('id,display_name,city,creator_type,genres,video_categories,is_pro').in('id',ids); profs=r2.data||[]; }
+  if(ids.length){ const r2=await sb.from('profiles').select('id,display_name,city,creator_type,genres,video_categories,is_pro,merch_url').in('id',ids); profs=r2.data||[]; }
   for(const arr of [artists,videos,tracks]) for(let i=arr.length-1;i>=0;i--) if(arr[i].real||!SHOW_SAMPLES) arr.splice(i,1);
   artists.unshift(...profs.map(artistFromProfile));
   const nv=[],nt=[];
@@ -1573,6 +1583,15 @@ document.addEventListener('click',e=>{
     case 'pick': { const inp=document.getElementById(d.target); if(inp) inp.click(); break; }
     case 'publish': if(!el.disabled) publishRelease(el); break;
     case 'rel': relAction(d.op, Number(d.id)); break;
+    case 'merch': break;
+    case 'savemerch': {
+      if(!sb||!S.user){ toast('Log in first'); break; }
+      const raw=d.clear?'':document.getElementById('merchUrl').value.trim(); const url=raw?safeUrl(/^https?:\/\//i.test(raw)?raw.replace(/^http:/i,'https:'):'https://'+raw):'';
+      if(raw&&!url){ toast('That link doesn\'t look right. It should start with https://'); break; }
+      sb.from('profiles').update({merch_url:url||null}).eq('id',S.user.id).then(({error})=>{
+        if(error){ toast("Couldn't save that. Try again."); return; }
+        S.user.merch=url; toast(url?'Merch link saved':'Merch link removed'); refreshAll(); });
+      break; }
   }
 });
 document.addEventListener('input',e=>{
@@ -1590,7 +1609,7 @@ async function loadProfile(user){
   try{ const r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(); p=r.data; }catch(_){}
   S.user={ id:user.id, email:user.email, role:(p&&p.role)||md.role||'supporter', name:(p&&p.display_name)||md.name||'Member',
     genre:(p&&p.genre)||md.genre, city:(p&&p.city)||md.city, pro:!!(p&&p.is_pro), pass:!!(p&&p.has_pass), wanted:(p&&p.wanted_plan)||md.plan,
-    makes:(p&&p.creator_type)||md.creator_type||null, genres:(p&&p.genres&&p.genres.length?p.genres:md.music_genres)||[], cats:(p&&p.video_categories&&p.video_categories.length?p.video_categories:md.video_categories)||[] };
+    makes:(p&&p.creator_type)||md.creator_type||null, genres:(p&&p.genres&&p.genres.length?p.genres:md.music_genres)||[], cats:(p&&p.video_categories&&p.video_categories.length?p.video_categories:md.video_categories)||[], merch:(p&&p.merch_url)||'' };
 }
 document.addEventListener('change',e=>{
   if(e.target.id==='upCover'){ const f=e.target.files[0]; if(!f) return; S.up=S.up||{}; S.up.cover=f; const c=document.getElementById('dropC');
