@@ -253,6 +253,37 @@ a.btn{text-decoration:none;color:inherit}
 .rel-actions .danger{border-color:rgba(255,120,120,.4);color:#ffb3b3}
 .pill{font-size:12px;padding:2px 8px;border-radius:999px;background:rgba(127,178,255,.12);color:#cfe0ff}
 .pill.hid{background:rgba(255,255,255,.08);color:var(--dust)}
+.live-pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;letter-spacing:.08em;padding:4px 10px;border-radius:999px;background:rgba(232,90,75,.16);color:#ffb4a8;flex:none}
+.live-pill i{width:7px;height:7px;border-radius:50%;background:#ff6a55;animation:livep 1.6s ease-in-out infinite}
+.off .live-pill,.live-pill.off{background:rgba(255,255,255,.08);color:var(--dust)}
+.off .live-pill i,.live-pill.off i{background:var(--dust);animation:none}
+@keyframes livep{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.live-pill i{animation:none}}
+.radio-now{margin:0 22px;max-width:860px;display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:24px;align-items:center;padding:20px;border-radius:20px;background:rgba(16,24,52,.82);border:1px solid var(--line)}
+.radio-now>.art{width:100%;aspect-ratio:1;border-radius:14px;--gs:120px}
+.rn-body{min-width:0;display:grid;gap:8px;justify-items:start}
+.rn-body h2{font-family:var(--display);font-size:clamp(24px,4vw,36px);line-height:1.1;margin:0;overflow-wrap:anywhere}
+.rn-body .hero-by{margin:0}
+.rn-kind{font-size:13px;color:var(--dust)}
+.rbar{width:100%;height:4px;border-radius:4px;background:rgba(242,245,255,.12);overflow:hidden;margin:6px 0 4px}
+.rbar i{display:block;height:100%;background:linear-gradient(90deg,var(--gold),var(--clay-2));width:0;transition:width 1s linear}
+@media (max-width:640px){.radio-now{grid-template-columns:1fr;gap:16px}.radio-now>.art{max-width:220px}}
+.radio-off{margin:0 22px;max-width:860px;padding:28px 22px;border-radius:18px;background:var(--bark);color:var(--dust);display:grid;gap:8px;justify-items:start}
+.radio-off b{color:var(--bone);font-size:18px}
+.upnext .trow{grid-template-columns:52px minmax(0,1fr) auto}
+.upnext .when{font-size:13px;color:var(--dust);white-space:nowrap}
+.radio-strip{margin:0 22px 8px;display:flex;align-items:center;gap:12px;width:calc(100% - 44px);max-width:860px;padding:12px 14px;border-radius:14px;background:rgba(16,24,52,.82);border:1px solid var(--line);text-align:left}
+.radio-strip .rs-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14.5px}
+.radio-strip .rs-go{font-weight:700;color:var(--gold);font-size:14px}
+.taglist .sl{background:rgba(232,165,75,.16);color:#f5cf95}
+.radio-ctl{margin:0 22px;max-width:860px;display:grid;gap:12px;padding:18px;border-radius:16px;background:rgba(16,24,52,.82);border:1px solid var(--line)}
+.onair{display:flex;gap:12px;align-items:center}
+.onair .s{font-size:13px;color:var(--dust)}
+.rshow{grid-template-columns:auto 52px minmax(0,1fr) auto}
+.rshow.now{background:rgba(232,165,75,.08)}
+.rshow .nowtag{color:var(--gold);font-weight:600}
+.addrow{grid-template-columns:52px minmax(0,1fr) auto}
+.rel-actions button:disabled{opacity:.35}
 .vframe{position:absolute;inset:0;width:100%;height:100%;border:0;z-index:2;background:#000}
 .lockmsg{position:absolute;inset:0;z-index:2;display:grid;place-items:center;text-align:center;padding:20px;background:rgba(7,11,26,.62);font-weight:600}
 .lockmsg small{display:block;font-weight:400;color:#c9d2ee;margin-top:6px}
@@ -776,6 +807,7 @@ const I = {
   chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>',
   dots:'<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>',
   shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 5 6v6c0 4.4 3 7.7 7 9 4-1.3 7-4.6 7-9V6z"/></svg>',
+  radio:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><path d="M16.2 7.8a6 6 0 0 1 0 8.4M7.8 16.2a6 6 0 0 1 0-8.4M19 5a10 10 0 0 1 0 14M5 19A10 10 0 0 1 5 5"/></svg>',
   bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M5 8h14l-1 13H6zM9 8V6a3 3 0 0 1 6 0v2"/></svg>'
 };
 
@@ -863,7 +895,7 @@ const mmss = s => Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
 const art = (p,letter,cls='') => `<div class="art ${cls}${String(p).startsWith('c_')?' cov':''}" style="--g:${P[p]}"><span class="glyph" aria-hidden="true">${esc(letter)}</span></div>`;
 
 /* ---------- nav ---------- */
-const TABS = [['home','Home',I.home],['music','Music',I.music],['videos','Videos',I.video],['library','Library',I.lib],['studio','Studio',I.studio],['help','Help',I.help]];
+const TABS = [['home','Home',I.home],['music','Music',I.music],['videos','Videos',I.video],['radio','Radio',I.radio],['library','Library',I.lib],['studio','Studio',I.studio],['help','Help',I.help]];
 function renderNav(){
   const html = (S.isAdmin?[...TABS,['admin','Admin',I.shield]]:TABS).map(([id,label,ic])=>`<button class="tab" data-action="tab" data-tab="${id}" ${S.tab===id&&!S.artist?'aria-current="page"':''}>${ic}<span>${label}</span></button>`).join('');
   document.getElementById('tabbar').innerHTML = html;
@@ -916,11 +948,13 @@ function viewHome(){
   <div class="up-next" aria-label="Featured premieres">
     ${videos.filter(v=>v.form==='long').slice(0,5).map(v=>`<button data-action="hero" data-id="${v.id}" aria-pressed="${v.id===h.id}">${art(v.p,v.title[0])}${esc(v.title)}</button>`).join('')}
   </div>
+  ${radioBanner()}
   ${!hasPass() && !(S.user && S.user.role==='star') ? `<div class="pass"><div><h3>StarPass</h3><p>Stream every song and video on StarTier for ${money(PASS_PRICE)} a month, and get 20% off anything you download to keep.</p></div><button class="btn btn-gold" data-action="${S.user?'upgrade':'tab'}" data-tab="join-supporter" data-plan="pass">Get StarPass</button></div>` : ''}
   <section class="section"><div class="section-head"><h2>Premiering this week</h2><button class="link" data-action="tab" data-tab="videos">See all videos</button></div>
     <div class="rail">${videos.filter(v=>v.form==='long').map(vcard).join('')}</div></section>
   <section class="section"><div class="section-head"><h2>Quick hits</h2><button class="link" data-action="vform" data-f="short" data-go="1">See all shorts</button></div>
     <div class="rail">${videos.filter(v=>v.form==='short').map(vcard).join('')}</div></section>
+  ${starLight()}
   <section class="section"><div class="section-head"><h2>Featured Stars</h2><button class="link" data-action="tab" data-tab="music">Browse music by genre</button></div>
     <div class="rail">${sortedArtists().map(acard).join('')}</div></section>
   <section class="section"><div class="section-head"><h2>Tracks fans are buying</h2><button class="link" data-action="tab" data-tab="music">See all music</button></div>
@@ -1029,7 +1063,7 @@ function viewStudio(){
     </div>
     <div class="split" id="split"></div>
     <div class="prog-wrap" id="upProg" hidden><div class="progress"><i></i></div><span></span></div>
-    <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically.</p>
+    <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light.</p>
     <button class="btn btn-gold full" data-action="publish">Publish</button>
   </div>
   <section class="section"><div class="section-head"><h2>Your releases</h2></div>${mine.length?'':'<div class="empty"><b>No releases yet</b>Upload your first song or video above.</div>'}
@@ -1047,7 +1081,7 @@ function viewArtist(){
     <button class="back" data-action="tab" data-tab="${S.tab}" aria-label="Back">${I.back}</button></div>
   <div class="artist-head">${art(a.p,a.name[0])}
     <div><h1>${esc(a.name)}</h1><div class="s">${makesLabel(a.makes)}, ${esc(a.city)}</div></div></div>
-  <div class="taglist">${[...(a.genres||[]),...(a.cats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+  <div class="taglist">${onStarLight(a.id)?'<span class="sl">★ Star Light · on StarTier Radio</span>':''}${[...(a.genres||[]),...(a.cats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
   <div class="stats"><div><b>${k(fol)}</b><span>Followers</span></div>${a.makes!=='music'?`<div><b>${av.length+as2.length}</b><span>Videos</span></div>`:''}${a.makes!=='video'?`<div><b>${at.length}</b><span>Songs</span></div>`:''}</div>
   <div class="row-btns" style="padding:0 22px">
     ${mine?`<button class="btn btn-gold" data-action="tab" data-tab="studio">Your studio</button>`:`<button class="btn ${f?'btn-ghost':'btn-gold'}" data-action="follow" data-id="${a.id}">${f?'Following':'Follow'}</button>`}
@@ -1137,6 +1171,8 @@ const FAQ = [
  {g:'For Stars', q:'What does Star Pro include?', a:'Star Pro is $9.99 a month. You get a Featured badge, you show up higher in search and on the home page, you get homepage and social promo spots, and detailed fan and sales stats. Paid plans are switching on soon.', k:'star pro upgrade featured promo visibility boost'},
  {g:'For Stars', q:'How do I get paid?', a:'Payouts launch together with payments. You will connect your bank account securely through Stripe, and your earnings will be sent to you from your Studio.', k:'paid payout payment bank cash out withdraw stripe'},
  {g:'For Stars', q:'What can I upload?', a:'Music (MP3 or WAV) and videos (MP4 or MOV): songs, music videos, short films, live sessions, and more. Only upload work you made or have the rights to share. Uploads are switching on in an upcoming update.', k:'upload music video file format mp3 wav mp4 mov'},
+ {g:'For Stars', q:'Will my music be played on StarTier Radio?', a:'It can be. StarTier Radio is our free live station, and the StarTier team picks songs from what Stars upload. Artists on the radio also get featured in Star Light, our artist promo spot. Radio plays are free promotion and are not paid per play. If you do not want a song on the radio, send us a message and we will take it off.', k:'radio station play my song star light spotlight promo featured airplay'},
+ {g:'For Supporters', q:'What is StarTier Radio?', a:'StarTier Radio is a free live station for rising Stars. Everyone hears the same song at the same time, with DJ drops in between. Open the Radio tab and tap Listen live. You do not need StarPass.', k:'radio live station listen free dj'},
  {g:'For Stars', q:'Can I set my own prices?', a:'Yes. You choose the price for every song and video you sell. The Studio shows exactly how much you get from each sale.', k:'price set pricing how much charge'},
  {g:'For Supporters', q:'What is StarPass?', a:'StarPass is $5.99 a month. It lets you stream every song and video on StarTier in full and gives you 20% off anything you download to keep. You can cancel anytime. Paid plans are switching on soon.', k:'starpass subscription stream monthly pass discount'},
  {g:'For Supporters', q:'Do I own what I buy?', a:'Yes. Anything you buy is yours to keep and lives in your Library, whether or not you have StarPass.', k:'own buy purchase keep library download'},
@@ -1285,7 +1321,7 @@ async function refreshAll(){ await loadCatalog(); await loadMine(); render(true)
 
 /* playing real songs */
 const audio = new Audio(); audio.preload='none';
-audio.addEventListener('ended',()=>{ S.playing=false; updateMini(); render(true); });
+audio.addEventListener('ended',()=>{ if(S.radioOn){ radioTune(true); return; } S.playing=false; updateMini(); render(true); });
 async function songSource(t){
   const mine = S.user && S.user.id===t.artist;
   if(!t.price || mine){ const {data,error}=await sb.storage.from('songs').createSignedUrl(t.audio, 4*3600); if(!error&&data&&data.signedUrl) return {url:data.signedUrl, full:true}; }
@@ -1312,7 +1348,7 @@ async function videoCall(body){
 }
 function openRealVideo(v){
   const a=A(v.artist), mine=S.user&&S.user.id===v.artist;
-  audio.pause(); if(S.playing){ S.playing=false; updateMini(); }
+  if(S.radioOn) radioStop(); audio.pause(); if(S.playing){ S.playing=false; updateMini(); }
   openSheet(`<div class="player" id="player">${art(v.p,v.title[0])}
     <button class="close" data-action="close" aria-label="Close">${I.close}</button>
     <div class="lockmsg" id="vmsg">Loading video…</div></div>
@@ -1454,6 +1490,7 @@ terms: { title:'Terms of Service', body:[
 ['Who can use StarTier', `You must be at least 13 years old to use StarTier. If you are under 18, you need permission from a parent or guardian, and they agree to these Terms for you. You're responsible for keeping your password safe and for everything that happens on your account. Give us true information when you sign up.`],
 ['Stars and Supporters', `Stars are artists and creators who upload music and videos. Supporters are fans who discover, stream, buy and tip. Either kind of account can follow Stars, like and comment on posts, and report content.`],
 ['Your content stays yours', `If you're a Star, you keep ownership of everything you upload. By uploading, you give StarTier a non-exclusive, worldwide, royalty-free license to host, store, copy, stream, display, sell (at the price you set) and promote your content on and off StarTier, only so we can run and grow the service. This license ends when you delete the content, except for copies fans already bought, backups kept for a short time, and anything we must keep by law.`],
+['StarTier Radio and Star Light', `By uploading music, you also let StarTier play your songs in full on StarTier Radio, our free live station, and feature you, your name, your artwork and your music in Star Light, our artist promotion, on and off StarTier. Radio plays and Star Light features are free promotion. They aren't sales and don't pay per play. If you don't want a song on the radio, email ${LEGAL.email} and we'll take it off the show.`],
 ['You need the rights to what you upload', `Only upload work you created or have permission to share. That includes the beats, samples, lyrics, footage and images in it. You're responsible for getting any licenses, clearances and permissions, and for paying anyone you owe, like producers, featured artists or collaborators.`],
 ['Sales, prices and our fee', `Stars set their own prices, including free. When paid sales and tips are switched on, StarTier keeps 15% of each sale and tip, and the Star gets the rest, minus any payment processing or tax amounts the law requires. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
 ['Paid plans', `Star Pro and StarPass are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
@@ -1636,13 +1673,175 @@ async function deleteItem(kind,id){
   closeSheet(); S.posts={}; toast('Deleted'); render(true);
 }
 
+/* ---------- StarTier Radio ---------- */
+const R={data:null,skew:0,at:0,busy:null,playingId:null,errT:null};
+async function radioFetch(force){
+  if(!sb) return R.data;
+  if(R.busy) return R.busy;
+  if(!force&&R.data&&Date.now()-R.at<60000) return R.data;
+  R.busy=(async()=>{ try{ const t0=Date.now(); const {data,error}=await sb.rpc('radio_now'); const t1=Date.now();
+    if(!error&&data&&Array.isArray(data.items)){ R.data=data; R.at=t1; const sn=Date.parse(data.now); R.skew=isFinite(sn)?sn-(t0+t1)/2:0; } }catch(_){}
+    R.busy=null; return R.data; })();
+  return R.busy;
+}
+const radioItems=()=>(R.data&&R.data.items)||[];
+function radioClock(){
+  const d=R.data, it=radioItems(); if(!d||!d.on_air||!it.length) return null;
+  const total=it.reduce((s,i)=>s+i.duration_sec,0), st=Date.parse(d.started_at); if(!total||!isFinite(st)) return null;
+  let t=((Date.now()+R.skew)-st)/1000; t=((t%total)+total)%total; return {t,total};
+}
+function radioNow(){
+  const k=radioClock(); if(!k) return null; const it=radioItems(); let acc=0;
+  for(let i=0;i<it.length;i++){ if(k.t<acc+it[i].duration_sec) return {item:it[i],idx:i,into:k.t-acc,total:k.total}; acc+=it[i].duration_sec; }
+  return {item:it[0],idx:0,into:0,total:k.total};
+}
+function radioUpNext(n){
+  const c=radioNow(); if(!c) return []; const it=radioItems(), out=[]; let wait=c.item.duration_sec-c.into;
+  for(let k2=1;k2<=Math.min(n,it.length-1);k2++){ const x=it[(c.idx+k2)%it.length]; out.push({item:x,wait}); wait+=x.duration_sec; }
+  return out;
+}
+function radioLead(){ // seconds the live clock is past the end of what we're playing
+  const k=radioClock(); if(!k||!R.playingId) return 0; const it=radioItems(); let acc=0;
+  for(const x of it){ if(x.id===R.playingId){ let d=k.t-(acc+x.duration_sec); d=((d%k.total)+k.total)%k.total; return d>k.total/2?d-k.total:d; } acc+=x.duration_sec; }
+  return 999;
+}
+const hm=s=>{ s=Math.round(s); const hh=Math.floor(s/3600), mm=Math.round((s%3600)/60); return hh?`${hh} hr${mm?' '+mm+' min':''}`:`${Math.max(1,Math.round(s/60))} min`; };
+function itemArt(it){ return it.kind==='song'&&it.release_id?art(covKey({id:it.release_id,cover_path:it.cover_path}),(it.title||'?')[0]):art('gold','DJ'); }
+const starLightIds=()=>[...new Set(radioItems().filter(i=>i.kind==='song'&&i.artist_id).map(i=>i.artist_id))].filter(id=>A(id)&&!S.blocked.has(id));
+const onStarLight=id=>starLightIds().includes(id);
+async function radioSrc(it){
+  if(it.kind==='drop') return /^drops\/[A-Za-z0-9_-]+\.[a-z0-9]{1,5}$/.test(it.drop_path||'')?pubUrl('radio',it.drop_path):null;
+  if(!PATH_OK.test(it.audio_path||'')) return null;
+  try{ const {data,error}=await sb.storage.from('songs').createSignedUrl(it.audio_path,3600); return (!error&&data&&data.signedUrl)?data.signedUrl:null; }catch(_){ return null; }
+}
+function radioSkipLater(id){ clearTimeout(R.errT); const c=radioNow(); const left=c&&c.item.id===id?c.item.duration_sec-c.into:2;
+  R.errT=setTimeout(()=>{ if(S.radioOn&&R.playingId===id) radioTune(true); },Math.max(1,left)*1000+300); }
+async function radioTune(afterEnded){
+  if(!S.radioOn) return;
+  await radioFetch(true); if(!S.radioOn) return;
+  let c=radioNow();
+  if(!c){ radioStop(); render(true); toast('StarTier Radio is off the air right now'); return; }
+  if(afterEnded&&c.item.id===R.playingId){ const it=radioItems(), i=(c.idx+1)%it.length; c={item:it[i],idx:i,into:0,total:c.total}; }
+  const id=c.item.id; R.playingId=id; clearTimeout(R.errT); updateMini(); render(true);
+  const url=await radioSrc(c.item); if(!S.radioOn||R.playingId!==id) return;
+  if(!url){ radioSkipLater(id); return; }
+  audio.src=url;
+  audio.addEventListener('loadedmetadata',()=>{ const c2=radioNow(); if(S.radioOn&&R.playingId===id&&c2&&c2.item.id===id&&c2.into>1.5){ try{ audio.currentTime=c2.into; }catch(_){} } },{once:true});
+  audio.play().catch(()=>{ if(R.playingId!==id) return; radioStop(); render(true); toast('Tap Listen live to start the radio'); });
+}
+function radioStart(){ audio.pause(); S.now=null; S.playing=false; S.radioOn=true; R.playingId=null; radioTune(false); }
+function radioStop(){ S.radioOn=false; R.playingId=null; clearTimeout(R.errT); audio.pause(); updateMini(); }
+audio.addEventListener('error',()=>{ if(S.radioOn&&R.playingId) radioSkipLater(R.playingId); });
+setInterval(()=>{
+  const watching=S.radioOn||(!S.artist&&(S.tab==='radio'||S.tab==='home'));
+  if(!sb||!watching) return;
+  if(Date.now()-R.at>60000&&!R.busy) radioFetch().then(()=>{ if(!S.artist&&(S.tab==='radio'||S.tab==='home')) render(true); });
+  const c=radioNow(), cid=c?String(c.item.id):'';
+  const pb=document.getElementById('rprog'); if(pb&&c) pb.style.width=(c.into/c.item.duration_sec*100)+'%';
+  const shown=document.querySelector('[data-rid]'); if(shown&&shown.dataset.rid!==cid) render(true);
+  if(!shown&&S.tab==='radio'&&!S.artist&&cid) render(true);
+  if(S.radioOn){
+    const pr=document.getElementById('miniProg'), it=radioItems().find(x=>x.id===R.playingId);
+    if(pr&&it){ pr.style.width=(audio.duration?audio.currentTime/audio.duration:0)*100+'%'; }
+    if(R.playingId&&!audio.paused&&radioLead()>4) radioTune(false);
+  }
+},1000);
+
+function radioBanner(){
+  const c=radioNow(); if(!c) return '';
+  return `<button class="radio-strip" data-action="tab" data-tab="radio" data-rid="${c.item.id}"><span class="live-pill"><i></i>LIVE</span><span class="rs-t">StarTier Radio · <b>${esc(c.item.title)}</b>${c.item.kind==='song'&&c.item.artist_name?' by '+esc(c.item.artist_name):''}</span><span class="rs-go">Listen</span></button>`;
+}
+function starLight(){
+  const as=starLightIds().map(A);
+  if(!as.length) return '';
+  return `<section class="section"><div class="section-head"><h2>Star Light</h2><button class="link" data-action="tab" data-tab="radio">Hear them live</button></div>
+    <p class="lead" style="margin-top:-4px">Stars playing on StarTier Radio right now.</p><div class="rail">${as.map(acard).join('')}</div></section>`;
+}
+function viewRadio(){
+  const head=`<h1 class="page-title">StarTier Radio</h1><p class="lead">One live station for rising Stars. Everyone hears the same song at the same time, and it's free.</p>`;
+  if(!R.data){ if(sb) radioFetch(true).then(()=>{ if(S.tab==='radio') render(true); });
+    return head+(sb?`<div class="empty">Tuning in…</div>`:`<div class="radio-off off"><span class="live-pill off"><i></i>OFF AIR</span><b>StarTier Radio is coming soon</b>Live shows start once Stars upload their music.</div>`); }
+  const c=radioNow();
+  if(!c) return head+`<div class="radio-off off"><span class="live-pill off"><i></i>OFF AIR</span><b>Off the air right now</b>Check back soon for the next live show.</div>${starLight()}${legalLinks()}`;
+  const it=c.item, a=it.kind==='song'?A(it.artist_id):null, on=S.radioOn, me=S.user&&a&&S.user.id===a.id;
+  return head+`<section class="radio-now" data-rid="${it.id}">${itemArt(it)}
+    <div class="rn-body"><span class="live-pill"><i></i>LIVE</span>
+      <div class="rn-kind">${it.kind==='drop'?'On the mic':'Now playing'}</div>
+      <h2>${esc(it.title)}</h2>
+      ${a?`<button class="hero-by" data-action="artist" data-id="${a.id}"><span class="dot" style="background:${P[a.p]}"></span>${esc(a.name)}</button>`:`<div class="rn-kind">${it.kind==='drop'?'StarTier Radio':esc(it.artist_name||'')}</div>`}
+      <div class="rbar"><i id="rprog" style="width:${(c.into/it.duration_sec*100).toFixed(1)}%"></i></div>
+      <div class="row-btns"><button class="btn ${on?'btn-ghost':'btn-gold'}" data-action="radio">${on?I.pause+'Stop listening':I.play+'Listen live'}</button>
+        ${a&&!me?`<button class="btn btn-ghost" data-action="follow" data-id="${a.id}">${following(a.id)?'Following':'Follow'}</button><button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button>`:''}</div>
+    </div></section>
+  ${radioUpNext(6).length?`<section class="section"><div class="section-head"><h2>Up next</h2></div><div class="tracks upnext">${radioUpNext(6).map(({item:x,wait})=>`<div class="trow">${itemArt(x)}<div class="meta"><div class="t">${esc(x.title)}</div><div class="s">${x.kind==='drop'?'DJ drop':esc(x.artist_name||'')}</div></div><span class="when">in ${hm(wait)}</span></div>`).join('')}</div></section>`:''}
+  ${starLight()}${legalLinks()}`;
+}
+function viewAdminRadio(){
+  if(!R.data){ radioFetch(true).then(()=>{ if(S.tab==='admin') render(true); }); return '<div class="empty">Loading the radio…</div>'; }
+  const d=R.data, items=radioItems(), total=items.reduce((s,i)=>s+i.duration_sec,0), c=radioNow();
+  const q=(S.rq||'').toLowerCase().trim(), inShow=new Set(items.filter(i=>i.kind==='song').map(i=>i.release_id));
+  const songs=tracks.filter(t=>t.real&&(!q||t.title.toLowerCase().includes(q)||nameOf(t.artist).toLowerCase().includes(q))).slice(0,40);
+  return `<div class="radio-ctl"><div class="onair ${d.on_air?'':'off'}"><span class="live-pill${d.on_air?'':' off'}"><i></i>${d.on_air?'ON AIR':'OFF AIR'}</span>
+      <div><b>${d.on_air?(c?'Playing: '+esc(c.item.title):'On air'):'The station is off'}</b><div class="s">${items.length} in the show${total?` · ${hm(total)} long, then it repeats`:''}</div></div></div>
+    <div class="row-btns">${d.on_air?`<button class="btn btn-ghost btn-sm" data-action="radio-edit" data-op="off">Go off air</button>`:`<button class="btn btn-gold btn-sm" data-action="radio-edit" data-op="on" ${items.length?'':'disabled'}>Go on air</button>`}
+      <button class="btn btn-ghost btn-sm" data-action="radio-edit" data-op="restart" ${items.length?'':'disabled'}>Start show from the top</button>
+      <button class="btn btn-ghost btn-sm" data-action="tab" data-tab="radio">Open the radio page</button></div></div>
+  <section class="section"><div class="section-head"><h2>The show</h2></div>
+    ${items.length?`<div class="tracks">${items.map((it,i)=>{ const now=c&&c.item.id===it.id; return `<div class="trow rshow${now?' now':''}"><span class="n">${i+1}</span>${itemArt(it)}
+      <div class="meta"><div class="t">${esc(it.title)}</div><div class="s">${it.kind==='drop'?'DJ drop':esc(it.artist_name||'')} · ${mmss(it.duration_sec)}${now?' · <b class="nowtag">Playing now</b>':''}</div></div>
+      <div class="rel-actions"><button data-action="radio-edit" data-op="up" data-id="${it.id}" ${i?'':'disabled'} aria-label="Move up">↑</button><button data-action="radio-edit" data-op="down" data-id="${it.id}" ${i<items.length-1?'':'disabled'} aria-label="Move down">↓</button><button class="danger" data-action="radio-edit" data-op="remove" data-id="${it.id}">Remove</button></div></div>`; }).join('')}</div>`
+    :`<div class="empty"><b>The show is empty</b>Add songs and DJ drops below, then tap Go on air.</div>`}</section>
+  <div class="form" style="margin-top:4px"><h3>Add a DJ drop</h3><p class="small" style="margin:0">Your voice between songs: shout-outs, intros, "you're listening to StarTier Radio." MP3, M4A or WAV, under 20 MB. It goes to the end of the show, and you can move it with the arrows.</p>
+    <label class="field">Name it<input id="dropTitle" maxlength="80" placeholder="Station ID, Friday intro…"></label>
+    <div class="drop" data-action="pick" data-target="dropFile" role="button" tabindex="0" id="dropBox"><b id="dropBoxT">Choose your drop</b><span id="dropBoxS">MP3, M4A or WAV</span></div>
+    <input type="file" id="dropFile" accept="audio/*,.mp3,.m4a,.wav" hidden>
+    <button class="btn btn-gold full" data-action="radio-adddrop">Add drop to the show</button></div>
+  <section class="section"><div class="section-head"><h2>Add songs</h2></div>
+    <label class="search">${I.search}<input id="rq" type="search" placeholder="Search songs and artists" value="${esc(S.rq||'')}" aria-label="Search songs to add"></label>
+    ${songs.length?`<div class="tracks">${songs.map(t=>`<div class="trow addrow">${art(t.p,t.title[0])}<div class="meta"><div class="t">${esc(t.title)}</div><div class="s">${esc(nameOf(t.artist))} · ${t.len?mmss(t.len):'length unknown'}</div></div>
+      ${inShow.has(t.rid)?'<span class="pill">In the show</span>':t.len?`<button class="btn btn-ghost btn-sm" data-action="radio-edit" data-op="add_song" data-id="${t.rid}">Add</button>`:'<span class="pill hid">Can\'t add</span>'}</div>`).join('')}</div>`
+    :`<div class="empty">${q?'No songs match that search.':'No songs uploaded yet. Once Stars upload music, it shows up here.'}</div>`}</section>`;
+}
+async function radioEdit(op,id){
+  if(op==='remove'&&!confirm('Take this off the show?')) return;
+  if(op==='off'&&!confirm('Go off the air? Everyone listening will be cut off.')) return;
+  if(op==='restart'&&!confirm('Start the show over from the first item? Everyone listening jumps to the top.')) return;
+  const it=radioItems().find(x=>x.id===id);
+  const args={p_action:op}; if(id!=null&&!isNaN(id)) args.p_id=id;
+  const {error}=await sb.rpc('radio_edit',args);
+  if(error){ toast("Couldn't do that: "+(error.message||'').slice(0,80)); return; }
+  if(op==='remove'&&it&&it.kind==='drop') sb.storage.from('radio').remove([it.drop_path]).catch(()=>{});
+  toast({on:"You're on the air",off:'Off the air',restart:'Show restarted from the top',add_song:'Added to the show',remove:'Removed from the show'}[op]||'Saved');
+  await radioFetch(true); render(true);
+}
+async function addDrop(btn){
+  const f=S.dropFile, title=((document.getElementById('dropTitle')||{}).value||'').trim().slice(0,80), ext=f?fileExt(f):'';
+  if(!f){ toast('Choose your drop file'); return; }
+  if(!title){ toast('Give your drop a name'); return; }
+  if(!['mp3','m4a','wav','aac'].includes(ext)){ toast('Drops must be MP3, M4A or WAV'); return; }
+  if(f.size>20*MB){ toast('Drops must be under 20 MB'); return; }
+  btn.disabled=true;
+  const dur=Math.round(S.dropDur||await readDuration(f,false));
+  if(!dur){ btn.disabled=false; toast("Couldn't read how long that file is. Try an MP3."); return; }
+  const path=`drops/${rid()}.${ext}`;
+  const r=await sb.storage.from('radio').upload(path,f,{contentType:f.type||AUDIO_TYPES[ext]});
+  if(r.error){ btn.disabled=false; toast(upErr(r.error)); return; }
+  const {error}=await sb.rpc('radio_edit',{p_action:'add_drop',p_title:title,p_path:path,p_duration:dur});
+  if(error){ sb.storage.from('radio').remove([path]).catch(()=>{}); btn.disabled=false; toast("Couldn't add that: "+(error.message||'').slice(0,80)); return; }
+  S.dropFile=null; S.dropDur=0; toast('Drop added to the show'); await radioFetch(true); render(true);
+}
+
 /* ---------- admin ---------- */
 const REASON_LABEL=Object.fromEntries(REASONS);
 async function loadReports(){ if(S.loading.rep) return; S.loading.rep=1; const {data,error}=await sb.rpc('admin_reports'); S.reports=error?[]:(data||[]); delete S.loading.rep; render(true); }
 function viewAdmin(){
   if(!S.isAdmin) return `<h1 class="page-title">Admin</h1><p class="lead">This page is only for StarTier admins.</p>`;
-  if(!S.reports){ loadReports(); return `<h1 class="page-title">Admin</h1><div class="empty">Loading reports…</div>`; }
-  return `<h1 class="page-title">Reports</h1>
+  const v=S.adminView||'reports';
+  return `<h1 class="page-title">Admin</h1><div class="seg" role="group" aria-label="Admin section">${[['reports','Reports'],['radio','Radio']].map(([k2,l])=>`<button data-action="adminview" data-v="${k2}" aria-pressed="${v===k2}">${l}</button>`).join('')}</div>`+(v==='radio'?viewAdminRadio():viewReports());
+}
+function viewReports(){
+  if(!S.reports){ loadReports(); return `<div class="empty">Loading reports…</div>`; }
+  return `
   <p class="lead">${S.reports.length?`${S.reports.length} open report${S.reports.length===1?'':'s'}. Newest first.`:'No open reports. All clear.'} <button class="link" data-action="admin-refresh">Refresh</button></p>
   <div class="posts">${S.reports.map(r=>`<div class="rep">
     <div><span class="pill">${esc(r.target_type)}</span> <b>${esc(REASON_LABEL[r.reason]||r.reason)}</b></div>
@@ -1704,7 +1903,7 @@ function openAccount(){
 function render(keepScroll){
   const y = window.scrollY;
   const v = document.getElementById('view');
-  v.innerHTML = S.artist ? viewArtist() : {home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset}[S.tab]();
+  v.innerHTML = S.artist ? viewArtist() : {home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,radio:viewRadio,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset}[S.tab]();
   renderNav();
   if(keepScroll) window.scrollTo(0,y); else window.scrollTo(0,0);
   if(!S.artist && S.tab==='studio') updateSplit();
@@ -1773,12 +1972,21 @@ function openTip(id){
 /* ---------- player ---------- */
 const mini = document.getElementById('mini');
 function play(id){
+  if(S.radioOn){ radioStop(); render(true); }
   const tr=T(id); if(tr&&tr.real) return playReal(tr);
   audio.pause();
   if(S.now===id){ S.playing=!S.playing; } else { S.now=id; S.pos=0; S.playing=true; }
   updateMini(); render(true);
 }
 function updateMini(){
+  if(S.radioOn){
+    const it=radioItems().find(x=>x.id===R.playingId); clearInterval(S.timer); mini.classList.add('show');
+    const ma=document.getElementById('miniArt'), key=it&&it.kind==='song'&&it.release_id?covKey({id:it.release_id,cover_path:it.cover_path}):'gold';
+    ma.style.setProperty('--g',P[key]); ma.classList.toggle('cov',String(key).startsWith('c_')); ma.innerHTML=`<span class="glyph">${it&&it.kind==='song'?esc((it.title||'?')[0]):'DJ'}</span>`;
+    document.getElementById('miniT').textContent=it?it.title:'StarTier Radio';
+    document.getElementById('miniS').textContent='LIVE · StarTier Radio'+(it&&it.kind==='song'&&it.artist_name?' · '+it.artist_name:'');
+    const b=document.getElementById('miniBtn'); b.innerHTML=I.pause; b.setAttribute('aria-label','Stop the radio'); return;
+  }
   if(!S.now){ mini.classList.remove('show'); return; }
   const t = T(S.now); if(!t){ mini.classList.remove('show'); return; } const a = A(t.artist);
   mini.classList.add('show');
@@ -1834,13 +2042,17 @@ document.addEventListener('click',e=>{
       if(!sb){ toast('Accounts are not connected yet'); break; }
       sb.auth.resetPasswordForEmail(em.trim(),{redirectTo:location.origin}).then(({error})=>toast(error?error.message:'Check your email for a reset link'));
       break; }
-    case 'signout': S.su={makes:null,vform:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
+    case 'signout': if(S.radioOn) radioStop(); S.su={makes:null,vform:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
     case 'hero': S.hero=d.id; render(true); break;
     case 'video': openVideo(d.id, d.autoplay==='1'); break;
     case 'trailer': startTrailer(); break;
     case 'artist': if(scrim.classList.contains('open')) closeSheet(); S.artist=d.id; render(); break;
     case 'play': play(d.id); break;
-    case 'toggle': { const tr=T(S.now); if(tr&&tr.real){ playReal(tr); break; } S.playing=!S.playing; updateMini(); render(true); break; }
+    case 'radio': if(S.radioOn){ radioStop(); render(true); } else radioStart(); break;
+    case 'adminview': S.adminView=d.v; render(true); break;
+    case 'radio-edit': radioEdit(d.op, d.id?Number(d.id):null); break;
+    case 'radio-adddrop': if(!el.disabled) addDrop(el); break;
+    case 'toggle': if(S.radioOn){ radioStop(); render(true); break; } { const tr=T(S.now); if(tr&&tr.real){ playReal(tr); break; } S.playing=!S.playing; updateMini(); render(true); break; }
     case 'buy': openBuy(d.kind,d.id); break;
     case 'confirm': S.owned.add(d.id); closeSheet(); render(true); updateMini(); toast('Purchased. It’s in your library.'); break;
     case 'close': closeSheet(); break;
@@ -1887,7 +2099,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('input',e=>{
   if(e.target.id==='q'){ S.q=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('q'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='upPrice') updateSplit();
-  if(e.target.id==='mq'||e.target.id==='vq'){ S[e.target.id]=e.target.value; const id=e.target.id, pos=e.target.selectionStart; render(true); const q=document.getElementById(id); q.focus(); q.setSelectionRange(pos,pos); }
+  if(e.target.id==='mq'||e.target.id==='vq'||e.target.id==='rq'){ S[e.target.id]=e.target.value; const id=e.target.id, pos=e.target.selectionStart; render(true); const q=document.getElementById(id); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='helpQ'){ S.helpQ=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('helpQ'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.closest&&e.target.closest('#contactForm')&&e.target.name==='message') S.contactDraft=e.target.value;
 });
@@ -1910,6 +2122,10 @@ document.addEventListener('change',e=>{
     readDuration(f,!song).then(sec=>{ if(S.up.file!==f) return; S.up.dur=sec; const s2=document.getElementById('dropS'); if(s2) s2.textContent=(f.size/MB).toFixed(1)+' MB'+(sec?' · '+mmss(sec):'');
       if(!song&&sec){ const fm=document.getElementById('upForm'); if(fm) fm.value=sec<180?'short':'long'; } });
     const t=document.getElementById('upTitle'); if(t&&!t.value) t.value=f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').slice(0,120); }
+  if(e.target.id==='dropFile'){ const f=e.target.files[0]; if(!f) return; S.dropFile=f; S.dropDur=0; const bx=document.getElementById('dropBox'); if(bx) bx.classList.add('has');
+    document.getElementById('dropBoxT').textContent=f.name; document.getElementById('dropBoxS').textContent=(f.size/MB).toFixed(1)+' MB · reading length…';
+    const tt=document.getElementById('dropTitle'); if(tt&&!tt.value) tt.value=f.name.replace(/\.[^.]+$/,'').replace(/[_-]+/g,' ').slice(0,80);
+    readDuration(f,false).then(sec=>{ if(S.dropFile!==f) return; S.dropDur=sec; const s2=document.getElementById('dropBoxS'); if(s2) s2.textContent=(f.size/MB).toFixed(1)+' MB'+(sec?' · '+mmss(sec):''); }); }
   if(e.target.id==='upKind'){ const song=e.target.value==='song';
     if(S.up) S.up.file=null; const fi=document.getElementById('upFile'); if(fi){ fi.value=''; fi.accept=song?'audio/*,.mp3,.wav,.m4a,.flac,.aac':'video/*'; }
     const dr=document.getElementById('drop'); if(dr) dr.classList.remove('has');
@@ -2017,7 +2233,7 @@ document.addEventListener('submit',async e=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape' && bot.open && !scrim.classList.contains('open')) closeBot();
   if(e.key==='Escape' && scrim.classList.contains('open')) closeSheet();
-  if((e.key==='Enter'||e.key===' ') && (e.target.id==='drop'||e.target.id==='dropC')){ e.preventDefault(); e.target.click(); }
+  if((e.key==='Enter'||e.key===' ') && (e.target.id==='drop'||e.target.id==='dropC'||e.target.id==='dropBox')){ e.preventDefault(); e.target.click(); }
 });
 scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
 
@@ -2025,6 +2241,7 @@ document.getElementById('botClose').innerHTML=I.close;
 render();
 if(sb){
   loadCatalog().then(()=>render(true));
+  radioFetch(true).then(()=>render(true));
   sb.auth.getSession().then(async ({data})=>{ if(data.session){ await loadProfile(data.session.user); await loadMine(); render(true); updateMini(); } });
   sb.auth.onAuthStateChange((ev,session)=>{
     if(ev==='PASSWORD_RECOVERY'){ S.artist=null; S.tab='reset'; render(); }
