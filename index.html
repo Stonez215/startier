@@ -623,6 +623,86 @@ body.chatmode .bot-fab,body.chatmode .mini{display:none!important}
 .req p{margin:0;color:#c9d2ee;font-size:14px}
 .req .small{color:var(--dust);font-size:13px}
 .req .row-btns{margin-top:4px}
+/* admin members, stats */
+.mini-h{font-family:var(--display);font-size:18px;margin:4px 22px 10px}
+.mems{display:grid;gap:10px;padding:0 22px;max-width:900px}
+.mem{display:grid;gap:8px;padding:12px;border-radius:14px;background:var(--bark)}
+.mem-who{display:flex;align-items:center;gap:10px;text-align:left;min-width:0}
+.mem-who .art{width:40px;height:40px;border-radius:50%;--gs:40px;flex:none}
+.mem-who b{display:block}
+.mem-who small{color:var(--dust);font-size:12.5px;overflow-wrap:anywhere}
+.mem-tags{display:flex;flex-wrap:wrap;gap:6px}
+.mem-tags:empty{display:none}
+.mem .rel-actions{flex-wrap:wrap}
+.stats-card{margin:0 22px 18px;max-width:640px;padding:18px;border-radius:16px;background:var(--bark);border:1px solid rgba(127,178,255,.25)}
+.stats-card h3{margin:0 0 12px;display:flex;align-items:center;gap:8px}
+.stats-card p{margin:10px 0 0;color:var(--dust);font-size:13.5px}
+.sc-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px}
+.sc-row b{display:block;font-family:var(--display);font-size:26px;line-height:1.1}
+.sc-row span{font-size:12.5px;color:var(--dust)}
+.stats-card.locked .sc-row b{color:var(--dust)}
+.sc-table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}
+.sc-table th{text-align:left;color:var(--dust);font-weight:600;font-size:12.5px;padding:6px 4px;border-bottom:1px solid var(--line)}
+.sc-table td{padding:7px 4px;border-bottom:1px solid var(--line)}
+.sc-table td:first-child{max-width:0;width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.paused-note{margin:6px 22px 14px;padding:12px 14px;border-radius:12px;background:rgba(255,122,122,.12);border:1px solid rgba(255,122,122,.4);color:#ffd0d0;font-size:14px}
+/* plans, galaxies, constellations, spotlight */
+@media (min-width:700px){.plans:has(.plan.nova){grid-template-columns:1fr 1fr 1fr}}
+.plan.nova{border-color:rgba(232,165,75,.55);background:linear-gradient(160deg,rgba(232,165,75,.14),var(--bark-2) 55%)}
+.plan-cards{display:grid;gap:10px}
+.plan-card{position:relative;padding:14px 16px;border-radius:14px;background:var(--bark-2);border:1.5px solid var(--line);display:grid;gap:4px}
+.plan-card.cur{border-color:var(--gold)}
+.plan-card .tag{position:absolute;top:12px;right:12px;font-size:11px;font-weight:700;background:var(--gold);color:#1a1206;padding:2px 8px;border-radius:999px}
+.plan-card b{font-family:var(--display);font-size:19px}
+.plan-card .pr{color:var(--gold);font-weight:700}
+.plan-card ul{margin:4px 0 0;padding-left:18px;color:#c9d2ee;font-size:14px}
+.plan-card .pill{justify-self:start;margin-top:6px}
+.feat.nova,.pill.nova{background:linear-gradient(90deg,#F5C67A,#E8A54B);color:#1a1206}
+.tier-sel{height:34px;border-radius:999px;background:var(--bark-2);border:1px solid var(--line);color:inherit;padding:0 10px;font:inherit;font-size:13.5px}
+.quota{margin:0 22px 18px;max-width:640px;padding:12px 14px;border-radius:12px;background:var(--bark);color:#c9d2ee;font-size:14px}
+.badge.gal{left:auto;right:10px;background:linear-gradient(90deg,#7F5BFF,#2F6BFF);color:#fff}
+.gal-dot{color:#a98bff}
+.galaxy-card{margin:18px 22px 4px;max-width:640px;padding:16px;border-radius:16px;background:radial-gradient(120% 140% at 0% 0%,rgba(127,91,255,.28),rgba(16,24,52,.9) 60%);border:1px solid rgba(169,139,255,.4);display:grid;gap:10px}
+.gx-top{display:flex;align-items:center;gap:12px}
+.gx-top>div{flex:1;min-width:0}
+.gx-top small{color:#b9a8ff;font-size:12.5px;font-weight:600}
+.gx-top h3{margin:0;font-family:var(--display);font-size:20px}
+.gx-ico{width:40px;height:40px;border-radius:50%;flex:none;background:radial-gradient(circle at 35% 35%,#fff 0 6%,#b9a8ff 18%,#5a3fd0 45%,#140c3a 75%);box-shadow:0 0 20px rgba(169,139,255,.55)}
+.gx-price{font-family:var(--display);font-size:20px}
+.gx-price small{font-size:12px;color:var(--dust);font-weight:600}
+.galaxy-card p{margin:0;color:#d6d0ff;font-size:14px}
+.gx-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.gx-foot small{color:var(--dust)}
+.galaxy-form{border:1px solid rgba(169,139,255,.35)}
+.pv-tag{position:absolute;left:12px;top:12px;z-index:4;font-size:12px;font-weight:700;background:rgba(7,11,26,.75);padding:3px 9px;border-radius:6px;pointer-events:none}
+.lockmsg.pv-end{z-index:5}
+.plcard{flex:none;width:150px;text-align:left;display:grid;gap:4px;scroll-snap-align:start}
+.pl-art{display:grid;place-items:center;aspect-ratio:1;border-radius:12px;background:radial-gradient(120% 100% at 20% 10%,#7F5BFF,#2F6BFF 45%,#0B1433);color:#fff}
+.pl-art svg{width:40%;height:40%}
+.plcard b{font-size:14.5px;line-height:1.25}
+.plcard small{color:var(--dust);font-size:12.5px}
+.pl-head{display:flex;align-items:flex-end;gap:16px;padding:8px 22px 14px}
+.pl-art.big{width:120px;flex:none}
+.pl-head small{color:#b9a8ff;font-weight:600;font-size:13px}
+.pl-head h1{margin:2px 0 4px;font-family:var(--display);font-size:clamp(26px,5vw,40px);line-height:1}
+.pl-head .s{color:var(--dust);font-size:14px}
+.pl-row{display:grid;grid-template-columns:minmax(0,1fr) 34px;align-items:center}
+.spotlight{position:relative;margin:0 22px 14px;border-radius:18px;overflow:hidden;min-height:190px;display:flex;align-items:flex-end;border:1px solid rgba(232,165,75,.4)}
+.spot-bg{position:absolute;inset:-20px;background:var(--g);background-size:cover;background-position:center;filter:blur(18px) saturate(1.2);transform:scale(1.1)}
+.spot-shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(7,11,26,.88),rgba(7,11,26,.45))}
+.spot-body{position:relative;padding:18px;display:grid;gap:10px;width:100%}
+.spot-tag{justify-self:start;font-size:12px;font-weight:800;letter-spacing:.4px;background:linear-gradient(90deg,#F5C67A,#E8A54B);color:#1a1206;padding:3px 10px;border-radius:999px}
+.spot-main{display:flex;align-items:center;gap:14px}
+.spot-main .art{width:64px;height:64px;border-radius:50%;--gs:60px;flex:none;border:2px solid #F5C67A}
+.spot-main h2{margin:0;font-family:var(--display);font-size:26px;line-height:1.05}
+.spot-main p{margin:4px 0 0;color:#c9d2ee;font-size:14px}
+.spot-dots{position:absolute;right:14px;bottom:14px;display:flex;gap:6px}
+.spot-dots button{width:8px;height:8px;border-radius:50%;background:rgba(242,245,255,.35);padding:0}
+.spot-dots button[aria-pressed="true"]{background:#F5C67A;width:20px;border-radius:4px}
+.shoot-tag{display:inline-block;margin-bottom:6px;font-size:12px;font-weight:800;background:linear-gradient(90deg,#F5C67A,#E8A54B);color:#1a1206;padding:2px 9px;border-radius:999px}
+.slide-media.blur{filter:blur(22px) brightness(.55);transform:scale(1.15)}
+.vholder{container-type:size}
+.vholder iframe.fit{position:relative;inset:auto;width:min(100cqw,calc(100cqh * var(--ar)));height:min(100cqh,calc(100cqw / var(--ar)))}
 </style>
 </head>
 <body>
@@ -3399,7 +3479,9 @@ const DL_CATS = ['E-books & PDFs','Coloring books','Sample packs & beats','Prese
 const ALL_DL = [...ART_CATS,...DL_CATS];
 const downloads = [];
 const A = id => artists.find(a=>a.id===id);
-const FEE = 0.15, PASS_PRICE = 5.99, PASS_OFF = 0.20, PRO_PRICE = 9.99;
+const FEE = 0.15, PASS_PRICE = 4.99, PASS_OFF = 0.20, PRO_PRICE = 8.99, NOVA_PRICE = 24.99, GALAXY_PRICES = [4,6,9];
+const keepPct = a => a&&a.nova?92:a&&a.pro?90:85;
+const isPaidStar = u => !!(u&&(u.pro||u.nova));
 const GENRES = MUSIC_GENRES;
 const tGenre = t => (A(t.artist).genres||[])[0] || A(t.artist).genre;
 const makesLabel = m => m==='both'?'Music and video':m==='video'?'Video creator':m==='art'?'Art and photos':'Music maker';
@@ -3412,10 +3494,10 @@ const SAMPLE_UNTIL = 6;   // sample artists hide by themselves once this many re
 /* ---------- state ---------- */
 const S = {tab:'feed',artist:null,hero:'v1',genre:'All',q:'',vform:'all',vcat:'All',vq:'',mgenre:'All',mq:'',acat:'All',aq:'',su:{makes:null,vform:null,role:null},owned:new Set(),following:new Set(),saved:new Set(),samples:true,
   now:null,playing:false,pos:0,timer:null,trailer:null,user:null,signupPlan:'free',people:{},cards:{},unread:0,convos:null,chat:{with:null,msgs:[],more:false},msgDraft:{}};
-const hasPass = () => !!(S.user && S.user.role==='supporter' && S.user.pass);
+const hasPass = () => !!(S.user && S.user.pass && !S.user.banned);
 const priceOf = item => hasPass() ? item.price*(1-PASS_OFF) : item.price;
 const priceTag = item => !item.price ? 'Free' : hasPass() ? `<span class="strike">${money(item.price)}</span>${money(priceOf(item))}` : money(item.price);
-const sortedArtists = () => [...artists].sort((a,b)=>(b.pro?1:0)-(a.pro?1:0));
+const sortedArtists = () => [...artists].sort((a,b)=>((b.nova?2:b.pro?1:0)-(a.nova?2:a.pro?1:0)));
 const initials = n => n.trim().split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
 
 /* ---------- helpers ---------- */
@@ -3444,17 +3526,17 @@ const isSaved = it => !!(it && it.real && S.saved.has(it.rid));
 function vcard(v){
   const owned = isSaved(v);
   return `<button class="vcard${v.form==='short'?' short':''}" data-action="video" data-id="${v.id}">
-    <div class="art${String(v.p).startsWith('c_')?' cov':''}" style="--g:${P[v.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(v.title[0])}</span><span class="badge">${v.len}</span>${owned?'<span class="badge owned">Saved</span>':!v.price?'<span class="badge free">Free</span>':''}</div>
+    <div class="art${String(v.p).startsWith('c_')?' cov':''}" style="--g:${P[v.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(v.title[0])}</span><span class="badge">${v.len}</span>${galBadge(v)||(owned?'<span class="badge owned">Saved</span>':!v.price?'<span class="badge free">Free</span>':'')}</div>
     <div class="t">${esc(v.title)}</div><div class="s">${esc(A(v.artist).name)}, ${esc(String(v.kind).toLowerCase())}</div></button>`;
 }
 function acard(a){
-  return `<button class="acard" data-action="artist" data-id="${a.id}">${a.pro?'<span class="feat">Featured</span>':''}${art(a.p,a.name[0])}<div class="t">${esc(a.name)}</div><div class="s">${esc(a.genre)}${a.makes==='both'?' · music + video':a.makes==='video'?' · video':''}</div></button>`;
+  return `<button class="acard" data-action="artist" data-id="${a.id}">${a.nova?'<span class="feat nova">Supernova</span>':a.pro?'<span class="feat">Featured</span>':''}${art(a.p,a.name[0])}<div class="t">${esc(a.name)}</div><div class="s">${esc(a.genre)}${a.makes==='both'?' · music + video':a.makes==='video'?' · video':''}</div></button>`;
 }
 function trow(t,i){
   const a = A(t.artist), on = S.now===t.id && S.playing, saved = isSaved(t);
   return `<div class="trow">
     <span class="n">${i+1}</span>${art(t.p,t.title[0])}
-    <div class="meta"><button class="t tlink" data-action="song" data-id="${t.id}">${esc(t.title)}</button><div class="s"><button data-action="artist" data-id="${a.id}">${esc(a.name)}</button>${t.credits&&t.credits.length?' '+esc(creditLine(t)):''} · ${mmss(t.len)}</div></div>
+    <div class="meta"><button class="t tlink" data-action="song" data-id="${t.id}">${t.galaxy&&!fullAccess(t)?'<span class="gal-dot" title="Galaxy only">✦</span> ':''}${esc(t.title)}</button><div class="s"><button data-action="artist" data-id="${a.id}">${esc(a.name)}</button>${t.credits&&t.credits.length?' '+esc(creditLine(t)):''} · ${mmss(t.len)}</div></div>
     <button class="icon-btn ${on?'on':''}" data-action="play" data-id="${t.id}" aria-label="${on?'Pause':'Play'} ${esc(t.title)}">${on?I.pause:I.play}</button>
     ${t.price?`<button class="price" data-action="buy" data-kind="track" data-id="${t.id}">${priceTag(t)}</button>`:`<button class="price${saved?' owned':''}" data-action="save" data-id="${t.id}" aria-pressed="${saved}">${saved?'Saved':'Free'}</button>`}
   </div>`;
@@ -3465,7 +3547,7 @@ function viewHome(){
   const h = V(S.hero) || videos.find(v=>v.form==='long') || videos[0];
   if(!h) return `<h1 class="page-title">Welcome to StarTier</h1><p class="lead">New music and videos from rising Stars land here. Check back soon.</p>`;
   const ha = A(h.artist), owned = isSaved(h);
-  return `
+  return `${spotlightHtml()}
   <section class="hero">
     <div class="hero-bg" style="background-image:url(${HERO[videos.indexOf(h)%3]})"></div>
     <div class="shade"></div>
@@ -3557,6 +3639,8 @@ function viewLibrary(){
   ${ot.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>Saved songs</h2></div><div class="tracks">${ot.map(trow).join('')}</div></section>`:''}
   ${ov.length?`<section class="section"><div class="section-head"><h2>Saved videos</h2></div><div class="rail">${ov.map(vcard).join('')}</div></section>`:''}
   ${od.length?`<section class="section"><div class="section-head"><h2>Saved art and downloads</h2></div><div class="rail">${od.map(dcard).join('')}</div></section>`:''}
+  <section class="section"><div class="section-head"><h2>Your Constellations</h2>${canPlaylist()?'<button class="link" data-action="pl-new">New Constellation</button>':''}</div>
+  ${!canPlaylist()?`<div class="empty">Make playlists from any song on StarTier with StarPass, Star Pro or Supernova.<br><button class="btn btn-gold" data-action="upgrade">See plans</button></div>`:S.pls===null?'<div class="empty">Loading…</div>':S.pls.length?`<div class="rail">${S.pls.map(plCard).join('')}</div>`:'<div class="empty">No Constellations yet. Open any song and tap "Add to Constellation".</div>'}</section>
   <section class="section"><div class="section-head"><h2>Stars you follow</h2></div>
   ${fa.length?`<div class="rail">${fa.map(acard).join('')}</div>`:`<div class="empty">Follow Stars to see their updates first.</div>`}</section>
   ${fp.length?`<section class="section"><div class="section-head"><h2>People you follow</h2></div><div class="people">${fp.map(personChip).join('')}</div></section>`:''}`;
@@ -3568,7 +3652,7 @@ const fsize = n => !n?'':n>=MB?(n/MB).toFixed(n>=10*MB?0:1)+' MB':Math.max(1,Mat
 function dcard(x){
   const a = A(x.artist)||{name:'Star'}, saved = isSaved(x);
   return `<button class="dcard" data-action="dl" data-id="${x.id}">
-    <div class="art${String(x.p).startsWith('c_')?' cov':''}" style="--g:${P[x.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(x.title[0])}</span>${saved?'<span class="badge owned">Saved</span>':!x.price?'<span class="badge free">Free</span>':`<span class="badge">${money(x.price)}</span>`}</div>
+    <div class="art${String(x.p).startsWith('c_')?' cov':''}" style="--g:${P[x.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(x.title[0])}</span>${galBadge(x)||(saved?'<span class="badge owned">Saved</span>':!x.price?'<span class="badge free">Free</span>':`<span class="badge">${money(x.price)}</span>`)}</div>
     <div class="t">${esc(x.title)}</div><div class="s">${esc(a.name)} · ${esc(x.cat)}</div></button>`;
 }
 function viewArt(){
@@ -3594,7 +3678,7 @@ function openDownload(id){
   <div class="sheet-body"><h2>${esc(x.title)}</h2><div class="s">${[esc(x.cat),x.price?money(x.price):'Free',x.fileName?esc(fileKind(x.fileName))+(x.size?' · '+fsize(x.size):''):''].filter(Boolean).join(' · ')}</div>${creditHtml(x)}${x.desc?`<p>${esc(x.desc)}</p>`:''}
     ${x.price&&!mine?'<p class="small" style="color:var(--dust)">The picture above is a preview. Buyers get the full file.</p>':''}
     <button class="byline" data-action="artist" data-id="${a.id}">${art(a.p,a.name[0])}<div><b>${esc(a.name)}</b><div class="s">${esc(makesLabel(a.makes))}</div></div></button>
-    <div class="row-btns">${!x.price||mine?`<button class="btn btn-gold" data-action="download" data-id="${x.id}">${I.down}Download${x.price?' (yours)':', free'}</button>`:`<button class="btn btn-gold" data-action="buy" data-kind="download" data-id="${x.id}">${I.bag}Buy ${money(x.price)}</button>`}
+    <div class="row-btns">${fullAccess(x)?`<button class="btn btn-gold" data-action="download" data-id="${x.id}">${I.down}Download${mine&&x.price?' (yours)':!x.price&&!x.galaxy?', free':''}</button>`:x.galaxy?`<button class="btn btn-gold" data-action="artist" data-id="${x.artist}">Galaxy only · See the Galaxy</button>`:`<button class="btn btn-gold" data-action="buy" data-kind="download" data-id="${x.id}">${I.bag}Buy ${money(x.price)}</button>`}
       <button class="btn btn-ghost" data-action="save" data-id="${x.id}" aria-pressed="${saved}">${saved?I.saveOn+'Saved':I.save+'Save'}</button>
       <button class="btn btn-ghost" data-action="share-rel" data-id="${x.id}">${I.share}Share</button>
       ${mine?'':`<button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip</button><button class="btn btn-ghost" data-action="report" data-id="${x.id}">Report</button>`}</div>
@@ -3604,7 +3688,7 @@ const fileKind = n => { const e=(/\.([a-z0-9]+)$/i.exec(n||'')||[])[1]; return e
 async function doDownload(id){
   const x=D(id); if(!x||!sb) return;
   const mine=S.user&&S.user.id===x.artist;
-  if(x.price&&!mine){ openBuy('download',id); return; }
+  if(!fullAccess(x)){ if(x.galaxy){ toast(`This one is for ${(A(x.artist)||{name:'the artist'}).name}'s Galaxy`); S.artist=x.artist; closeSheet(); render(); } else openBuy('download',id); return; }
   const {data,error}=await sb.storage.from('downloads').createSignedUrl(x.file,600,{download:x.fileName||true});
   if(error||!data||!data.signedUrl){ toast("Couldn't get the file right now. Try again."); return; }
   const l=document.createElement('a'); l.href=data.signedUrl; l.rel='noopener'; document.body.appendChild(l); l.click(); l.remove();
@@ -3617,20 +3701,24 @@ function viewStudio(){
     <div style="padding:0 22px"><button class="btn btn-gold" data-action="tab" data-tab="join-star">Become a Star</button></div>`;
   const mine = S.mine || [];
   const mk = S.user.makes || 'both';
-  const DLK = ['download',mk==='art'?'Artwork or photo':'Art or download'];
-  const kinds = mk==='music'?[['song','Song'],DLK]:mk==='video'?[['video','Video'],DLK]:mk==='art'?[DLK]:[['song','Song'],['video','Video'],DLK];
+  const DLK = ['download','Art, photo or download'];
+  const kinds = mk==='art'?[DLK,['song','Song'],['video','Video']]:mk==='video'?[['video','Video'],['song','Song'],DLK]:[['song','Song'],['video','Video'],DLK];
   const myG = (S.user.genres&&S.user.genres.length?S.user.genres:MUSIC_GENRES), myC = (S.user.cats&&S.user.cats.length?S.user.cats:VIDEO_CATS);
   const myA = [...new Set([...(S.user.artCats||[]),...ALL_DL])];
   const k0 = kinds[0][0];
   const dropT = k=>k==='song'?'Choose your song':k==='video'?'Choose your video':'Choose your file', dropS = k=>k==='song'?'MP3, WAV, M4A or FLAC, under 50 MB':k==='video'?'MP4 or MOV':'Image, PDF or ZIP, under 50 MB';
   return `<div class="studio-head"><h1 class="page-title">${esc(S.user.name)}'s studio</h1><button class="btn btn-ghost btn-sm" data-action="edit-profile">Edit profile</button></div>
   <div class="taglist" style="margin:-8px 0 16px"><span>${makesLabel(mk)}</span>${[...(S.user.genres||[]),...(S.user.cats||[]),...(S.user.artCats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+  ${statsCard()}
   ${qrCard()}
   <div class="earn"><div><div class="s">Your earnings this month</div><div class="big">${sb?'$0.00':'$412.60'}</div><div class="s">${sb?'Your sales and tips will show up here':'From 226 sales and 14 tips'}</div></div>
     <button class="btn btn-ghost btn-sm" data-action="cashout">Cash out</button></div>
-  ${S.user.pro
-    ? `<div class="fee-note" style="margin:0 22px 18px;max-width:640px"><b>Star Pro is on.</b> Your Featured badge, higher placement in search, and homepage promo spots are active.</div>`
-    : `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Star Pro</h3><p>Get a Featured badge, show up higher in search, and get homepage and social promo spots. ${money(PRO_PRICE)} a month.</p></div><button class="btn btn-gold" data-action="upgrade">Upgrade</button></div>`}
+  ${S.user.nova
+    ? `<div class="fee-note" style="margin:0 22px 18px;max-width:640px"><b>Supernova is on.</b> Your Shorts are in the Shooting Stars top 10, your page is in the Supernova Spotlight, and you have unlimited uploads, stats and Constellations.</div>`
+    : S.user.pro ? `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Star Pro is on</h3><p>Go Supernova for the Shooting Stars top 10, the homepage Spotlight and radio play. ${money(NOVA_PRICE)} a month.</p></div><button class="btn btn-gold" data-action="upgrade">See Supernova</button></div>`
+    : `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Grow faster</h3><p>Star Pro (${money(PRO_PRICE)}/mo): unlimited uploads, Featured badge, stats and Constellations. Supernova (${money(NOVA_PRICE)}/mo): plus the Shooting Stars top 10 and the homepage Spotlight.</p></div><button class="btn btn-gold" data-action="upgrade">See plans</button></div>`}
+  ${uploadQuota()}
+  ${galaxyStudio()}
   <section class="section" style="padding-top:0"><div class="section-head"><h2>Post an update</h2><button class="link" data-action="mypage">View my page</button></div></section>${composer()}
   <div class="form" style="margin-bottom:18px">
     <h3>Your merch store</h3>
@@ -3642,7 +3730,7 @@ function viewStudio(){
     <h3>Upload a release</h3>
     <div class="two-col">
       <label class="field">What are you uploading?<select id="upKind">${kinds.map(([k2,l])=>`<option value="${k2}">${l}</option>`).join('')}</select></label>
-      <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Video length<select id="upForm"><option value="short">Short-form (under 3 min)</option><option value="long">Long-form (3 min or more)</option></select></label>
+      <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Video length<select id="upForm"><option value="short">Short (under 3 min, always free)</option><option value="long">Long-form (3 min or more)</option></select></label>
       <label class="field" data-up="song" ${k0==='song'?'':'hidden'}>Genre<select id="upGenre">${myG.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
       <label class="field" data-up="download" ${k0==='download'?'':'hidden'}>Category<select id="upDlCat">${myA.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
     </div>
@@ -3660,6 +3748,7 @@ function viewStudio(){
       <label class="field">Your price (USD)<input id="upPrice" type="number" min="0" step="0.01" value="${UP_PRICE[k0]}"></label>
     </div>
     <div class="split" id="split"></div>
+    ${S.gal[S.user.id]?`<label class="agree"><input type="checkbox" id="upGalaxy"><span><b>Galaxy only.</b> Only your Galaxy members get the full version. Everyone else gets a 30-second preview.</span></label>`:''}
     <div class="field"><b class="ce-title">Collaborators (optional)</b>${collabEditor('up','Tag other Stars who worked on this, like "feat." or "prod. by". You can also split your 85% with them. Each person has to accept before their name or split goes live.')}</div>
     <div class="prog-wrap" id="upProg" hidden><div class="progress"><i></i></div><span></span></div>
     <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light. Selling opens when payments switch on; until then, paid items show as "coming soon" and free ones work right away.</p>
@@ -3693,10 +3782,12 @@ function viewArtist(){
   </div>
   ${a.bio?`<p class="bio">${esc(a.bio)}</p>`:mine?'<p class="bio" style="color:var(--dust)">Add a short bio so fans know your story. Tap Edit profile.</p>':''}
   ${socialRow(a.socials)}
+  ${a.real?galaxyCard(a):''}
   ${at.length?`<section class="section"><div class="section-head"><h2>Music</h2></div><div class="tracks">${at.map(trow).join('')}</div></section>`:''}
   ${av.length?`<section class="section"><div class="section-head"><h2>Videos</h2></div><div class="rail">${av.map(vcard).join('')}</div></section>`:''}
   ${as2.length?`<section class="section"><div class="section-head"><h2>Shorts</h2></div><div class="rail">${as2.map(vcard).join('')}</div></section>`:''}
   ${ad.length?`<section class="section"><div class="section-head"><h2>Art and downloads</h2></div><div class="rail">${ad.map(dcard).join('')}</div></section>`:''}
+  ${a.real?plSection(a.id,'Constellations'):''}
   ${ct.length||cv.length||cd.length?`<section class="section"><div class="section-head"><h2>Collabs</h2></div>${ct.length?`<div class="tracks">${ct.map(trow).join('')}</div>`:''}${cv.length||cd.length?`<div class="rail">${cv.map(vcard).join('')}${cd.map(dcard).join('')}</div>`:''}</section>`:''}
   ${a.real?(mine?`<section class="section"><div class="section-head"><h2>Updates</h2></div></section>${composer()}`:'')+postsSection('a:'+a.id, mine?'':'Updates', mine?'Your updates will show here.':''):''}`;
 }
@@ -3711,7 +3802,7 @@ function viewJoin(){
   ${googleBlock('Or join in one tap with Google. You pick Star or Supporter right after.')}`;
 }
 function viewJoinStar(){
-  const plan = S.signupPlan==='pro' ? 'pro' : 'free';
+  const plan = ['pro','nova'].includes(S.signupPlan) ? S.signupPlan : 'free';
   return `<h1 class="page-title">Become a Star</h1>
   <p class="lead">Put your music, videos and art in front of new fans. Start free and upgrade anytime.</p>
   ${googleBlock('Quickest way: sign up with Google, then pick "I\'m a Star."','star')}
@@ -3724,10 +3815,11 @@ function viewJoinStar(){
     ${starFields()}
     <h3>Choose your plan</h3>
     <div class="plans">
-      <button type="button" class="plan" data-action="plan" data-plan="free" aria-pressed="${plan==='free'}"><b>Free</b><span class="pr">$0<small> /month</small></span><ul><li>Unlimited uploads</li><li>Your own artist page</li><li>Sell your music, videos and art</li><li>Tips from fans</li></ul></button>
-      <button type="button" class="plan" data-action="plan" data-plan="pro" aria-pressed="${plan==='pro'}"><span class="tag">More reach</span><b>Star Pro</b><span class="pr">${money(PRO_PRICE)}<small> /month</small></span><ul><li>Everything in Free</li><li>Featured badge, higher in search</li><li>Homepage and social promo spots</li><li>Detailed fan and sales stats</li></ul></button>
+      <button type="button" class="plan" data-action="plan" data-plan="free" aria-pressed="${plan==='free'}"><b>Rising Star</b><span class="pr">$0<small> /month</small></span><ul><li>10 songs, 5 videos, 20 art pieces</li><li>Unlimited Shorts</li><li>Your own page, QR code and Galaxy</li><li>Keep 85% of every sale</li></ul></button>
+      <button type="button" class="plan" data-action="plan" data-plan="pro" aria-pressed="${plan==='pro'}"><span class="tag">More reach</span><b>Star Pro</b><span class="pr">${money(PRO_PRICE)}<small> /month</small></span><ul><li>Unlimited uploads</li><li>Featured badge, higher in search</li><li>Plays and saves stats</li><li>Constellations (playlists)</li><li>Keep 90% of every sale</li></ul></button>
+      <button type="button" class="plan nova" data-action="plan" data-plan="nova" aria-pressed="${plan==='nova'}"><span class="tag">Top tier</span><b>Supernova</b><span class="pr">${money(NOVA_PRICE)}<small> /month</small></span><ul><li>Everything in Star Pro</li><li>Your Shorts in the Shooting Stars top 10</li><li>Supernova Spotlight on the homepage</li><li>Radio play on StarTier Radio</li><li>Keep 92% of every sale</li></ul></button>
     </div>
-    <div class="fee-note">On every plan you keep 85% of each sale. StarTier keeps 15%.</div>
+    <div class="fee-note">Paid plans switch on with payments. Until then everyone starts as a Rising Star.</div>
     <label class="agree"><input type="checkbox" name="agree"><span>I'm at least 13, and I agree to the <button type="button" data-action="legal" data-doc="terms">Terms</button>, <button type="button" data-action="legal" data-doc="guidelines">Community Guidelines</button> and <button type="button" data-action="legal" data-doc="privacy">Privacy Policy</button>.</span></label>
     <button class="btn btn-gold full" type="submit">Create my Star account</button>
     <p class="small">Already have an account? <button type="button" class="link" data-action="tab" data-tab="login">Log in</button><br>Are you a fan? <button type="button" class="link" data-action="tab" data-tab="join-supporter">Sign up as a Supporter</button></p>
@@ -3747,8 +3839,8 @@ function viewJoinSupporter(){
     <div class="field">Videos you love<div class="chips wrap">${VIDEO_CATS.filter(g=>g!=='Other').map(g=>`<button type="button" class="chip" data-action="favgenre" aria-pressed="false">${esc(g)}</button>`).join('')}</div></div>
     <h3>Choose your plan</h3>
     <div class="plans">
-      <button type="button" class="plan" data-action="plan" data-plan="free" aria-pressed="${plan==='free'}"><b>Free</b><span class="pr">$0<small> /month</small></span><ul><li>Browse and discover by genre</li><li>30-second previews</li><li>Buy songs and videos to keep</li><li>Follow and tip artists</li></ul></button>
-      <button type="button" class="plan" data-action="plan" data-plan="pass" aria-pressed="${plan==='pass'}"><span class="tag">Best value</span><b>StarPass</b><span class="pr">${money(PASS_PRICE)}<small> /month</small></span><ul><li>Stream every song and video in full</li><li>20% off every download</li><li>Early access to premieres</li><li>Cancel anytime</li></ul></button>
+      <button type="button" class="plan" data-action="plan" data-plan="free" aria-pressed="${plan==='free'}"><b>Stargazer</b><span class="pr">$0<small> /month</small></span><ul><li>30-second clips of paid songs and videos</li><li>Free songs, videos and art in full</li><li>All Shorts and StarTier Radio</li><li>Follow, message and join Galaxies</li></ul></button>
+      <button type="button" class="plan" data-action="plan" data-plan="pass" aria-pressed="${plan==='pass'}"><span class="tag">Best value</span><b>StarPass</b><span class="pr">${money(PASS_PRICE)}<small> /month</small></span><ul><li>Every song and video in full</li><li>Make Constellations (playlists)</li><li>20% off everything you buy</li><li>Cancel anytime</li></ul></button>
     </div>
     <label class="agree"><input type="checkbox" name="agree"><span>I'm at least 13, and I agree to the <button type="button" data-action="legal" data-doc="terms">Terms</button>, <button type="button" data-action="legal" data-doc="guidelines">Community Guidelines</button> and <button type="button" data-action="legal" data-doc="privacy">Privacy Policy</button>.</span></label>
     <button class="btn btn-gold full" type="submit">Create my account</button>
@@ -3777,7 +3869,7 @@ function starFields(){
     <div class="subq" data-sec="art" ${m==='art'?'':'hidden'}>
       <span class="lbl">What do you make? (pick up to 5)</span>
       <div class="chips wrap">${ALL_DL.map(g=>`<button type="button" class="chip" data-action="sart" aria-pressed="false">${esc(g)}</button>`).join('')}</div>
-      <span class="lbl" style="font-weight:400">Musicians and video creators can sell art and downloads too, from their Studio.</span>
+      <span class="lbl" style="font-weight:400">Every Star can upload songs, videos and art. This just helps fans find you.</span>
     </div>`;
 }
 function googleBlock(text,role){
@@ -3786,10 +3878,12 @@ function googleBlock(text,role){
 const BOT_URL = "https://n8n.kingjordanapps.com/webhook/startier-help";   // the AI brain (n8n) address goes here once it is set up
 const FAQ = [
  {g:'Getting started', q:'What is StarTier?', a:'StarTier is where up-and-coming artists and creators share their music and videos, and where fans discover them first. Fans can stream, buy, and tip artists directly.', k:'what is startier about app'},
- {g:'Getting started', q:'Is it free to join?', a:'Yes. Stars (artists and creators) and Supporters (fans) can both join for free. Paid plans add extra perks: Star Pro for artists and StarPass for fans.', k:'free cost join price sign up'},
+ {g:'Getting started', q:'Is it free to join?', a:'Yes. Fans join free as Stargazers, and artists join free as Rising Stars. Paid plans add more: StarPass for fans ($4.99 a month), and Star Pro ($8.99) or Supernova ($24.99) for artists.', k:'free cost join price sign up'},
  {g:'Getting started', q:'What is the difference between a Star and a Supporter?', a:'A Star is an artist or content creator who uploads and sells work. A Supporter is a fan who discovers, streams, buys, and tips. Pick the one that fits you when you sign up.', k:'star supporter difference artist fan account type'},
- {g:'For Stars', q:'How much of each sale do I keep?', a:'You keep 85% of every sale and tip. StarTier keeps 15% to run the platform. That is the same on every plan.', k:'keep percent cut fee commission 15 85 earn money sale'},
- {g:'For Stars', q:'What does Star Pro include?', a:'Star Pro is $9.99 a month. You get a Featured badge, you show up higher in search and on the home page, you get homepage and social promo spots, and detailed fan and sales stats. Paid plans are switching on soon.', k:'star pro upgrade featured promo visibility boost'},
+ {g:'For Stars', q:'How much of each sale do I keep?', a:'Rising Stars keep 85% of every sale and tip, Star Pro keeps 90%, and Supernova keeps 92%. StarTier keeps the rest to run the platform.', k:'keep percent cut fee commission 15 85 earn money sale'},
+ {g:'For Stars', q:'What are Star Pro and Supernova?', a:'Rising Star is free: 10 songs, 5 videos and 20 pieces of art or downloads, unlimited Shorts, and you keep 85%. Star Pro is $8.99 a month: unlimited uploads, a Featured badge, higher placement in search, plays and saves stats, Constellations, and you keep 90%. Supernova is $24.99 a month: everything in Star Pro, plus your Shorts in the Shooting Stars top 10, your page in the Supernova Spotlight on the homepage, play on StarTier Radio, and you keep 92%. Paid plans switch on with payments.', k:'star pro supernova upgrade featured promo visibility boost plan tier price'},
+ {g:'For Stars', q:'What is a Galaxy?', a:'A Galaxy is your fan club. You name it, pick a monthly price, and mark songs, videos and posts as Galaxy only. Members get it all plus a badge. Until payments switch on, fans can join the waitlist so you can see who is ready. You can also gift free memberships from your Studio.', k:'galaxy fan club members exclusive subscription patreon'},
+ {g:'For Supporters', q:'What is a Constellation?', a:'A Constellation is a playlist. StarPass members and Star Pro or Supernova artists can make them from any song on StarTier. Make one public and it shows on your profile.', k:'constellation playlist queue list songs'},
  {g:'For Stars', q:'How do I get paid?', a:'Buying, tips and payouts are switching on soon. You will connect your bank account securely through Stripe, and your earnings will be sent to you from your Studio. Until then, paid items show as coming soon, and free items work right away.', k:'paid payout payment bank cash out withdraw stripe tip'},
  {g:'For Stars', q:'What can I upload?', a:'Songs (MP3, WAV, M4A or FLAC), videos (MP4 or MOV), and art and downloads: paintings, photos, digital art, e-books, PDFs, coloring books, sample packs and more (images, PDF or ZIP, up to 50 MB). Open your Studio and use Upload a release. Only upload work you made or have the rights to share.', k:'upload music video file format mp3 wav mp4 mov art photo painting pdf zip download'},
  {g:'For Stars', q:'I paint, take photos, or make designs. Can I sell on StarTier?', a:'Yes. Sign up as a Star and pick Art, or add art from any Star account. In your Studio, choose "Art or download", upload the full file, and set a price or make it free. We make a smaller preview for your page automatically, with a watermark if it is paid. Buyers get the full file.', k:'art painter painting photographer photo photography design artwork sell prints download digital'},
@@ -3797,7 +3891,7 @@ const FAQ = [
  {g:'For Supporters', q:'What is StarTier Radio?', a:'StarTier Radio is a free live station for rising Stars. Everyone hears the same song at the same time, with DJ drops in between. Open the Radio tab and tap Listen live. You do not need StarPass.', k:'radio live station listen free dj'},
  {g:'For Stars', q:'Where is my QR code?', a:'Every Star gets their own QR code as soon as they sign up. Open your Studio and it is at the top. Tap Download to save it as a picture for flyers, merch and posters, or Share to send it. Fans who scan it land right on your StarTier page.', k:'qr code scan share link flyer poster my page'},
  {g:'For Stars', q:'Can I set my own prices?', a:'Yes. You choose the price for every song and video you sell. The Studio shows exactly how much you get from each sale.', k:'price set pricing how much charge'},
- {g:'For Supporters', q:'What is StarPass?', a:'StarPass is $5.99 a month. It lets you stream every song and video on StarTier in full and gives you 20% off anything you download to keep. You can cancel anytime. Paid plans are switching on soon.', k:'starpass subscription stream monthly pass discount'},
+ {g:'For Supporters', q:'What is StarPass?', a:'StarPass is $4.99 a month. Free Stargazers hear 30-second clips of paid songs and videos; StarPass plays everything in full, lets you make Constellations (playlists), and gives you 20% off anything you buy. Free songs, videos, art, Shorts and the radio are free for everyone. You can cancel anytime. Paid plans are switching on soon.', k:'starpass subscription stream monthly pass discount'},
  {g:'For Supporters', q:'Do I own what I buy?', a:'Yes. Anything you buy is yours to keep and lives in your Library, whether or not you have StarPass.', k:'own buy purchase keep library download'},
  {g:'For Supporters', q:'How do I find new artists?', a:'Use the Music, Videos and Art tabs to search by name or browse by genre and category. Featured Stars also show up on the home page. Follow artists to keep up with what they drop.', k:'find discover search genre browse new artists follow'},
  {g:'For Supporters', q:'How do I save something?', a:'Tap Save on any song, video or artwork. It shows up in your Library. Things you buy will live there too once buying opens.', k:'save library keep bookmark favorite'},
@@ -3883,7 +3977,7 @@ async function askBot(text){
       const r=await fetch(BOT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
         message:text,
         history:bot.log.slice(-10).map(m=>({role:m.role==='me'?'user':'assistant',content:m.text})),
-        user:S.user?{role:S.user.role,name:S.user.name,plan:S.user.pro?'Star Pro':S.user.pass?'StarPass':'Free'}:null,
+        user:S.user?{role:S.user.role,name:S.user.name,plan:S.user.nova?'Supernova':S.user.pro?'Star Pro':S.user.pass?'StarPass':'Free'}:null,
         faq:FAQ.map(f=>({q:f.q,a:f.a}))
       })});
       const j=await r.json(); bot.busy=false;
@@ -3920,25 +4014,26 @@ const AV_OK = /^[0-9a-f-]{36}\/[A-Za-z0-9_-]+\.(jpg|png|webp)$/;
 const avUrl = path => (sb && path && AV_OK.test(path)) ? pubUrl('avatars',path) : '';
 function palOf(id){ let n=0; for(const ch of String(id)) n=(n*31+ch.charCodeAt(0))%997; return PALS[n%7]; }
 function faceKey(id,path){ const u=avUrl(path); if(!u) return palOf(id); const key='c_av_'+id; P[key]=cssUrl(u)+' center/cover'; return key; }
-const PCOLS='id,role,display_name,city,creator_type,genres,video_categories,art_categories,is_pro,merch_url,avatar_path,bio,socials';
+const PCOLS='id,role,display_name,city,creator_type,genres,video_categories,art_categories,is_pro,is_supernova,merch_url,avatar_path,bio,socials';
 function artistFromProfile(p){
   return { id:p.id, real:true, makes:p.creator_type||'both', genres:p.genres||[], cats:[...(p.video_categories||[]),...(p.art_categories||[])],
     name:p.display_name||'Star', genre:(p.genres||[])[0]||(p.video_categories||[])[0]||(p.art_categories||[])[0]||'', city:p.city||'',
-    p:faceKey(p.id,p.avatar_path), av:avUrl(p.avatar_path), followers:0, pro:!!p.is_pro, bio:p.bio||'', socials:p.socials||{}, merch:safeUrl(p.merch_url) };
+    p:faceKey(p.id,p.avatar_path), av:avUrl(p.avatar_path), followers:0, pro:!!(p.is_pro||p.is_supernova), nova:!!p.is_supernova, bio:p.bio||'', socials:p.socials||{}, merch:safeUrl(p.merch_url) };
 }
 function releaseToItem(r){
-  const base={ id:'r'+r.id, rid:r.id, real:true, title:r.title, artist:r.artist_id, price:(r.price_cents||0)/100, p:covKey(r), status:r.status };
+  const base={ id:'r'+r.id, rid:r.id, real:true, title:r.title, artist:r.artist_id, price:(r.price_cents||0)/100, p:covKey(r), status:r.status, galaxy:!!r.galaxy_only, created:r.created_at };
   if(r.kind==='song') return Object.assign(base,{ len:r.duration_sec||0, audio:r.audio_path, genre:r.genre,
     preview:(r.preview_path&&PATH_OK.test(r.preview_path))?pubUrl('previews',r.preview_path):null });
   if(r.kind==='download') return Object.assign(base,{ kind:'download', cat:r.category||'Other downloads', desc:r.description||'',
     cover:(r.cover_path&&PATH_OK.test(r.cover_path))?pubUrl('covers',r.cover_path):'', file:PATH_OK.test(r.file_path||'')?r.file_path:null,
     fileName:String(r.file_name||'').slice(0,120), size:r.file_size||0 });
-  return Object.assign(base,{ form:r.form||'long', cat:r.category||'Other', kind:r.category||'Video', len:r.duration_sec?mmss(r.duration_sec):'', desc:r.description||'' });
+  return Object.assign(base,{ form:r.form||'long', cat:r.category||'Other', kind:r.category||'Video', len:r.duration_sec?mmss(r.duration_sec):'', desc:r.description||'', vw:r.video_w||0, vh:r.video_h||0 });
 }
-const REL_COLS='id,artist_id,kind,form,title,description,genre,category,price_cents,duration_sec,cover_path,audio_path,preview_path,file_path,file_name,file_size,status,created_at';
+const REL_COLS='id,artist_id,kind,form,title,description,genre,category,price_cents,duration_sec,cover_path,audio_path,preview_path,file_path,file_name,file_size,galaxy_only,video_w,video_h,status,created_at';
 function addRelease(r,list){ const o=releaseToItem(r); (r.kind==='song'?list.t:r.kind==='download'?list.d:list.v).push(o); return o; }
 async function loadCatalog(){
   if(!sb) return;
+  loadGalaxies();
   const {data:rels,error}=await sb.from('releases').select(REL_COLS).eq('status','live').order('created_at',{ascending:false}).limit(1000);
   if(error||!rels) return;
   let credits=[];
@@ -3956,7 +4051,8 @@ async function loadCatalog(){
   videos.length=0; videos.push(...list.v,...(S.samples?SAMPLES.v:[]));
   tracks.length=0; tracks.push(...list.t,...(S.samples?SAMPLES.t:[]));
   downloads.length=0; downloads.push(...list.d.filter(x=>x.file));
-  if(!V(S.hero)) S.hero=(videos.find(v=>v.form==='long')||{}).id;
+  const proHero=videos.find(v=>v.real&&v.form==='long'&&A(v.artist)&&A(v.artist).pro);
+  if(!V(S.hero)||(!V(S.hero).real&&proHero)) S.hero=(proHero||videos.find(v=>v.real&&v.form==='long')||videos.find(v=>v.form==='long')||{}).id;
 }
 async function loadMine(){
   S.mine=[]; await loadSocial(); pollUnread(); if(!sb||!S.user||S.user.role!=='star') return;
@@ -3967,10 +4063,12 @@ async function refreshAll(){ await loadCatalog(); await loadMine(); render(true)
 
 /* playing real songs */
 const audio = new Audio(); audio.preload='none';
-audio.addEventListener('ended',()=>{ if(S.radioOn){ radioTune(true); return; } S.playing=false; updateMini(); render(true); });
+audio.addEventListener('ended',()=>{ if(S.radioOn){ radioTune(true); return; }
+  if(S.queue&&S.queue.ids){ const i=S.queue.ids.indexOf(S.now), n=S.queue.ids[i+1]; if(i>=0&&n&&T(n)){ S.playing=false; playReal(T(n)); return; } S.queue=null; }
+  S.playing=false; updateMini(); render(true); });
 async function songSource(t){
   const mine = S.user && S.user.id===t.artist;
-  if(!t.price || mine){ const {data,error}=await sb.storage.from('songs').createSignedUrl(t.audio, 4*3600); if(!error&&data&&data.signedUrl) return {url:data.signedUrl, full:true}; }
+  if(fullAccess(t)){ const {data,error}=await sb.storage.from('songs').createSignedUrl(t.audio, 4*3600); if(!error&&data&&data.signedUrl) return {url:data.signedUrl, full:true}; }
   if(t.preview) return {url:t.preview, full:false};
   return null;
 }
@@ -3978,8 +4076,8 @@ async function playReal(t){
   if(S.now===t.id){ S.playing=!S.playing; if(S.playing) audio.play().catch(()=>{}); else audio.pause(); updateMini(); render(true); return; }
   audio.pause(); S.now=t.id; S.playing=true; S.full=false; updateMini(); render(true);
   const src=await songSource(t); if(S.now!==t.id) return;
-  if(!src){ S.playing=false; updateMini(); render(true); toast("This song can't play yet"); return; }
-  S.full=src.full; audio.src=src.url;
+  if(!src){ S.playing=false; updateMini(); render(true); toast(t.galaxy?`This one is for ${(A(t.artist)||{name:'the artist'}).name}'s Galaxy`:"This song can't play yet"); return; }
+  S.full=src.full; audio.src=src.url; logPlay(t.rid);
   audio.play().catch(()=>{ S.playing=false; updateMini(); render(true); toast("Tap play again to start the song"); });
   updateMini();
 }
@@ -4004,15 +4102,17 @@ function openRealVideo(v){
   </div>`);
   (async()=>{
     const msg=()=>document.getElementById('vmsg');
-    const {data:vid}=await sb.rpc('video_to_play',{p_release_id:v.rid});
+    let {data:vid}=await sb.rpc('video_to_play',{p_release_id:v.rid}); let preview=false;
+    if(!vid){ const r2=await sb.rpc('video_preview',{p_release_id:v.rid}); vid=r2.data; preview=!!vid; }
     if(!document.getElementById('player')) return;
-    if(!vid){ if(msg()) msg().innerHTML=`Unlocks when you buy it<small>Buying opens soon. This one is ${money(v.price)}.</small>`; return; }
+    if(!vid){ if(msg()) msg().innerHTML=`This video is getting ready<small>Try again in a few minutes.</small>`; return; }
     const res=await videoCall({action:'play',video_id:vid});
     const pl=document.getElementById('player'); if(!pl) return;
     if(res.status!==200||!res.url||!/^https:\/\/player\.mediadelivery\.net\//.test(res.url)){ if(msg()) msg().innerHTML=`Video can't play right now<small>Try again in a moment.</small>`; return; }
     const f=document.createElement('iframe'); f.className='vframe'; f.src=res.url; f.allow='accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen=true; f.title=v.title;
-    if(msg()) msg().remove(); pl.appendChild(f);
-    if(mine&&v.price) toast('Only you can watch this until buying opens');
+    if(msg()) msg().remove(); pl.appendChild(f); logPlay(v.rid);
+    if(preview){ const tag=document.createElement('span'); tag.className='pv-tag'; tag.textContent='30-second preview'; pl.appendChild(tag);
+      limitFrame(f,30,()=>{ const p2=document.getElementById('player'); if(!p2) return; f.remove(); tag.remove(); p2.insertAdjacentHTML('beforeend',`<div class="lockmsg pv-end">${previewEndHtml(v)}</div>`); }); }
   })();
 }
 
@@ -4045,7 +4145,7 @@ async function resizeSquare(file,size){
 }
 function readDuration(file,isVideo){
   return new Promise(res=>{ const el=document.createElement(isVideo?'video':'audio'); el.preload='metadata'; const u=URL.createObjectURL(file);
-    const done=v=>{ URL.revokeObjectURL(u); res(v); }; el.onloadedmetadata=()=>done(isFinite(el.duration)?el.duration:0); el.onerror=()=>done(0); el.src=u; setTimeout(()=>done(0),15000); });
+    const done=v=>{ URL.revokeObjectURL(u); res(v); }; el.onloadedmetadata=()=>{ if(isVideo&&S.up&&S.up.file===file){ S.up.vw=el.videoWidth||0; S.up.vh=el.videoHeight||0; } done(isFinite(el.duration)?el.duration:0); }; el.onerror=()=>done(0); el.src=u; setTimeout(()=>done(0),15000); });
 }
 async function makePreview(file){
   const Ctx=window.AudioContext||window.webkitAudioContext; const ctx=new Ctx();
@@ -4082,7 +4182,9 @@ async function publishRelease(btn){
   if(!sb||!S.user||S.user.role!=='star'){ toast('Log in as a Star to upload'); return; }
   const $=id=>document.getElementById(id), up=S.up||{};
   const kind=$('upKind').value, title=$('upTitle').value.trim(), desc=($('upDesc').value||'').trim().slice(0,2000);
-  const priceNum=parseFloat($('upPrice').value); const price=Math.round((isNaN(priceNum)?0:priceNum)*100);
+  const priceNum=parseFloat($('upPrice').value); let price=Math.round((isNaN(priceNum)?0:priceNum)*100);
+  if(kind==='video'&&$('upForm').value==='short') price=0;
+  const galaxyOnly=!!($('upGalaxy')&&$('upGalaxy').checked);
   const isDl=kind==='download', dext=fileExt(up.file||{}), autoCover=isDl&&!up.cover&&/^(jpg|jpeg|png|webp|gif)$/.test(dext);
   if(!up.file){ toast(kind==='song'?'Choose your song file':kind==='video'?'Choose your video file':'Choose the file fans will get'); return; }
   if(!up.cover&&!autoCover){ toast(isDl?'Add a cover picture so fans can see what it is':'Add cover art'); return; }
@@ -4096,6 +4198,10 @@ async function publishRelease(btn){
   if(isDl&&up.file.size>50*MB){ toast('Files must be under 50 MB for now. Try a ZIP or a smaller export.'); return; }
   const isSong=kind==='song', ext=fileExt(up.file);
   if(isSong&&!AUDIO_TYPES[ext]){ toast('Songs must be MP3, WAV, M4A, AAC or FLAC'); return; }
+  if(!isPaidStar(S.user)&&!S.isAdmin){ const mineNow=(S.mine||[]).filter(r=>r.status!=='removed');
+    if(isSong&&mineNow.filter(r=>r.kind==='song').length>=10){ toast('Rising Stars can have up to 10 songs. Upgrade for unlimited.'); return; }
+    if(kind==='video'&&$('upForm').value!=='short'&&mineNow.filter(r=>r.kind==='video'&&r.form!=='short').length>=5){ toast('Rising Stars can have up to 5 videos. Shorts are unlimited.'); return; }
+    if(kind==='download'&&mineNow.filter(r=>r.kind==='download').length>=20){ toast('Rising Stars can have up to 20 pieces of art or downloads. Upgrade for unlimited.'); return; } }
   if(isSong&&up.file.size>50*MB){ toast('Songs must be under 50 MB. Try an MP3.'); return; }
   if(!isSong&&!/^video\//.test(up.file.type)){ toast('Choose a video file (MP4 or MOV)'); return; }
   if(!isSong&&up.file.size>4096*MB){ toast('Videos must be under 4 GB'); return; }
@@ -4108,12 +4214,13 @@ async function publishRelease(btn){
     setProg(3,'Uploading cover art…');
     let r=await sb.storage.from('covers').upload(cpath,cover,{contentType:cover.type}); if(r.error) throw r.error; done.push(['covers',cpath]);
     const row={kind,title,description:desc||null,price_cents:price,duration_sec:Math.round(up.dur||0)||null,cover_path:cpath};
+    if(galaxyOnly) row.galaxy_only=true;
     if(isSong){
       row.genre=$('upGenre').value;
       const apath=`${uid}/${key}.${ext}`;
-      await storageTus('songs',apath,up.file,up.file.type||AUDIO_TYPES[ext],p=>setProg(5+p*(price>0?0.7:0.9),`Uploading your song… ${Math.round(p)}%`));
+      await storageTus('songs',apath,up.file,up.file.type||AUDIO_TYPES[ext],p=>setProg(5+p*(price>0||galaxyOnly?0.7:0.9),`Uploading your song… ${Math.round(p)}%`));
       done.push(['songs',apath]); row.audio_path=apath;
-      if(price>0){
+      if(price>0||galaxyOnly){
         setProg(78,'Making the 30-second preview…');
         const mp3=await makePreview(up.file), ppath=`${uid}/${key}p.mp3`;
         r=await sb.storage.from('previews').upload(ppath,mp3,{contentType:'audio/mpeg'}); if(r.error) throw r.error;
@@ -4127,6 +4234,7 @@ async function publishRelease(btn){
       row.file_name=(String(up.file.name||'file').replace(/[^A-Za-z0-9 ._()-]+/g,'').replace(/\s+/g,' ').trim().slice(0,100)||'file')+(/\.[a-z0-9]{1,5}$/i.test(up.file.name||'')?'':'.'+dext);
     } else {
       row.form=$('upForm').value; row.category=$('upCat').value;
+      if(up.vw>0&&up.vh>0&&up.vw<20000&&up.vh<20000){ row.video_w=up.vw; row.video_h=up.vh; }
       setProg(5,'Getting your video ready…');
       const c=await videoCall({action:'upload',title});
       if(c.status!==200||!c.signature) throw new Error(c.error||'Video upload is not set up yet');
@@ -4175,8 +4283,9 @@ terms: { title:'Terms of Service', body:[
 ['StarTier Radio and Star Light', `By uploading music, you also let StarTier play your songs in full on StarTier Radio, our free live station, and feature you, your name, your artwork and your music in Star Light, our artist promotion, on and off StarTier. Radio plays and Star Light features are free promotion. They aren't sales and don't pay per play. If you don't want a song on the radio, email ${LEGAL.email} and we'll take it off the show.`],
 ['You need the rights to what you upload', `Only upload work you created or have permission to share. That includes the beats, samples, lyrics, footage and images in it. You're responsible for getting any licenses, clearances and permissions, and for paying anyone you owe, like producers, featured artists or collaborators.`],
 ['Collabs and splits', `Stars can tag other Stars on a release or post, and can split their share of the money from a release with collaborators. A tag only shows after the tagged Star accepts. A split only takes effect after every person in it agrees, and it can only be changed if everyone in the new split, and everyone in the old one, agrees again. When payments are on, StarTier pays each person their share of the artist's part of a sale, based on the split that was active at the time of the sale. Splits are an agreement between the collaborators. StarTier isn't a party to it and doesn't settle disagreements between collaborators, but we may pause payouts on a release while a dispute is reported to us.`],
-['Sales, prices and our fee', `Stars set their own prices, including free. When you buy a download, you get a personal license to keep and enjoy it, not ownership of the artwork or the right to resell or reprint it, unless the Star says otherwise. When paid sales and tips are switched on, StarTier keeps 15% of each sale and tip, and the Star gets the rest, minus any payment processing or tax amounts the law requires. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
-['Paid plans', `Star Pro and StarPass are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
+['Sales, prices and our fee', `Stars set their own prices, including free. When you buy a download, you get a personal license to keep and enjoy it, not ownership of the artwork or the right to resell or reprint it, unless the Star says otherwise. When paid sales and tips are switched on, StarTier keeps 15% of each sale and tip (10% on Star Pro, 8% on Supernova), and the Star gets the rest, minus any payment processing or tax amounts the law requires. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
+['Galaxies', `A Galaxy is a Star's paid fan club. Members pay the monthly price the Star sets and get the Star's Galaxy-only content for as long as they stay members. StarTier keeps 10% of Galaxy payments. Stars decide what goes in their Galaxy and can gift free memberships.`],
+['Paid plans', `Star Pro, Supernova and StarPass are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
 ['Merch and outside links', `Stars can link to their own merch stores. Those stores are run by the Star or by other companies, not StarTier. Any purchase you make there is between you and that store, including shipping, returns and refunds. We aren't responsible for outside websites.`],
 ['Rules', `Follow our Community Guidelines. Don't break the law, steal other people's work, harass people, spam, scrape or copy StarTier, try to get around locks on paid content, upload viruses, or interfere with how StarTier works.`],
 ['What we can do', `We can remove content, turn off features, or suspend or close accounts that break these Terms or put others at risk. We can also change or stop parts of StarTier. If we close your account for a reason that isn't your fault, we'll try to give you a chance to download your content first.`],
@@ -4229,7 +4338,7 @@ const isReal = id => UUID_RE.test(String(id||''));
 const following = id => isReal(id) ? S.follows.has(id) : S.following.has(id);
 function ago(ts){ const s=(Date.now()-Date.parse(ts))/1000; if(s<60) return 'just now'; if(s<3600) return Math.floor(s/60)+'m'; if(s<86400) return Math.floor(s/3600)+'h'; if(s<604800) return Math.floor(s/86400)+'d'; return new Date(ts).toLocaleDateString('en-US',{month:'short',day:'numeric'}); }
 async function loadSocial(){
-  S.follows=new Set(); S.blocked=new Set(); S.isAdmin=false; S.posts={}; S.saved=new Set();
+  S.follows=new Set(); S.blocked=new Set(); S.isAdmin=false; S.posts={}; S.saved=new Set(); S.myGal=new Set(); S.myWait=new Set(); S.pls=null;
   if(!sb||!S.user) return;
   const [f,b,ad,sv]=await Promise.all([
     sb.from('follows').select('followee_id').eq('follower_id',S.user.id),
@@ -4238,6 +4347,9 @@ async function loadSocial(){
     sb.from('saves').select('release_id').eq('user_id',S.user.id).limit(2000)]);
   S.follows=new Set((f.data||[]).map(r=>r.followee_id)); S.blocked=new Set((b.data||[]).map(r=>r.blocked_id)); S.isAdmin=ad.data===true;
   S.saved=new Set((sv.data||[]).map(r=>r.release_id));
+  const gm=await sb.from('galaxy_members').select('artist_id,status').eq('user_id',S.user.id);
+  S.myGal=new Set(); S.myWait=new Set(); (gm.error?[]:(gm.data||[])).forEach(r=>(r.status==='waitlist'?S.myWait:S.myGal).add(r.artist_id));
+  loadMyPls();
 }
 function needLogin(what){ if(S.user) return false; toast(`Log in or join free to ${what}`); S.artist=null; S.tab='join'; if(scrim.classList.contains('open')) closeSheet(); render(); return true; }
 async function toggleFollow(id){
@@ -4325,6 +4437,7 @@ function postsSection(key,title,emptyMsg){
 }
 function composer(){
   return `<div class="composer"><form class="form" id="postForm"><textarea name="body" maxlength="1000" placeholder="Share an update with your fans… new drop, show, behind the scenes" aria-label="Post an update"></textarea>
+    ${S.user&&S.gal[S.user.id]?'<label class="agree"><input type="checkbox" name="galaxy"><span><b>Galaxy only</b>: just for your Galaxy members</span></label>':''}
     <details class="tagger"${(S.ce.post||[]).length?' open':''}><summary>Tag Stars in this post</summary>${collabEditor('post','Tagged Stars get a request. Once they accept, the post shows on their page too.')}</details>
     <div class="row-btns" style="justify-content:flex-end"><button class="btn btn-gold btn-sm" type="submit">Post update</button></div></form></div>`;
 }
@@ -4385,13 +4498,20 @@ async function deleteItem(kind,id){
 /* ---------- Shorts feed (swipe like IG / TikTok) ---------- */
 const FV={urls:{},obs:null,active:-1,scroll:0,goto:null};
 function feedKey(){ return feedItems().map(v=>v.id).join(',')+'|'+(S.user?S.user.id:'')+(S.isAdmin?'a':''); }
-function feedItems(){ const sh=videos.filter(v=>v.form==='short'); return [...sh.filter(v=>v.real),...sh.filter(v=>!v.real)]; }
+function feedItems(){
+  const sh=videos.filter(v=>v.form==='short'), real=sh.filter(v=>v.real);
+  const top=dayShuffle(real.filter(v=>A(v.artist)&&A(v.artist).nova)).slice(0,10); top.forEach(v=>v.shooting=true);
+  const rest=real.filter(v=>!top.includes(v)); rest.forEach(v=>v.shooting=false);
+  return [...top,...rest,...sh.filter(v=>!v.real)];
+}
 async function feedUrl(v){
   const c=FV.urls[v.rid]; if(c&&c.exp>Date.now()) return c.url;
   let url=null;
-  try{ const {data:vid}=await sb.rpc('video_to_play',{p_release_id:v.rid});
+  let preview=false;
+  try{ let {data:vid}=await sb.rpc('video_to_play',{p_release_id:v.rid});
+    if(!vid){ const r2=await sb.rpc('video_preview',{p_release_id:v.rid}); vid=r2.data; preview=!!vid; }
     if(vid){ const res=await videoCall({action:'play',video_id:vid}); if(res.status===200&&res.url&&/^https:\/\/player\.mediadelivery\.net\//.test(res.url)) url=res.url; } }catch(_){}
-  FV.urls[v.rid]={url,exp:Date.now()+(url?45*60000:60000)}; return url;
+  FV.urls[v.rid]={url,exp:Date.now()+(url?45*60000:60000),preview}; return url;
 }
 function feedEmbed(u){ const x=new URL(u); x.searchParams.set('autoplay','true'); x.searchParams.set('loop','true'); x.searchParams.set('muted',S.feedSound?'false':'true'); x.searchParams.set('preload','true'); x.searchParams.set('responsive','false'); return x.href; }
 function feedMsg(method){ const f=feedHolder(FV.active); const ifr=f&&f.querySelector('iframe'); if(ifr&&ifr.contentWindow) try{ ifr.contentWindow.postMessage(JSON.stringify({context:'player.js',version:'0.0.11',method}),'https://player.mediadelivery.net'); }catch(_){} return !!ifr; }
@@ -4404,14 +4524,15 @@ async function feedActivate(i){
   const hd=feedHolder(i); if(!hd||hd.querySelector('iframe')) return;
   hd.innerHTML='<div class="vmsg">Loading…</div>';
   const u=await feedUrl(v); if(FV.active!==i) return; const h2=feedHolder(i); if(!h2) return;
-  if(!u){ h2.innerHTML=v.price?`<div class="vmsg">Unlock the full video<small>${money(v.price)}. Buying opens soon.</small></div>`:`<div class="vmsg">This video is getting ready<small>Try again in a few minutes.</small></div>`; return; }
-  h2.innerHTML=`<iframe src="${esc(feedEmbed(u))}" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${esc(v.title)}"></iframe>`;
+  if(!u){ h2.innerHTML=`<div class="vmsg">This video is getting ready<small>Try again in a few minutes.</small></div>`; return; }
+  logPlay(v.rid); h2.innerHTML=`<iframe ${v.vw&&v.vh?`class="fit" style="--ar:${(v.vw/v.vh).toFixed(4)}" `:''}src="${esc(feedEmbed(u))}" allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen title="${esc(v.title)}"></iframe>`;
+  if(FV.urls[v.rid]&&FV.urls[v.rid].preview){ const f=h2.querySelector('iframe'); h2.insertAdjacentHTML('beforeend','<span class="pv-tag">30-second preview</span>'); limitFrame(f,30,()=>{ const h3=feedHolder(i); if(h3) h3.innerHTML=previewEndHtml(v); }); }
   const n=items[i+1]; if(n&&n.real) feedUrl(n);
 }
 function feedSlide(v,i){
   const a=A(v.artist)||{id:v.artist,name:'Star',p:'night'}, f=following(a.id), me=S.user&&S.user.id===a.id;
   return `<section class="slide" data-i="${i}" data-id="${v.id}"><div class="slide-col">
-    <div class="slide-media" style="--g:${P[v.p]}">${String(v.p).startsWith('c_')?'':`<span class="glyph" aria-hidden="true">${esc(v.title[0])}</span>`}</div>
+    <div class="slide-media${v.real&&String(v.p).startsWith('c_')?' blur':''}" style="--g:${P[v.p]}">${String(v.p).startsWith('c_')?'':`<span class="glyph" aria-hidden="true">${esc(v.title[0])}</span>`}</div>
     <div class="vholder" data-i="${i}">${v.real?'':'<div class="vmsg">Sample short<small>Real shorts from Stars play here.</small></div>'}</div>
     <div class="tapzone" data-action="feed-tap" aria-hidden="true"></div>
     <div class="slide-shade"></div>
@@ -4421,7 +4542,7 @@ function feedSlide(v,i){
       <button data-action="feed-share" data-id="${v.id}" data-artist="${a.id}"><span class="ic">${I.share}</span>Share</button>
       ${v.price&&!me?`<button data-action="buy" data-kind="video" data-id="${v.id}"><span class="ic">${I.bag}</span>${money(priceOf(v))}</button>`:''}
     </div>
-    <div class="slide-info"><button class="who" data-action="artist" data-id="${a.id}">${esc(a.name)}</button>
+    <div class="slide-info">${v.shooting?'<span class="shoot-tag">★ Shooting Star</span>':''}<button class="who" data-action="artist" data-id="${a.id}">${esc(a.name)}</button>
       <div class="t">${esc(v.title)}</div>${v.desc?`<p>${esc(v.desc)}</p>`:''}
       <div class="tags">${[v.cat,v.len].filter(Boolean).map(x=>`<span>${esc(x)}</span>`).join('')}</div></div>
   </div></section>`;
@@ -4553,11 +4674,11 @@ function openSong(id){
   openSheet(`<div class="sheet-body checkout song-sheet" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${esc(t.title)}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
     <div class="song-top">${art(t.p,t.title[0])}<div><div class="s">${esc(a.name)}${t.len?' · '+mmss(t.len):''} · ${t.price?money(t.price):'Free'}</div>
-      ${creditHtml(t)}${t.price&&!mine?'<p class="small" style="color:var(--dust);margin:6px 0 0">You hear a 30-second preview until you buy it.</p>':''}</div></div>
+      ${creditHtml(t)}${!fullAccess(t)?`<p class="small" style="color:var(--dust);margin:6px 0 0">${t.galaxy?`Galaxy only. You hear a 30-second preview; members hear it all.`:`You hear a 30-second preview. StarPass plays it in full.`}</p>`:''}</div></div>
     <div class="row-btns"><button class="btn btn-gold" data-action="play" data-id="${t.id}" data-close="1">${on?I.pause+'Pause':I.play+'Play'}</button>
       ${t.price&&!mine?`<button class="btn btn-clay" data-action="buy" data-kind="track" data-id="${t.id}">${I.bag}Buy ${money(t.price)}</button>`:''}
       <button class="btn btn-ghost" data-action="save" data-id="${t.id}" aria-pressed="${saved}">${saved?I.saveOn+'Saved':I.save+'Save'}</button>
-      <button class="btn btn-ghost" data-action="share-rel" data-id="${t.id}">${I.share}Share</button></div>
+      <button class="btn btn-ghost" data-action="share-rel" data-id="${t.id}">${I.share}Share</button>${t.real?`<button class="btn btn-ghost" data-action="add-pl" data-id="${t.id}">+ Add to Constellation</button>`:''}</div>
     <button class="byline" style="margin-top:14px" data-action="artist" data-id="${a.id}">${art(a.p,a.name[0])}<div><b>${esc(a.name)}</b><div class="s">${esc(makesLabel(a.makes))}</div></div></button>
     ${mine||!t.real?'':`<div class="row-btns"><button class="btn btn-clay btn-sm" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button><button class="btn btn-ghost btn-sm" data-action="report" data-id="${t.id}">Report</button></div>`}
   </div>`);
@@ -4757,8 +4878,55 @@ async function loadReports(){ if(S.loading.rep) return; S.loading.rep=1; const {
 function viewAdmin(){
   if(!S.isAdmin) return `<h1 class="page-title">Admin</h1><p class="lead">This page is only for StarTier admins.</p>`;
   const v=S.adminView||'reports';
-  return `<h1 class="page-title">Admin</h1><div class="seg" role="group" aria-label="Admin section">${[['reports','Reports'],['radio','Radio']].map(([k2,l])=>`<button data-action="adminview" data-v="${k2}" aria-pressed="${v===k2}">${l}</button>`).join('')}</div>`+(v==='radio'?viewAdminRadio():viewReports());
+  return `<h1 class="page-title">Admin</h1><div class="seg" role="group" aria-label="Admin section">${[['reports','Reports'],['members','Members'],['radio','Radio']].map(([k2,l])=>`<button data-action="adminview" data-v="${k2}" aria-pressed="${v===k2}">${l}</button>`).join('')}</div>`+(v==='radio'?viewAdminRadio():v==='members'?viewMembers():viewReports());
 }
+/* admin: members, free plans, pause / shut down */
+let admT=null;
+function loadMembers(){ clearTimeout(admT); admT=setTimeout(async()=>{ const q=S.admq||''; const {data,error}=await sb.rpc('admin_members',{q});
+  if((S.admq||'')!==q) return; S.adm={q,list:error?[]:(data||[]),err:error&&error.message}; if(S.tab==='admin') renderKeepInput('admq'); },S.adm?250:0); }
+function renderKeepInput(id){ const el=document.getElementById(id), focused=el&&document.activeElement===el, pos=el&&el.selectionStart; render(true); const e2=document.getElementById(id); if(e2&&focused){ e2.focus(); try{ e2.setSelectionRange(pos,pos); }catch(_){} } }
+function viewMembers(){
+  if(!S.adm||S.adm.q!==(S.admq||'')) loadMembers();
+  const list=(S.adm&&S.adm.list)||[];
+  const row=m=>{ const st=m.banned?'<span class="pill hid">Paused</span>':''; return `<div class="mem">
+    <button class="mem-who" data-action="person" data-id="${m.id}">${personArt(m.id)}<span><b>${esc(m.display_name)}</b><small>${m.role==='star'?'Star':'Supporter'}${m.email?' · '+esc(m.email):''}</small></span></button>
+    <div class="mem-tags">${m.is_supernova?'<span class="pill nova">Supernova</span>':''}${m.is_pro?'<span class="pill">Star Pro</span>':''}${m.has_pass?'<span class="pill">StarPass</span>':''}${m.comped?'<span class="pill">free from you</span>':''}${st}</div>
+    <div class="rel-actions">${m.role==='star'?`<select class="tier-sel" data-adm-tier="${m.id}" aria-label="Artist tier"><option value="rising" ${!m.is_pro&&!m.is_supernova?'selected':''}>Rising Star</option><option value="pro" ${m.is_pro?'selected':''}>Star Pro</option><option value="supernova" ${m.is_supernova?'selected':''}>Supernova</option></select>`:''}
+      <button data-action="adm" data-op="${m.has_pass?'pass-off':'pass-on'}" data-id="${m.id}">${m.has_pass?'Remove StarPass':'Give StarPass'}</button>
+      ${m.banned?`<button data-action="adm" data-op="active" data-id="${m.id}">Unpause</button>`:`<button data-action="adm" data-op="paused" data-id="${m.id}">Pause</button>`}
+      <button class="danger" data-action="adm" data-op="shutdown" data-id="${m.id}">Shut down</button></div></div>`; };
+  return `<p class="lead">Search by name or email. Give free Star Pro, Supernova or StarPass, or pause an account. Pausing hides their page and releases until you unpause. Shutting down removes their releases and plans for good.</p>
+  <label class="search">${I.search}<input id="admq" type="search" placeholder="Search members by name or email" value="${esc(S.admq||'')}" aria-label="Search members"></label>
+  ${!S.adm?'<div class="empty">Loading…</div>':S.adm.err?`<div class="empty"><b>Couldn't load members</b>${esc(/function|schema/.test(S.adm.err)?'Run the latest database update first.':S.adm.err)}</div>`
+   :!list.length?`<div class="empty">${(S.admq||'').trim().length>=2?'No members match that search.':'No one has a free plan yet. Search for someone to give them one.'}</div>`
+   :`${(S.admq||'').trim().length<2?'<h2 class="mini-h">Members on a paid plan</h2>':''}<div class="mems">${list.map(row).join('')}</div>`}`;
+}
+async function adminMember(op,id){
+  const m=((S.adm&&S.adm.list)||[]).find(x=>x.id===id); const nm=m?m.display_name:'this member';
+  if(op==='paused'&&!confirm(`Pause ${nm}? Their page and releases are hidden and they can't post, upload or message until you unpause them.`)) return;
+  if(op==='shutdown'&&!confirm(`Shut down ${nm} for good? Their releases are removed, their plans end, and they can't use StarTier. This can't be undone from the app.`)) return;
+  const plan={'pro-on':[true,null],'pro-off':[false,null],'pass-on':[null,true],'pass-off':[null,false]}[op];
+  const {error}= op.startsWith('tier-') ? await sb.rpc('admin_set_tier',{p_user:id,p_tier:op.slice(5)}) : plan ? await sb.rpc('admin_set_plan',{p_user:id,p_pro:plan[0],p_pass:plan[1]}) : await sb.rpc('admin_set_status',{p_user:id,p_status:op});
+  if(error){ toast(error.message&&error.message.length<90?error.message:"Couldn't do that"); return; }
+  toast({'tier-rising':`${nm} is a Rising Star`,'tier-pro':`${nm} has Star Pro now`,'tier-supernova':`${nm} is a Supernova now`,'pro-on':`${nm} has Star Pro now`,'pro-off':'Star Pro removed','pass-on':`${nm} has StarPass now`,'pass-off':'StarPass removed',paused:`${nm} is paused`,active:`${nm} is active again`,shutdown:`${nm} is shut down`}[op]);
+  S.adm=null; render(true); if(op==='paused'||op==='active'||op==='shutdown') refreshAll();
+}
+
+/* plays and Star Pro stats */
+const PLAYED=new Set();
+function logPlay(rid){ if(!sb||!rid||PLAYED.has(rid)) return; PLAYED.add(rid); sb.rpc('log_play',{p_release:rid}).then(()=>{},()=>{}); }
+function statsCard(){
+  if(!sb||!S.user) return '';
+  if(!S.stats||Date.now()-S.stats.at>60000){ if(!S.loading.stats){ S.loading.stats=1; sb.rpc('my_stats').then(({data,error})=>{ delete S.loading.stats; S.stats={at:Date.now(),d:error?null:data}; if(S.tab==='studio'&&!S.artist) render(true); }); } if(!S.stats) return ''; }
+  const d=S.stats.d; if(!d) return '';
+  if(!d.pro) return `<div class="stats-card locked"><div class="sc-row"><div><b>${k(d.followers||0)}</b><span>Followers</span></div><div><b>—</b><span>Plays</span></div><div><b>—</b><span>Saves</span></div></div><p>Star Pro and Supernova show you plays and saves for every release.</p></div>`;
+  const rl=(d.releases||[]).slice(0,8);
+  return `<div class="stats-card"><h3>Your stats <span class="pill">${S.user.nova?'Supernova':'Star Pro'}</span></h3>
+    <div class="sc-row"><div><b>${k(d.plays_7||0)}</b><span>Plays, 7 days</span></div><div><b>${k(d.plays_30||0)}</b><span>Plays, 30 days</span></div><div><b>${k(d.saves||0)}</b><span>Saves</span></div><div><b>${k(d.followers||0)}</b><span>Followers</span></div></div>
+    ${rl.length?`<table class="sc-table"><thead><tr><th>Release</th><th>30 days</th><th>All time</th><th>Saves</th></tr></thead><tbody>${rl.map(r=>`<tr><td>${esc(r.title)}</td><td>${r.plays_30}</td><td>${r.plays_all}</td><td>${r.saves}</td></tr>`).join('')}</tbody></table>`:''}
+    <p>Sales will show here when payments switch on.</p></div>`;
+}
+
 function viewReports(){
   if(!S.reports){ loadReports(); return `<div class="empty">Loading reports…</div>`; }
   return `
@@ -4809,13 +4977,13 @@ function viewReset(){
 }
 async function openAccountNames(){ if(sb&&S.blocked.size){ await fetchNames([...S.blocked]); } openAccount(); }
 function openAccount(){
-  const u = S.user, paid = u.role==='star' ? u.pro : u.pass;
-  const planName = u.role==='star' ? (u.pro?'Star Pro':'Free plan') : (u.pass?'StarPass':'Free plan');
+  const u = S.user, paid = u.role==='star' ? (u.pro||u.nova) : u.pass;
+  const planName = u.role==='star' ? (u.nova?'Supernova':u.pro?'Star Pro':'Rising Star')+(u.pass?' + StarPass':'') : (u.pass?'StarPass':'Stargazer');
   openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${esc(u.name)}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
-    <div class="s">${u.role==='star'?'Star':'Supporter'} account, ${planName}${u.email?' · '+esc(u.email):''}</div>
-    ${!paid && u.wanted && u.wanted!=='free' ? `<div class="fee-note" style="margin-bottom:12px">You picked ${u.wanted==='pro'?'Star Pro':'StarPass'}. Paid plans switch on soon; you're on the Free plan until then.</div>` : ''}
-    ${paid?'':`<button class="btn btn-gold full" style="margin-bottom:10px" data-action="upgrade">${u.role==='star'?`Upgrade to Star Pro, ${money(PRO_PRICE)}/mo`:`Get StarPass, ${money(PASS_PRICE)}/mo`}</button>`}
+    <div class="s">${u.role==='star'?'Star':'Supporter'} account, ${planName}${paid&&u.comped?' (free from StarTier)':''}${u.email?' · '+esc(u.email):''}</div>
+    ${!paid && u.wanted && u.wanted!=='free' ? `<div class="fee-note" style="margin-bottom:12px">You picked ${u.wanted==='pro'?'Star Pro':u.wanted==='nova'?'Supernova':'StarPass'}. Paid plans switch on soon; you're on the free plan until then.</div>` : ''}
+    ${u.nova&&u.role==='star'?'':`<button class="btn btn-gold full" style="margin-bottom:10px" data-action="upgrade">${u.role==='star'?(u.pro?`Go Supernova, ${money(NOVA_PRICE)}/mo`:'See Star Pro and Supernova'):(u.pass?'Your StarPass':`Get StarPass, ${money(PASS_PRICE)}/mo`)}</button>`}
     <div class="acct-grid"><button class="btn btn-ghost" data-action="edit-profile">Edit profile</button><button class="btn btn-ghost" data-action="tab" data-tab="inbox">${I.msg}Messages${S.unread?` (${S.unread})`:''}</button>
     ${u.role==='star'?`<button class="btn btn-ghost" data-action="tab" data-tab="studio">Your studio</button><button class="btn btn-ghost" data-action="mypage">View my page</button>`:`<button class="btn btn-ghost" data-action="person" data-id="${u.id}">View my page</button><button class="btn btn-ghost" data-action="tab" data-tab="become-star">I'm an artist too</button>`}</div>
     ${S.blocked.size?`<h3 style="margin:14px 0 8px;font-size:16px">Blocked</h3><div class="blist" style="margin-bottom:12px">${[...S.blocked].map(id=>`<div><span>${esc(nameOf(id))}</span><button class="btn btn-ghost btn-sm" data-action="unblock" data-id="${id}">Unblock</button></div>`).join('')}</div>`:''}
@@ -4987,7 +5155,8 @@ function viewMember(){
     <button class="btn btn-ghost" data-action="message" data-id="${id}">${I.msg}Message</button>
     <button class="dots" style="width:46px;height:46px;border:1px solid var(--line)" data-action="amenu" data-id="${id}" aria-label="More options">${I.dots}</button>`}</div>
   ${c.bio?`<p class="bio">${esc(c.bio)}</p>`:me?'<p class="bio" style="color:var(--dust)">Add a picture and a short bio so people know who you are.</p>':''}
-  ${socialRow(c.socials)}`;
+  ${socialRow(c.socials)}
+  ${me?plSection('me','Your Constellations'):plSection(id,'Constellations')}`;
 }
 
 /* ---------- messages ---------- */
@@ -5224,6 +5393,176 @@ async function answerReq(type,id,ok){
   S.reqs=null; S.posts={}; await loadReqs(); pollUnread(); if(ok) refreshAll();
 }
 
+/* ---------- who gets the full version ---------- */
+S.gal={}; S.myGal=new Set(); S.myWait=new Set(); S.galCounts={}; S.pls=null; S.ppl={}; S.plView={}; S.queue=null;
+const inGalaxy = aid => !!(S.user && (S.user.id===aid || S.isAdmin || S.myGal.has(aid)));
+function fullAccess(it){
+  if(!it) return false; if(!it.real) return true;
+  if(S.user&&(S.user.id===it.artist||S.isAdmin)) return true;
+  if(it.galaxy) return inGalaxy(it.artist);
+  if(!it.price) return true;
+  return it.kind==='download' ? false : hasPass();
+}
+const galBadge = it => it&&it.galaxy&&!fullAccess(it) ? '<span class="badge gal">Galaxy</span>' : '';
+
+/* 30-second video previews */
+const PV=new Map();
+function pvPost(f,method,value){ try{ f.contentWindow.postMessage(JSON.stringify({context:'player.js',version:'0.0.11',method,value}),'https://player.mediadelivery.net'); }catch(_){} }
+window.addEventListener('message',e=>{
+  if(e.origin!=='https://player.mediadelivery.net') return; let d=e.data; try{ if(typeof d==='string') d=JSON.parse(d); }catch(_){ return; }
+  for(const [f,o] of PV){ if(!f.isConnected){ PV.delete(f); continue; } if(f.contentWindow!==e.source) continue;
+    if(d.event==='ready') pvPost(f,'addEventListener','timeupdate');
+    if(d.event==='timeupdate'&&d.value&&+d.value.seconds>=o.limit){ pvPost(f,'pause'); PV.delete(f); o.end(); } }
+});
+function limitFrame(f,limit,end){
+  PV.set(f,{limit,end});
+  f.addEventListener('load',()=>{ pvPost(f,'addEventListener','timeupdate'); setTimeout(()=>{ if(PV.has(f)&&f.isConnected){ PV.delete(f); end(); } },(limit+20)*1000); },{once:true});
+}
+function previewEndHtml(v){
+  const a=A(v.artist)||{name:'this Star'};
+  return v.galaxy?`<div class="vmsg">That was the 30-second preview<small>The full video is for ${esc(a.name)}'s Galaxy.</small><div class="row-btns"><button class="btn btn-gold btn-sm" data-action="artist" data-id="${v.artist}">See the Galaxy</button></div></div>`
+    :`<div class="vmsg">That was the 30-second preview<small>Watch it all with StarPass, ${money(PASS_PRICE)}/mo${v.price?`, or buy it for ${money(v.price)}`:''}.</small><div class="row-btns"><button class="btn btn-gold btn-sm" data-action="upgrade">Get StarPass</button>${v.price?`<button class="btn btn-ghost btn-sm" data-action="buy" data-kind="video" data-id="${v.id}">Buy</button>`:''}</div></div>`;
+}
+
+/* ---------- Galaxies (fan clubs) ---------- */
+async function loadGalaxies(){ if(!sb) return; const {data,error}=await sb.from('galaxies').select('artist_id,name,price_cents,perks'); if(!error){ S.gal={}; (data||[]).forEach(g=>S.gal[g.artist_id]=g); } }
+function galaxyCounts(aid){ if(!(aid in S.galCounts)){ S.galCounts[aid]=null; sb.rpc('galaxy_counts',{p_artist:aid}).then(({data})=>{ S.galCounts[aid]=data||{waitlist:0,members:0}; render(true); }); } return S.galCounts[aid]; }
+function galaxyCard(a){
+  const g=S.gal[a.id]; if(!g) return '';
+  const mine=S.user&&S.user.id===a.id, inG=S.myGal.has(a.id), wait=S.myWait.has(a.id), c=galaxyCounts(a.id);
+  return `<section class="galaxy-card"><div class="gx-top"><span class="gx-ico"></span><div><small>${esc(a.name)}'s Galaxy</small><h3>${esc(g.name)}</h3></div><b class="gx-price">${money(g.price_cents/100)}<small>/mo</small></b></div>
+    ${g.perks?`<p>${esc(g.perks)}</p>`:'<p>Galaxy-only songs, videos and posts, plus a member badge.</p>'}
+    <div class="gx-foot">${c?`<small>${c.members?k(c.members)+' member'+(c.members===1?'':'s')+' · ':''}${k(c.waitlist)} waiting to join</small>`:'<small></small>'}
+    ${mine?`<button class="btn btn-ghost btn-sm" data-action="tab" data-tab="studio">Manage</button>`:inG?`<span class="pill">You're in</span>`:wait?`<button class="btn btn-ghost btn-sm" data-action="gal-leave" data-id="${a.id}">On the waitlist ✓</button>`:`<button class="btn btn-gold btn-sm" data-action="gal-wait" data-id="${a.id}">Notify me when it opens</button>`}</div></section>`;
+}
+async function galaxyWait(aid,on){
+  if(needLogin('join a Galaxy')) return;
+  const {error}= on ? await sb.from('galaxy_members').insert({artist_id:aid}) : await sb.from('galaxy_members').delete().eq('artist_id',aid).eq('user_id',S.user.id);
+  if(error&&!/duplicate/i.test(error.message||'')){ toast("Couldn't do that right now"); return; }
+  on?S.myWait.add(aid):S.myWait.delete(aid); delete S.galCounts[aid];
+  toast(on?"You're on the waitlist. We'll let you know when you can join.":'Left the waitlist'); render(true);
+}
+function galaxyStudio(){
+  if(!S.user||S.user.role!=='star') return '';
+  const g=S.gal[S.user.id];
+  if(!g||S.galEdit) return `<div class="form galaxy-form" style="margin-bottom:18px">
+    <h3>${g?'Edit your Galaxy':'Start your Galaxy'}</h3>
+    <p class="small" style="margin:0;color:var(--dust)">Your fan club. Members pay monthly and get your Galaxy-only songs, videos and posts. Until payments switch on, fans can join the waitlist.</p>
+    <label class="field">Galaxy name<input id="gxName" maxlength="60" value="${esc(g?g.name:S.user.name+"'s Galaxy")}"></label>
+    <label class="field">Monthly price<select id="gxPrice">${GALAXY_PRICES.map(p=>`<option value="${p*100}" ${(g?g.price_cents:400)===p*100?'selected':''}>${money(p)} a month</option>`).join('')}</select></label>
+    <label class="field">What members get (optional)<textarea id="gxPerks" maxlength="500" rows="3" placeholder="Early songs, behind the scenes, shout-outs…">${esc(g&&g.perks||'')}</textarea></label>
+    <div class="row-btns"><button class="btn btn-gold btn-sm" data-action="gal-save">${g?'Save':'Start my Galaxy'}</button>${g?'<button class="btn btn-ghost btn-sm" data-action="gal-cancel">Cancel</button>':''}</div></div>`;
+  const c=galaxyCounts(S.user.id);
+  return `<div class="galaxy-card" style="margin:0 22px 18px"><div class="gx-top"><span class="gx-ico"></span><div><small>Your Galaxy</small><h3>${esc(g.name)}</h3></div><b class="gx-price">${money(g.price_cents/100)}<small>/mo</small></b></div>
+    <p>${c?`${k(c.members)} member${c.members===1?'':'s'} · ${k(c.waitlist)} on the waitlist`:'…'}. Mark uploads and posts "Galaxy only" to make them members-only.</p>
+    <div class="row-btns"><button class="btn btn-ghost btn-sm" data-action="gal-people">See people</button><button class="btn btn-ghost btn-sm" data-action="gal-edit">Edit</button></div></div>`;
+}
+async function galaxySave(){
+  const name=(document.getElementById('gxName').value||'').trim(), price=+document.getElementById('gxPrice').value, perks=(document.getElementById('gxPerks').value||'').trim();
+  if(!name){ toast('Name your Galaxy'); return; }
+  const row={artist_id:S.user.id,name:name.slice(0,60),price_cents:price,perks:perks.slice(0,500)||null,updated_at:new Date().toISOString()};
+  const {error}=await sb.from('galaxies').upsert(row);
+  if(error){ toast(/relation|schema/i.test(error.message||'')?'Galaxies are getting set up. Try again soon.':"Couldn't save that"); return; }
+  S.gal[S.user.id]=row; S.galEdit=false; toast('Your Galaxy is live'); render(true);
+}
+async function galaxyPeople(){
+  const {data,error}=await sb.rpc('galaxy_people',{p_artist:S.user.id}); const list=error?[]:(data||[]);
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Your Galaxy</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>Fans on the waitlist can join once payments switch on. You can gift anyone a free membership now.</p>
+    ${list.length?`<div class="blist">${list.map(m=>`<div><span>${esc(m.name)} <small class="pill${m.status==='waitlist'?' hid':''}">${m.status==='waitlist'?'waiting':m.status==='comped'?'gifted':'member'}</small></span>
+      ${m.status==='comped'?`<button class="btn btn-ghost btn-sm" data-action="gal-gift" data-id="${m.user_id}" data-on="0">Remove</button>`:m.status==='waitlist'?`<button class="btn btn-gold btn-sm" data-action="gal-gift" data-id="${m.user_id}" data-on="1">Gift free</button>`:''}</div>`).join('')}</div>`:'<div class="empty">No one yet. Share your page so fans can find your Galaxy.</div>'}</div>`);
+}
+async function galaxyGift(uid,on){
+  const {error}=await sb.rpc('galaxy_gift',{p_artist:S.user.id,p_user:uid,p_on:on});
+  if(error){ toast(error.message&&error.message.length<90?error.message:"Couldn't do that"); return; }
+  delete S.galCounts[S.user.id]; toast(on?'Gifted. They can see your Galaxy-only stuff now.':'Membership removed'); galaxyPeople();
+}
+
+/* ---------- Constellations (playlists) ---------- */
+const canPlaylist = () => !!(S.user && !S.user.banned && (S.user.pass || (S.user.role==='star'&&isPaidStar(S.user)) || S.isAdmin));
+async function loadMyPls(){ if(!sb||!S.user) { S.pls=[]; return; } const {data,error}=await sb.from('playlists').select('id,name,is_public,updated_at,playlist_items(count)').eq('owner_id',S.user.id).order('updated_at',{ascending:false}); S.pls=error?[]:(data||[]).map(p=>({...p,n:(p.playlist_items&&p.playlist_items[0]&&p.playlist_items[0].count)||0})); }
+function plCard(p){ return `<button class="plcard" data-action="pl-open" data-id="${p.id}"><span class="pl-art">${I.music}</span><b>${esc(p.name)}</b><small>${p.n!=null?p.n+' song'+(p.n===1?'':'s'):''}${p.is_public?' · public':''}</small></button>`; }
+function plSection(owner,title){
+  const list = owner==='me' ? S.pls : S.ppl[owner];
+  if(owner!=='me'&&list===undefined){ S.ppl[owner]=null; sb.from('playlists').select('id,name,is_public,updated_at,playlist_items(count)').eq('owner_id',owner).eq('is_public',true).order('updated_at',{ascending:false}).limit(20).then(({data})=>{ S.ppl[owner]=(data||[]).map(p=>({...p,n:(p.playlist_items&&p.playlist_items[0]&&p.playlist_items[0].count)||0})); render(true); }); return ''; }
+  if(!list||!list.length) return '';
+  return `<section class="section"><div class="section-head"><h2>${esc(title)}</h2></div><div class="rail">${list.map(plCard).join('')}</div></section>`;
+}
+async function openPl(id){
+  if(scrim.classList.contains('open')) closeSheet();
+  S.artist=null; if(S.tab!=='constellation') S.prevTab=S.tab; S.tab='constellation'; S.plId=id; render();
+  const [p,it]=await Promise.all([sb.from('playlists').select('id,name,is_public,owner_id').eq('id',id).maybeSingle(), sb.from('playlist_items').select('release_id,position,added_at').eq('playlist_id',id).order('position').order('added_at')]);
+  S.plView[id]={pl:p.data,items:it.error?[]:(it.data||[])}; if(p.data) fetchNames([p.data.owner_id]); render(true);
+}
+function viewConstellation(){
+  const v=S.plView[S.plId]; const back=`<button class="back-link" data-action="tab" data-tab="${S.prevTab&&S.prevTab!=='constellation'?S.prevTab:'library'}">${I.back}Back</button>`;
+  if(!v) return back+'<div class="empty">Loading…</div>';
+  if(!v.pl) return back+`<div class="empty"><b>That Constellation isn't available</b>It may be private or deleted.</div>`;
+  const mine=S.user&&S.user.id===v.pl.owner_id, ts=v.items.map(x=>T('r'+x.release_id)).filter(Boolean);
+  return `${back}<div class="pl-head"><span class="pl-art big">${I.music}</span><div><small>Constellation${v.pl.is_public?'':' · private'}</small><h1>${esc(v.pl.name)}</h1><div class="s">by <button class="namelink" data-action="person" data-id="${v.pl.owner_id}">${esc(nameOf(v.pl.owner_id))}</button> · ${ts.length} song${ts.length===1?'':'s'}</div></div></div>
+  <div class="row-btns" style="padding:0 22px 8px">${ts.length?`<button class="btn btn-gold" data-action="pl-play" data-id="${v.pl.id}">${I.play}Play all</button><button class="btn btn-ghost" data-action="pl-play" data-id="${v.pl.id}" data-shuffle="1">Shuffle</button>`:''}
+    ${mine?`<button class="btn btn-ghost" data-action="pl-public" data-id="${v.pl.id}">${v.pl.is_public?'Make private':'Make public'}</button><button class="btn btn-ghost" data-action="pl-rename" data-id="${v.pl.id}">Rename</button><button class="btn btn-ghost" data-action="pl-del" data-id="${v.pl.id}">Delete</button>`:`<button class="btn btn-ghost" data-action="pl-share" data-id="${v.pl.id}">${I.share}Share</button>`}</div>
+  ${!S.user||!fullAccessAll(ts)?'<p class="lead" style="margin-top:6px">Paid songs play as 30-second clips. StarPass plays everything in full.</p>':''}
+  ${ts.length?`<div class="tracks" style="padding:0 14px">${ts.map((t,i)=>`<div class="pl-row">${trow(t,i)}${mine?`<button class="ce-del" data-action="pl-rm" data-id="${v.pl.id}" data-rel="${t.rid}" aria-label="Remove ${esc(t.title)}">${I.close}</button>`:''}</div>`).join('')}</div>`
+    :`<div class="empty"><b>No songs yet</b>${mine?'Open any song and tap "Add to Constellation".':''}</div>`}`;
+}
+const fullAccessAll = ts => ts.every(fullAccess);
+function openAddToPl(trackId){
+  const t=T(trackId); if(!t||!t.real){ toast("Samples can't go in a Constellation"); return; }
+  if(needLogin('make Constellations')) return;
+  if(!canPlaylist()){ openSheet(`<div class="sheet-body checkout" style="padding-top:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Constellations</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>Constellations are playlists made from any song on StarTier. They come with StarPass (${money(PASS_PRICE)}/mo) for fans, and with Star Pro or Supernova for artists.</p><div class="row-btns"><button class="btn btn-gold" data-action="upgrade">See plans</button><button class="btn btn-ghost" data-action="close">Not now</button></div></div>`); return; }
+  const go=()=>openSheet(`<div class="sheet-body checkout" style="padding-top:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Add to Constellation</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>“${esc(t.title)}”</p>
+    <div class="menu-list">${(S.pls||[]).map(p=>`<button data-action="pl-add" data-id="${p.id}" data-track="${t.id}">${esc(p.name)} <small style="color:var(--dust);font-weight:400">· ${p.n} song${p.n===1?'':'s'}</small></button>`).join('')}</div>
+    <form id="plNewForm" class="cmt-form" style="margin-top:12px" data-track="${t.id}"><input name="name" maxlength="60" placeholder="New Constellation name" aria-label="New Constellation name"><button type="submit">Create</button></form></div>`);
+  if(S.pls===null) loadMyPls().then(go); else go();
+}
+async function plAdd(plId,trackId){
+  const t=T(trackId); const p=(S.pls||[]).find(x=>x.id===plId);
+  const {error}=await sb.from('playlist_items').insert({playlist_id:plId,release_id:t.rid,position:p?p.n:0});
+  if(error&&!/duplicate/i.test(error.message||'')){ toast("Couldn't add that"); return; }
+  if(error){ toast('Already in that Constellation'); return; }
+  if(p) p.n++; sb.from('playlists').update({updated_at:new Date().toISOString()}).eq('id',plId).then(()=>{}); delete S.plView[plId];
+  closeSheet(); toast(`Added to ${p?p.name:'your Constellation'}`);
+}
+async function plCreate(name,trackId){
+  const {data,error}=await sb.from('playlists').insert({name:name.slice(0,60)}).select('id,name,is_public,updated_at').single();
+  if(error){ toast(/security|policy/i.test(error.message||'')?'Constellations come with StarPass, Star Pro or Supernova':"Couldn't make that"); return; }
+  const p={...data,n:0}; S.pls=[p,...(S.pls||[])]; if(trackId) await plAdd(p.id,trackId); else { closeSheet(); render(true); }
+}
+function playQueue(ids,shuffle){
+  ids=ids.filter(id=>T(id)); if(!ids.length) return;
+  if(shuffle) ids=ids.map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]);
+  S.queue={ids}; S.now=null; play(ids[0]);
+}
+
+/* ---------- Supernova Spotlight and Shooting Stars ---------- */
+const novas = () => artists.filter(a=>a.real&&a.nova&&!S.blocked.has(a.id));
+S.spot=0;
+function spotItem(a){
+  const latest=[...videos.filter(v=>v.artist===a.id&&v.real),...tracks.filter(t=>t.artist===a.id&&t.real),...downloads.filter(d=>d.artist===a.id)].sort((x,y)=>String(y.created||'').localeCompare(String(x.created||'')))[0];
+  return {a,latest};
+}
+function spotlightHtml(){
+  const list=novas(); if(!list.length) return '';
+  const i=S.spot%list.length, {a,latest}=spotItem(list[i]);
+  const bg=latest&&String(latest.p).startsWith('c_')?P[latest.p]:P[a.p];
+  return `<section class="spotlight" id="spot"><div class="spot-bg" style="--g:${bg}"></div><div class="spot-shade"></div>
+    <div class="spot-body"><span class="spot-tag">★ Supernova Spotlight</span>
+      <div class="spot-main">${art(a.p,a.name[0])}<div><h2>${esc(a.name)}</h2><p>${esc(a.bio?a.bio.slice(0,120):(a.city||makesLabel(a.makes)))}</p></div></div>
+      <div class="row-btns"><button class="btn btn-gold btn-sm" data-action="artist" data-id="${a.id}">Visit page</button>${latest?(T(latest.id)?`<button class="btn btn-ghost btn-sm" data-action="play" data-id="${latest.id}">${I.play}${esc(latest.title.slice(0,30))}</button>`:D(latest.id)?`<button class="btn btn-ghost btn-sm" data-action="dl" data-id="${latest.id}">${esc(latest.title.slice(0,30))}</button>`:`<button class="btn btn-ghost btn-sm" data-action="video" data-id="${latest.id}">${I.play}${esc(latest.title.slice(0,30))}</button>`):''}</div></div>
+    ${list.length>1?`<div class="spot-dots">${list.map((x,j)=>`<button data-action="spot" data-i="${j}" aria-label="Show ${esc(x.name)}" aria-pressed="${j===i}"></button>`).join('')}</div>`:''}</section>`;
+}
+setInterval(()=>{ const el=document.getElementById('spot'); if(!el||document.hidden||novas().length<2||el.matches(':hover')) return; S.spot++; el.outerHTML=spotlightHtml(); },9000);
+function dayShuffle(list){ const d=new Date().toISOString().slice(0,10); const h=s=>{ let n=0; for(const ch of s) n=(n*31+ch.charCodeAt(0))%1000003; return n; }; return [...list].sort((a,b)=>h(a.id+d)-h(b.id+d)); }
+function uploadQuota(){
+  if(!S.user||isPaidStar(S.user)) return '';
+  const mine=(S.mine||[]).filter(r=>r.status!=='removed'), songs=mine.filter(r=>r.kind==='song').length, vids=mine.filter(r=>r.kind==='video'&&r.form!=='short').length, arts=mine.filter(r=>r.kind==='download').length;
+  return `<div class="quota"><b>Rising Star uploads:</b> ${songs} of 10 songs · ${vids} of 5 videos · ${arts} of 20 art and downloads. Shorts are unlimited. <button class="link" data-action="upgrade">Get unlimited</button></div>`;
+}
+
 function render(keepScroll){
   const y = window.scrollY;
   const v = document.getElementById('view');
@@ -5234,9 +5573,9 @@ function render(keepScroll){
   if(!feedOn){ S.drawer=false; if(FV.obs){ FV.obs.disconnect(); FV.obs=null; } FV.active=-1; }
   const fd = document.getElementById('feed');
   if(feedOn && fd && fd.dataset.key===feedKey()){ feedPatch(); renderNav(); return; }
-  const VIEWS = {feed:viewFeed,home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,art:viewArt,radio:viewRadio,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset,finish:viewFinish,'become-star':viewFinish,member:viewMember,inbox:viewInbox,chat:viewChat};
+  const VIEWS = {feed:viewFeed,home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,art:viewArt,radio:viewRadio,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset,finish:viewFinish,'become-star':viewFinish,member:viewMember,inbox:viewInbox,chat:viewChat,constellation:viewConstellation};
   document.body.classList.toggle('chatmode', !S.artist && S.tab==='chat');
-  v.innerHTML = S.artist ? viewArtist() : (VIEWS[S.tab]||viewHome)();
+  v.innerHTML = (S.user&&S.user.banned&&S.tab!=='feed'?`<div class="paused-note"><b>Your account is paused.</b> You can browse, but you can't post, upload or message right now. Questions? Email ${esc(LEGAL.email)}.</div>`:'') + (S.artist ? viewArtist() : (VIEWS[S.tab]||viewHome)());
   if(feedOn) feedBind();
   renderNav();
   if(S.deepDone){ try{ const want=S.artist&&isReal(S.artist)?'?star='+S.artist:''; if(/^https?:$/.test(location.protocol)&&location.search!==want&&!/[?&](code|error|error_description)=/.test(location.search)) history.replaceState(null,'',location.pathname+want+location.hash); }catch(_){} }
@@ -5281,6 +5620,19 @@ function openBuy(kind,id){
   openSoon(kind==='video'?'video':kind==='download'?'download':'track',id);
 }
 function openTip(id){ openSoon('tip',id); }
+function openPlans(){
+  const star=S.user&&S.user.role==='star', u=S.user||{};
+  const card=(name,price,items,cur,tag)=>`<div class="plan-card${cur?' cur':''}">${tag?`<span class="tag">${tag}</span>`:''}<b>${name}</b><span class="pr">${price}</span><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>${cur?'<span class="pill">Your plan</span>':''}</div>`;
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${star?'Artist plans':'StarPass'}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>Paid plans switch on as soon as payments are ready. We'll let you know.</p>
+    <div class="plan-cards">${star?[
+      card('Rising Star','Free',['10 songs, 5 videos and 20 art pieces','Unlimited Shorts','Keep 85% of every sale'],!u.pro&&!u.nova),
+      card('Star Pro',money(PRO_PRICE)+'/mo',['Unlimited uploads','Featured badge, higher in search','Plays and saves stats','Constellations (playlists)','Keep 90% of every sale'],u.pro,'More reach'),
+      card('Supernova',money(NOVA_PRICE)+'/mo',['Everything in Star Pro','Shooting Stars top 10 in Shorts','Supernova Spotlight on the homepage','Play on StarTier Radio','Keep 92% of every sale'],u.nova,'Top tier')].join('')
+      :[card('Stargazer','Free',['30-second clips of paid songs and videos','Free songs, videos and art in full','All Shorts and the radio'],!u.pass),
+        card('StarPass',money(PASS_PRICE)+'/mo',['Every song and video in full','Make Constellations (playlists)','20% off everything you buy'],u.pass,'Best value')].join('')}</div></div>`);
+}
 
 /* ---------- player ---------- */
 const mini = document.getElementById('mini');
@@ -5338,8 +5690,8 @@ document.addEventListener('click',e=>{
     case 'account': openAccountNames(); break;
     case 'upgrade':
       if(!S.user){ S.artist=null; S.tab='join-supporter'; S.signupPlan='pass'; if(scrim.classList.contains('open')) closeSheet(); render(); break; }
-      if(sb){ toast('Paid plans are coming soon. You are on the Free plan for now.'); if(scrim.classList.contains('open')) closeSheet(); break; }
-      if(S.user.role==='star'){ S.user.pro=true; toast('Star Pro is on. You are now Featured.'); }
+      if(sb){ openPlans(); break; }
+      if(S.user.role==='star'){ S.user.pro=true; toast('Star Pro is on.'); }
       else { S.user.pass=true; toast('StarPass is on. Stream everything.'); }
       if(scrim.classList.contains('open')) closeSheet(); render(true); updateMini(); break;
     case 'bot-open': openBot(); break;
@@ -5356,7 +5708,7 @@ document.addEventListener('click',e=>{
       if(!sb){ toast('Accounts are not connected yet'); break; }
       sb.auth.resetPasswordForEmail(em.trim(),{redirectTo:location.origin}).then(({error})=>toast(error?error.message:'Check your email for a reset link'));
       break; }
-    case 'signout': if(S.radioOn) radioStop(); S.su={makes:null,vform:null,role:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.saved=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; S.convos=null; S.unread=0; S.chat={with:null,msgs:[],more:false}; S.cards={}; clearTimeout(unreadT); clearTimeout(chatT); audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
+    case 'signout': if(S.radioOn) radioStop(); S.su={makes:null,vform:null,role:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.saved=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; S.convos=null; S.unread=0; S.chat={with:null,msgs:[],more:false}; S.cards={}; S.myGal=new Set(); S.myWait=new Set(); S.pls=null; S.queue=null; clearTimeout(unreadT); clearTimeout(chatT); audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
     case 'hero': S.hero=d.id; render(true); break;
     case 'video': if(V(d.id)&&V(d.id).form==='short'&&!d.autoplay){ openFeedAt(d.id); break; } openVideo(d.id, d.autoplay==='1'); break;
     case 'trailer': startTrailer(); break;
@@ -5382,6 +5734,24 @@ document.addEventListener('click',e=>{
     case 'cashout': toast('Cash out opens when payments switch on. Your earnings will show here.'); break;
     case 'acat': S.acat=d.g; render(true); break;
     case 'ce-add': ceAdd(d.ctx,d.id,d.name); break;
+    case 'gal-wait': galaxyWait(d.id,true); break;
+    case 'gal-leave': galaxyWait(d.id,false); break;
+    case 'gal-save': galaxySave(); break;
+    case 'gal-edit': S.galEdit=true; render(true); break;
+    case 'gal-cancel': S.galEdit=false; render(true); break;
+    case 'gal-people': galaxyPeople(); break;
+    case 'gal-gift': galaxyGift(d.id,d.on==='1'); break;
+    case 'add-pl': openAddToPl(d.id); break;
+    case 'pl-add': plAdd(Number(d.id),d.track); break;
+    case 'pl-new': { if(!canPlaylist()){ openAddToPl(''); break; } const nm=prompt('Name your Constellation'); if(nm&&nm.trim()) plCreate(nm.trim(),null); break; }
+    case 'pl-open': openPl(Number(d.id)); break;
+    case 'pl-play': { const v=S.plView[Number(d.id)]; if(v) playQueue(v.items.map(x=>'r'+x.release_id),d.shuffle==='1'); break; }
+    case 'pl-public': { const v=S.plView[Number(d.id)]; if(!v) break; sb.from('playlists').update({is_public:!v.pl.is_public}).eq('id',v.pl.id).then(({error})=>{ if(error){ toast("Couldn't change that"); return; } v.pl.is_public=!v.pl.is_public; const m=(S.pls||[]).find(x=>x.id===v.pl.id); if(m) m.is_public=v.pl.is_public; toast(v.pl.is_public?'Public. It shows on your profile.':'Private. Only you can see it.'); render(true); }); break; }
+    case 'pl-rename': { const v=S.plView[Number(d.id)]; if(!v) break; const nm=prompt('New name',v.pl.name); if(!nm||!nm.trim()) break; sb.from('playlists').update({name:nm.trim().slice(0,60)}).eq('id',v.pl.id).then(({error})=>{ if(error){ toast("Couldn't rename it"); return; } v.pl.name=nm.trim().slice(0,60); const m=(S.pls||[]).find(x=>x.id===v.pl.id); if(m) m.name=v.pl.name; render(true); }); break; }
+    case 'pl-del': { const v=S.plView[Number(d.id)]; if(!v||!confirm(`Delete “${v.pl.name}”?`)) break; sb.from('playlists').delete().eq('id',v.pl.id).then(({error})=>{ if(error){ toast("Couldn't delete it"); return; } S.pls=(S.pls||[]).filter(x=>x.id!==v.pl.id); S.tab='library'; render(); toast('Deleted'); }); break; }
+    case 'pl-rm': { const id=Number(d.id), rel=Number(d.rel); sb.from('playlist_items').delete().eq('playlist_id',id).eq('release_id',rel).then(({error})=>{ if(error){ toast("Couldn't remove it"); return; } const v=S.plView[id]; if(v) v.items=v.items.filter(x=>x.release_id!==rel); const m=(S.pls||[]).find(x=>x.id===id); if(m) m.n=Math.max(0,m.n-1); render(true); }); break; }
+    case 'pl-share': { const v=S.plView[Number(d.id)]; if(v) openShare({title:v.pl.name+' on StarTier',text:`Listen to “${v.pl.name}” on StarTier`,link:SITE+'/?pl='+v.pl.id}); break; }
+    case 'spot': S.spot=+d.i; { const el=document.getElementById('spot'); if(el) el.outerHTML=spotlightHtml(); } break;
     case 'ce-del': { const l=S.ce[d.ctx]||[]; l.splice(+d.i,1); ceRefresh(d.ctx); break; }
     case 'ce-save': { if(!S.ceEdit) break; el.disabled=true; saveCollabs(S.ceEdit.id,'edit',S.ceEdit.prev).then(ok=>{ el.disabled=false; if(ok){ closeSheet(); toast('Saved. Your collaborators will see a request.'); refreshAll(); } }); break; }
     case 'rel-collab': openCollabEdit(Number(d.id)); break;
@@ -5397,6 +5767,7 @@ document.addEventListener('click',e=>{
     case 'qr-copy': copyLink(starLink(d.id)); break;
     case 'radio': if(S.radioOn){ radioStop(); render(true); } else radioStart(); break;
     case 'adminview': S.adminView=d.v; render(true); break;
+    case 'adm': adminMember(d.op,d.id); break;
     case 'radio-edit': radioEdit(d.op, d.id?Number(d.id):null); break;
     case 'radio-adddrop': if(!el.disabled) addDrop(el); break;
     case 'toggle': if(S.radioOn){ radioStop(); render(true); break; } { const tr=T(S.now); if(tr&&tr.real){ playReal(tr); break; } S.playing=!S.playing; updateMini(); render(true); break; }
@@ -5446,6 +5817,7 @@ document.addEventListener('input',e=>{
   if(e.target.id==='mq'||e.target.id==='vq'||e.target.id==='rq'){ S[e.target.id]=e.target.value; const id=e.target.id, pos=e.target.selectionStart; render(true); const q=document.getElementById(id); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.dataset&&e.target.dataset.ceq){ ceSearch(e.target.dataset.ceq,e.target.value); return; }
   if(e.target.dataset&&e.target.dataset.cePct){ const l=S.ce[e.target.dataset.cePct]||[], c=l[+e.target.dataset.i]; if(c){ c.pct=e.target.value; const sm=document.getElementById('ceSum-'+e.target.dataset.cePct); if(sm) sm.innerHTML=ceSummary(e.target.dataset.cePct); } return; }
+  if(e.target.id==='admq'){ S.admq=e.target.value; loadMembers(); return; }
   if(e.target.id==='aq'){ S.aq=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('aq'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='msgIn'){ S.msgDraft[S.chat.with]=e.target.value; e.target.style.height='auto'; e.target.style.height=Math.min(140,e.target.scrollHeight)+'px'; }
   if(e.target.id==='helpQ'){ S.helpQ=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('helpQ'); q.focus(); q.setSelectionRange(pos,pos); }
@@ -5458,15 +5830,16 @@ async function loadProfile(user){
   let p=null;
   try{ const r=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle(); p=r.data; }catch(_){}
   S.user={ id:user.id, email:user.email, role:(p&&p.role)||md.role||'supporter', name:(p&&p.display_name)||md.name||'Member',
-    genre:(p&&p.genre)||md.genre, city:(p&&p.city)||md.city, pro:!!(p&&p.is_pro), pass:!!(p&&p.has_pass), wanted:(p&&p.wanted_plan)||md.plan,
+    genre:(p&&p.genre)||md.genre, city:(p&&p.city)||md.city, pro:!!(p&&p.is_pro), nova:!!(p&&p.is_supernova), pass:!!(p&&p.has_pass), wanted:(p&&p.wanted_plan)||md.plan,
     makes:(p&&p.creator_type)||md.creator_type||null, genres:(p&&p.genres&&p.genres.length?p.genres:md.music_genres)||[], cats:(p&&p.video_categories&&p.video_categories.length?p.video_categories:md.video_categories)||[], merch:(p&&p.merch_url)||'',
     artCats:(p&&p.art_categories)||[], bio:(p&&p.bio)||'', socials:(p&&p.socials)||{}, dm:(p&&p.dm_policy)||null, avatarPath:(p&&p.avatar_path)||null, av:avUrl(p&&p.avatar_path),
-    setup:p?p.setup_done!==false:true };
+    setup:p?p.setup_done!==false:true, banned:!!(p&&p.banned), comped:!!(p&&p.comped_by) };
 }
 document.addEventListener('change',e=>{
   if(e.target.id==='upCover'){ const f=e.target.files[0]; if(!f) return; S.up=S.up||{}; S.up.cover=f; const c=document.getElementById('dropC');
     if(c){ const u=URL.createObjectURL(f); c.style.backgroundImage=`url("${u}")`; c.classList.add('has'); } }
   if(e.target.dataset&&e.target.dataset.ceRole){ const c=(S.ce[e.target.dataset.ceRole]||[])[+e.target.dataset.i]; if(c) c.role=e.target.value; return; }
+  if(e.target.dataset&&e.target.dataset.admTier){ adminMember('tier-'+e.target.value,e.target.dataset.admTier); return; }
   if(e.target.id==='picFile'){ const f=e.target.files[0]; e.target.value=''; if(f) uploadPic(f); return; }
   if(e.target.id==='upFile'&&document.getElementById('upKind').value==='download'){ const f=e.target.files[0]; if(!f) return;
     S.up=S.up||{}; S.up.file=f; S.up.dur=0; const dr=document.getElementById('drop'); dr.classList.add('has');
@@ -5517,12 +5890,14 @@ document.addEventListener('submit',async e=>{
     await loadProfile(data.user); await loadMine(); await loadCatalog(); S.artist=null; S.tab=S.user.role==='star'?'studio':'home'; render(); updateMini();
     toast(`Welcome back, ${S.user.name.split(' ')[0]}`); return;
   }
+  if(f.id==='plNewForm'){ e.preventDefault(); const nm=(f.elements.name.value||'').trim(); if(!nm){ toast('Name it first'); return; } plCreate(nm,f.dataset.track); return; }
   if(f.id==='finishForm'){ e.preventDefault(); submitFinish(f); return; }
   if(f.id==='profileForm'){ e.preventDefault(); saveProfile(f); return; }
   if(f.id==='msgForm'){ e.preventDefault(); sendMsg(f); return; }
   if(f.id==='postForm'){
     e.preventDefault(); const body=(f.elements.body.value||'').trim(); if(!body){ toast('Write something first'); return; }
-    busy(f,true); const {data:np,error}=await sb.from('posts').insert({body:body.slice(0,1000)}).select('id').single();
+    busy(f,true); const prow={body:body.slice(0,1000)}; if(f.elements.galaxy&&f.elements.galaxy.checked) prow.galaxy_only=true;
+    const {data:np,error}=await sb.from('posts').insert(prow).select('id').single();
     let tagged=0; if(!error&&np&&np.id&&(S.ce.post||[]).length){ const tr=await sb.rpc('tag_post',{p_post:np.id,p_artists:S.ce.post.map(c=>c.id)}); if(!tr.error) tagged=S.ce.post.length; }
     busy(f,false);
     if(error){ toast("Couldn't post that. Try again."); return; }
@@ -5606,10 +5981,11 @@ document.addEventListener('keydown',e=>{
 scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
 
 document.getElementById('botClose').innerHTML=I.close;
+const DEEP_PL=(()=>{ try{ const x=new URLSearchParams(location.search).get('pl'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
 (()=>{ try{ const lg=new URLSearchParams(location.search).get('legal'); if(lg&&LEGAL_DOCS[lg]){ S.tab='legal'; S.legal=lg; } }catch(_){} })();
 render();
 if(sb){
-  loadCatalog().then(()=>{ render(true); if(DEEP) openDeepStar(); else openDeepRelease(); });
+  loadCatalog().then(()=>{ render(true); if(DEEP) openDeepStar(); else if(DEEP_PL){ S.deepDone=true; openPl(DEEP_PL); } else openDeepRelease(); });
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&S.user){ pollUnread(); if(S.tab==='chat') loadChat(false); } });
   radioFetch(true).then(()=>render(true));
   sb.auth.getSession().then(async ({data})=>{ if(data.session){ await loadProfile(data.session.user); await loadMine(); render(true); updateMini(); } });
