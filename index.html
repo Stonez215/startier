@@ -578,6 +578,51 @@ body.chatmode .bot-fab,body.chatmode .mini{display:none!important}
 .field input,.field select,.field textarea{width:100%;box-sizing:border-box;min-width:0}
 .dl-hero{min-height:220px}
 .studio-head .btn{margin-left:22px}
+/* collabs */
+.credits{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13.5px;color:var(--dust);margin:-4px 0 12px}
+.credits button{color:var(--bone);font-weight:600;padding:0}
+.credits button:hover{text-decoration:underline;text-underline-offset:2px}
+.post .credits{margin:8px 0 0}
+.ce-title{color:var(--bone);font-size:15px}
+.ce{display:grid;gap:10px}
+.ce-intro{margin:0;color:var(--dust);font-size:13px}
+.ce-rows{display:grid;gap:8px}
+.ce-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto 34px;gap:8px;align-items:center;padding:8px 8px 8px 12px;border-radius:12px;background:var(--bark-2)}
+.ce-row select{height:38px;width:auto;min-width:0;padding:0 8px;font-size:13.5px;background:var(--bark);border:1px solid var(--line);border-radius:10px;color:inherit}
+.ce-name{font-weight:600;color:var(--bone);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ce-name .pill{font-size:11px;font-weight:600;margin-left:4px}
+.ce-pct{display:flex;align-items:center;gap:4px;color:var(--dust);font-size:14px}
+.ce-pct input{width:64px;height:38px;padding:0 8px;text-align:right;background:var(--bark);border:1px solid var(--line);border-radius:10px;color:inherit;font:inherit;box-sizing:border-box}
+.ce-del{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:var(--dust)}
+.ce-del svg{width:16px;height:16px}
+.ce-del:hover{background:var(--bark-3)}
+@media (max-width:480px){.ce-row{grid-template-columns:minmax(0,1fr) auto 34px}.ce-row select{grid-column:1/2;grid-row:2}.ce-row .ce-pct{grid-row:2}.ce-row .ce-del{grid-row:1;grid-column:3}}
+.ce-search{position:relative}
+.ce-search input{width:100%;box-sizing:border-box;height:44px;background:var(--bark-2);border:1px solid var(--line);border-radius:10px;padding:0 12px;color:inherit;font:inherit}
+.ce-results{display:grid;gap:4px;margin-top:6px}
+.ce-results:empty{display:none}
+.ce-results button{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;background:var(--bark-3);text-align:left}
+.ce-results button:hover{outline:1px solid rgba(127,178,255,.5)}
+.ce-results .art{width:32px;height:32px;border-radius:50%;--gs:32px;flex:none}
+.ce-results b{display:block;font-size:14px}
+.ce-results small{color:var(--dust);font-size:12px}
+.ce-none{padding:8px 10px;color:var(--dust);font-size:13.5px}
+.ce-sum{margin:0;color:#c9d2ee;font-size:13.5px}
+.ce-sum .bad,.bad{color:#ffb3b3}
+.tagger summary{cursor:pointer;color:var(--gold);font-weight:600;font-size:14px;padding:4px 0}
+.tagger[open] summary{margin-bottom:8px}
+.split-box{display:grid;gap:4px;padding:12px 14px;border-radius:12px;margin-bottom:12px;font-size:14px;color:#c9d2ee;background:var(--bark-2)}
+.split-box b{color:var(--bone)}
+.split-box small{color:var(--dust)}
+.split-box.ok{border-left:3px solid #4cc38a}
+.split-box.wait{border-left:3px solid var(--gold)}
+.split-box.bad{border-left:3px solid #ff7a7a}
+.reqs{margin:0 22px 18px;max-width:720px;display:grid;gap:10px}
+.reqs h2{font-family:var(--display);font-size:20px;margin:0;display:flex;align-items:center;gap:8px}
+.req{padding:14px;border-radius:14px;background:var(--bark);border:1px solid rgba(232,165,75,.35);display:grid;gap:6px}
+.req p{margin:0;color:#c9d2ee;font-size:14px}
+.req .small{color:var(--dust);font-size:13px}
+.req .row-btns{margin-top:4px}
 </style>
 </head>
 <body>
@@ -3409,7 +3454,7 @@ function trow(t,i){
   const a = A(t.artist), on = S.now===t.id && S.playing, saved = isSaved(t);
   return `<div class="trow">
     <span class="n">${i+1}</span>${art(t.p,t.title[0])}
-    <div class="meta"><button class="t tlink" data-action="song" data-id="${t.id}">${esc(t.title)}</button><div class="s"><button data-action="artist" data-id="${a.id}">${esc(a.name)}</button> · ${mmss(t.len)}</div></div>
+    <div class="meta"><button class="t tlink" data-action="song" data-id="${t.id}">${esc(t.title)}</button><div class="s"><button data-action="artist" data-id="${a.id}">${esc(a.name)}</button>${t.credits&&t.credits.length?' '+esc(creditLine(t)):''} · ${mmss(t.len)}</div></div>
     <button class="icon-btn ${on?'on':''}" data-action="play" data-id="${t.id}" aria-label="${on?'Pause':'Play'} ${esc(t.title)}">${on?I.pause:I.play}</button>
     ${t.price?`<button class="price" data-action="buy" data-kind="track" data-id="${t.id}">${priceTag(t)}</button>`:`<button class="price${saved?' owned':''}" data-action="save" data-id="${t.id}" aria-pressed="${saved}">${saved?'Saved':'Free'}</button>`}
   </div>`;
@@ -3546,7 +3591,7 @@ function openDownload(id){
   const x=D(id); if(!x) return; const a=A(x.artist)||{id:x.artist,name:'Star',p:'night',makes:'art'}, mine=S.user&&S.user.id===x.artist, saved=isSaved(x);
   openSheet(`<div class="dl-hero">${x.cover?`<img src="${esc(x.cover)}" alt="${esc(x.title)}">`:art(x.p,x.title[0])}
     <button class="close" data-action="close" aria-label="Close">${I.close}</button></div>
-  <div class="sheet-body"><h2>${esc(x.title)}</h2><div class="s">${[esc(x.cat),x.price?money(x.price):'Free',x.fileName?esc(fileKind(x.fileName))+(x.size?' · '+fsize(x.size):''):''].filter(Boolean).join(' · ')}</div>${x.desc?`<p>${esc(x.desc)}</p>`:''}
+  <div class="sheet-body"><h2>${esc(x.title)}</h2><div class="s">${[esc(x.cat),x.price?money(x.price):'Free',x.fileName?esc(fileKind(x.fileName))+(x.size?' · '+fsize(x.size):''):''].filter(Boolean).join(' · ')}</div>${creditHtml(x)}${x.desc?`<p>${esc(x.desc)}</p>`:''}
     ${x.price&&!mine?'<p class="small" style="color:var(--dust)">The picture above is a preview. Buyers get the full file.</p>':''}
     <button class="byline" data-action="artist" data-id="${a.id}">${art(a.p,a.name[0])}<div><b>${esc(a.name)}</b><div class="s">${esc(makesLabel(a.makes))}</div></div></button>
     <div class="row-btns">${!x.price||mine?`<button class="btn btn-gold" data-action="download" data-id="${x.id}">${I.down}Download${x.price?' (yours)':', free'}</button>`:`<button class="btn btn-gold" data-action="buy" data-kind="download" data-id="${x.id}">${I.bag}Buy ${money(x.price)}</button>`}
@@ -3615,13 +3660,14 @@ function viewStudio(){
       <label class="field">Your price (USD)<input id="upPrice" type="number" min="0" step="0.01" value="${UP_PRICE[k0]}"></label>
     </div>
     <div class="split" id="split"></div>
+    <div class="field"><b class="ce-title">Collaborators (optional)</b>${collabEditor('up','Tag other Stars who worked on this, like "feat." or "prod. by". You can also split your 85% with them. Each person has to accept before their name or split goes live.')}</div>
     <div class="prog-wrap" id="upProg" hidden><div class="progress"><i></i></div><span></span></div>
     <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light. Selling opens when payments switch on; until then, paid items show as "coming soon" and free ones work right away.</p>
     <button class="btn btn-gold full" data-action="publish">Publish</button>
   </div>
   <section class="section"><div class="section-head"><h2>Your releases</h2></div>${mine.length?'':'<div class="empty"><b>No releases yet</b>Upload your first song or video above.</div>'}
     <div class="tracks">${mine.map((r,i)=>`<div class="trow" style="grid-template-columns:auto 52px minmax(0,1fr) auto">${'<span class="n">'+(i+1)+'</span>'}${art(covKey(r),r.title[0])}<div class="meta"><div class="t">${esc(r.title)}</div><div class="s">${r.kind==='song'?'Song':r.kind==='download'?esc(r.category||'Download'):(r.form==='short'?'Short video':'Video')} · ${r.price_cents?money(r.price_cents/100):'Free'} · <span class="pill ${r.status==='hidden'?'hid':''}">${r.status==='hidden'?'Hidden':'Live'}</span></div></div>
-      <div class="rel-actions"><button data-action="rel" data-op="${r.status==='hidden'?'show':'hide'}" data-id="${r.id}">${r.status==='hidden'?'Show':'Hide'}</button><button class="danger" data-action="rel" data-op="delete" data-id="${r.id}">Delete</button></div></div>`).join('')}</div></section>`;
+      <div class="rel-actions"><button data-action="rel-collab" data-id="${r.id}">Collabs</button><button data-action="rel" data-op="${r.status==='hidden'?'show':'hide'}" data-id="${r.id}">${r.status==='hidden'?'Show':'Hide'}</button><button class="danger" data-action="rel" data-op="delete" data-id="${r.id}">Delete</button></div></div>`).join('')}</div></section>`;
 }
 
 function viewArtist(){
@@ -3630,6 +3676,8 @@ function viewArtist(){
   if(a.real && !(a.id in S.fcount)) loadFollowerCount(a.id);
   const fol = a.real ? (S.fcount[a.id]||0) : a.followers+(f?1:0);
   const av = videos.filter(v=>v.artist===a.id&&v.form==='long'), as2 = videos.filter(v=>v.artist===a.id&&v.form==='short'), at = tracks.filter(t=>t.artist===a.id), ad = downloads.filter(x=>x.artist===a.id);
+  const onIt = x => x.artist!==a.id && (x.credits||[]).some(c=>c.id===a.id);
+  const ct = tracks.filter(onIt), cv = videos.filter(onIt), cd = downloads.filter(onIt);
   return `<div class="banner"><div class="hero-bg" style="background-image:url(${SKIES[artists.indexOf(a)%3]})"></div><div class="shade"></div>
     <button class="back" data-action="tab" data-tab="${S.tab}" aria-label="Back">${I.back}</button></div>
   <div class="artist-head">${art(a.p,a.name[0])}
@@ -3649,6 +3697,7 @@ function viewArtist(){
   ${av.length?`<section class="section"><div class="section-head"><h2>Videos</h2></div><div class="rail">${av.map(vcard).join('')}</div></section>`:''}
   ${as2.length?`<section class="section"><div class="section-head"><h2>Shorts</h2></div><div class="rail">${as2.map(vcard).join('')}</div></section>`:''}
   ${ad.length?`<section class="section"><div class="section-head"><h2>Art and downloads</h2></div><div class="rail">${ad.map(dcard).join('')}</div></section>`:''}
+  ${ct.length||cv.length||cd.length?`<section class="section"><div class="section-head"><h2>Collabs</h2></div>${ct.length?`<div class="tracks">${ct.map(trow).join('')}</div>`:''}${cv.length||cd.length?`<div class="rail">${cv.map(vcard).join('')}${cd.map(dcard).join('')}</div>`:''}</section>`:''}
   ${a.real?(mine?`<section class="section"><div class="section-head"><h2>Updates</h2></div></section>${composer()}`:'')+postsSection('a:'+a.id, mine?'':'Updates', mine?'Your updates will show here.':''):''}`;
 }
 
@@ -3755,6 +3804,8 @@ const FAQ = [
  {g:'Your account', q:'Can I sign in with Google?', a:'Yes. Tap Continue with Google on the Log in or Join page. The first time, you pick whether you are a Star or a Supporter.', k:'google sign in login gmail account'},
  {g:'Your account', q:'How do I add a profile picture, bio or my social links?', a:'Tap your circle at the top, then Edit profile. You can add a picture, a short bio, and links to Instagram, TikTok, YouTube, X, Facebook, Spotify, Apple Music, SoundCloud and your website.', k:'profile picture photo avatar bio social links instagram tiktok youtube edit'},
  {g:'Your account', q:'How do messages work?', a:'Open someone\'s page and tap Message. Your chats are in Messages. Stars can get messages from anyone. Supporters only get messages from people they follow, unless they change it. You can change who can message you in Edit profile, and you can always block or report someone.', k:'message dm chat inbox direct talk send private'},
+ {g:'For Stars', q:'How do I tag collaborators or split the money?', a:'When you upload, use the Collaborators box to tag other Stars, like feat. or prod. by, and type a % next to anyone you want to split your 85% with. For older releases, tap Collabs next to the release in your Studio. Tagged Stars get a request in their Messages. Names show only after they accept, and a split only turns on when everyone in it agrees. After that it is locked, and changing it needs everyone to agree again. Money is split automatically once payments switch on.', k:'collab collaboration feature feat tag producer split splits share percent royalty money divide'},
+ {g:'For Stars', q:'How do I tag someone in a post?', a:'Under the post box, tap "Tag Stars in this post" and type their name. Once they accept, the post shows on their page too.', k:'tag post mention update collab'},
  {g:'For Stars', q:'How do I share my songs, videos or art?', a:'Open any of your releases and tap Share. You can send it with your phone\'s share menu, copy the link, or post it to X, Facebook or WhatsApp. Anyone who opens the link lands right on it.', k:'share link post social instagram facebook whatsapp x twitter promote'},
  {g:'For Supporters', q:'How do I cancel StarPass?', a:'Open your account (the circle with your initials, top right) and manage your plan there. You keep StarPass until the end of the month you paid for.', k:'cancel starpass stop subscription unsubscribe'},
  {g:'For Supporters', q:'Can I get a refund?', a:'If something went wrong with a purchase, like a file that will not play or a charge you did not mean to make, send the team a message with what you bought and what happened. We look at every request.', k:'refund money back accident mistake charge wrong purchase'},
@@ -3890,13 +3941,16 @@ async function loadCatalog(){
   if(!sb) return;
   const {data:rels,error}=await sb.from('releases').select(REL_COLS).eq('status','live').order('created_at',{ascending:false}).limit(1000);
   if(error||!rels) return;
-  const ids=[...new Set(rels.map(r=>r.artist_id))];
+  let credits=[];
+  if(rels.length){ const rc=await sb.from('release_credits').select('release_id,artist_id,role').in('release_id',rels.map(r=>r.id)).limit(5000); credits=rc.error?[]:(rc.data||[]); }
+  const ids=[...new Set([...rels.map(r=>r.artist_id),...credits.map(c=>c.artist_id)])];
   let profs=[];
   if(ids.length){ const r2=await sb.from('profiles').select(PCOLS).in('id',ids); profs=r2.data||[]; }
+  const crBy={}; credits.forEach(c=>{ if(profs.some(p=>p.id===c.artist_id)&&!S.blocked.has(c.artist_id)) (crBy[c.release_id]=crBy[c.release_id]||[]).push({id:c.artist_id,role:c.role}); });
   const ok=profs.filter(p=>!S.blocked.has(p.id));
   S.samples = ok.length < SAMPLE_UNTIL;
   const list={t:[],v:[],d:[]};
-  for(const r of rels){ if(!ok.some(p=>p.id===r.artist_id)) continue; addRelease(r,list); }
+  for(const r of rels){ if(!ok.some(p=>p.id===r.artist_id)) continue; const o=addRelease(r,list); o.credits=crBy[r.id]||[]; }
   const extra=Object.values(S.xa||{}).filter(x=>!ok.some(p=>p.id===x.id)&&!S.blocked.has(x.id));
   artists.length=0; artists.push(...ok.map(artistFromProfile),...extra,...(S.samples?SAMPLES.a:[]));
   videos.length=0; videos.push(...list.v,...(S.samples?SAMPLES.v:[]));
@@ -3944,7 +3998,7 @@ function openRealVideo(v){
   openSheet(`<div class="player" id="player">${art(v.p,v.title[0])}
     <button class="close" data-action="close" aria-label="Close">${I.close}</button>
     <div class="lockmsg" id="vmsg">Loading video…</div></div>
-  <div class="sheet-body"><h2>${esc(v.title)}</h2><div class="s">${[esc(v.kind),esc(v.len),v.price?money(v.price):'free'].filter(Boolean).join(', ')}</div>${v.desc?`<p>${esc(v.desc)}</p>`:''}
+  <div class="sheet-body"><h2>${esc(v.title)}</h2><div class="s">${[esc(v.kind),esc(v.len),v.price?money(v.price):'free'].filter(Boolean).join(', ')}</div>${creditHtml(v)}${v.desc?`<p>${esc(v.desc)}</p>`:''}
     <button class="byline" data-action="artist" data-id="${a.id}">${art(a.p,a.name[0])}<div><b>${esc(a.name)}</b><div class="s">${esc(makesLabel(a.makes))}</div></div></button>
     <div class="row-btns">${v.price&&!mine?`<button class="btn btn-gold" data-action="buy" data-kind="video" data-id="${v.id}">${I.bag}Buy ${money(v.price)}</button>`:''}<button class="btn btn-ghost" data-action="save" data-id="${v.id}" aria-pressed="${isSaved(v)}">${isSaved(v)?I.saveOn+'Saved':I.save+'Save'}</button><button class="btn btn-ghost" data-action="share-rel" data-id="${v.id}">${I.share}Share</button>${mine?'':`<button class="btn btn-clay" data-action="tip" data-id="${a.id}">Tip ${esc(a.name.split(' ')[0])}</button><button class="btn btn-ghost" data-action="report" data-id="${v.id}">Report</button>`}</div>
   </div>`);
@@ -4035,6 +4089,7 @@ async function publishRelease(btn){
   if(!title){ toast('Add a title'); $('upTitle').focus(); return; }
   if(price<0||price>100000){ toast('Price must be between $0 and $1,000'); return; }
   if(price>0&&price<50){ toast('Paid items need to be at least $0.50'); return; }
+  if(Object.values(ceShares(S.ce.up)).reduce((a2,b2)=>a2+b2,0)>10000){ toast('The collaborator shares add up to more than 100%'); return; }
   if(up.cover&&up.cover.size>5*MB){ toast('Cover art must be under 5 MB'); return; }
   if(up.cover&&!/^image\/(jpeg|png|webp)$/.test(up.cover.type)){ toast('Cover art must be a JPG, PNG or WEBP'); return; }
   if(isDl&&!DL_TYPES[dext]){ toast('Upload an image, PDF, ZIP or EPUB file'); return; }
@@ -4081,7 +4136,8 @@ async function publishRelease(btn){
       row.bunny_video_id=c.videoId;
     }
     setProg(97,'Publishing…');
-    r=await sb.from('releases').insert(row); if(r.error) throw r.error;
+    r=await sb.from('releases').insert(row).select('id').single(); if(r.error) throw r.error;
+    if((S.ce.up||[]).length&&r.data&&r.data.id){ setProg(99,'Tagging your collaborators…'); if(await saveCollabs(r.data.id,'up',null)) S.ce.up=[]; }
     setProg(100,'Published!');
     toast(`Published “${title}”${isSong||isDl?'':'. Bunny takes a few minutes to get it ready to play.'}`);
     S.up={}; await refreshAll(); setTimeout(()=>setProg(null),1500);
@@ -4118,6 +4174,7 @@ terms: { title:'Terms of Service', body:[
 ['Your content stays yours', `If you're a Star, you keep ownership of everything you upload. By uploading, you give StarTier a non-exclusive, worldwide, royalty-free license to host, store, copy, stream, display, sell (at the price you set) and promote your content on and off StarTier, only so we can run and grow the service. This license ends when you delete the content, except for copies fans already bought, backups kept for a short time, and anything we must keep by law.`],
 ['StarTier Radio and Star Light', `By uploading music, you also let StarTier play your songs in full on StarTier Radio, our free live station, and feature you, your name, your artwork and your music in Star Light, our artist promotion, on and off StarTier. Radio plays and Star Light features are free promotion. They aren't sales and don't pay per play. If you don't want a song on the radio, email ${LEGAL.email} and we'll take it off the show.`],
 ['You need the rights to what you upload', `Only upload work you created or have permission to share. That includes the beats, samples, lyrics, footage and images in it. You're responsible for getting any licenses, clearances and permissions, and for paying anyone you owe, like producers, featured artists or collaborators.`],
+['Collabs and splits', `Stars can tag other Stars on a release or post, and can split their share of the money from a release with collaborators. A tag only shows after the tagged Star accepts. A split only takes effect after every person in it agrees, and it can only be changed if everyone in the new split, and everyone in the old one, agrees again. When payments are on, StarTier pays each person their share of the artist's part of a sale, based on the split that was active at the time of the sale. Splits are an agreement between the collaborators. StarTier isn't a party to it and doesn't settle disagreements between collaborators, but we may pause payouts on a release while a dispute is reported to us.`],
 ['Sales, prices and our fee', `Stars set their own prices, including free. When you buy a download, you get a personal license to keep and enjoy it, not ownership of the artwork or the right to resell or reprint it, unless the Star says otherwise. When paid sales and tips are switched on, StarTier keeps 15% of each sale and tip, and the Star gets the rest, minus any payment processing or tax amounts the law requires. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
 ['Paid plans', `Star Pro and StarPass are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
 ['Merch and outside links', `Stars can link to their own merch stores. Those stores are run by the Star or by other companies, not StarTier. Any purchase you make there is between you and that store, including shipping, returns and refunds. We aren't responsible for outside websites.`],
@@ -4223,10 +4280,17 @@ async function loadPosts(key){
   if(!sb||S.loading[key]) return; S.loading[key]=1;
   let q=sb.from('posts').select('id,author_id,body,created_at').eq('status','live').order('created_at',{ascending:false}).limit(40);
   if(key==='feed'){ const ids=[...S.follows]; if(!ids.length){ S.posts[key]=[]; delete S.loading[key]; return; } q=q.in('author_id',ids); }
-  else if(key.startsWith('a:')) q=q.eq('author_id',key.slice(2));
+  else if(key.startsWith('a:')){
+    const aid=key.slice(2); const tg=await sb.from('post_tags').select('post_id').eq('artist_id',aid).eq('status','accepted').limit(100);
+    const tids=tg.error?[]:(tg.data||[]).map(r=>r.post_id).filter(n=>Number.isInteger(n));
+    q=tids.length?q.or(`author_id.eq.${aid},id.in.(${tids.join(',')})`):q.eq('author_id',aid);
+  }
   const {data,error}=await q; const posts=error?[]:(data||[]).filter(p=>!S.blocked.has(p.author_id));
   const ids=posts.map(p=>p.id);
   if(ids.length){
+    const tg=await sb.from('post_tags').select('post_id,artist_id').in('post_id',ids).eq('status','accepted').limit(2000);
+    S.ptags=S.ptags||{}; ids.forEach(i=>S.ptags[i]=[]); (tg.error?[]:(tg.data||[])).filter(t=>!S.blocked.has(t.artist_id)).forEach(t=>S.ptags[t.post_id].push(t.artist_id));
+    await fetchNames((tg.data||[]).map(t=>t.artist_id));
     const [lk,cm]=await Promise.all([
       sb.from('post_likes').select('post_id,user_id').in('post_id',ids).limit(5000),
       sb.from('comments').select('id,post_id,author_id,body,created_at').in('post_id',ids).eq('status','live').order('created_at').limit(2000)]);
@@ -4245,6 +4309,7 @@ function postCard(p){
     <div class="post-head">${av}<button class="who" style="text-align:left" data-action="person" data-id="${p.author_id}"><b>${esc(nameOf(p.author_id))}</b><span>${ago(p.created_at)}</span></button>
       <button class="dots" data-action="pmenu" data-kind="post" data-id="${p.id}" data-owner="${p.author_id}" aria-label="More options">${I.dots}</button></div>
     <div class="post-body">${esc(p.body)}</div>
+    ${(S.ptags&&S.ptags[p.id]||[]).length?`<div class="credits">with ${S.ptags[p.id].map(id=>`<button data-action="person" data-id="${id}">${esc(nameOf(id))}</button>`).join(', ')}</div>`:''}
     <div class="post-acts"><button class="${lk.me?'on':''}" data-action="like" data-id="${p.id}" aria-pressed="${lk.me}">${lk.me?I.heartOn:I.heart}${lk.n||''} Like</button>
       <button data-action="cmts" data-id="${p.id}" aria-expanded="${open}">${I.chat}${cm.length||''} Comment${cm.length===1?'':'s'}</button></div>
     ${open?`<div class="cmts">${cm.map(c=>`<div class="cmt"><div class="body"><b><button class="namelink" data-action="person" data-id="${c.author_id}">${esc(nameOf(c.author_id))}</button></b>${esc(c.body)}<div class="meta2">${ago(c.created_at)}</div></div>
@@ -4260,6 +4325,7 @@ function postsSection(key,title,emptyMsg){
 }
 function composer(){
   return `<div class="composer"><form class="form" id="postForm"><textarea name="body" maxlength="1000" placeholder="Share an update with your fans… new drop, show, behind the scenes" aria-label="Post an update"></textarea>
+    <details class="tagger"${(S.ce.post||[]).length?' open':''}><summary>Tag Stars in this post</summary>${collabEditor('post','Tagged Stars get a request. Once they accept, the post shows on their page too.')}</details>
     <div class="row-btns" style="justify-content:flex-end"><button class="btn btn-gold btn-sm" type="submit">Post update</button></div></form></div>`;
 }
 async function toggleLike(id){
@@ -4487,7 +4553,7 @@ function openSong(id){
   openSheet(`<div class="sheet-body checkout song-sheet" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${esc(t.title)}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
     <div class="song-top">${art(t.p,t.title[0])}<div><div class="s">${esc(a.name)}${t.len?' · '+mmss(t.len):''} · ${t.price?money(t.price):'Free'}</div>
-      ${t.price&&!mine?'<p class="small" style="color:var(--dust);margin:6px 0 0">You hear a 30-second preview until you buy it.</p>':''}</div></div>
+      ${creditHtml(t)}${t.price&&!mine?'<p class="small" style="color:var(--dust);margin:6px 0 0">You hear a 30-second preview until you buy it.</p>':''}</div></div>
     <div class="row-btns"><button class="btn btn-gold" data-action="play" data-id="${t.id}" data-close="1">${on?I.pause+'Pause':I.play+'Play'}</button>
       ${t.price&&!mine?`<button class="btn btn-clay" data-action="buy" data-kind="track" data-id="${t.id}">${I.bag}Buy ${money(t.price)}</button>`:''}
       <button class="btn btn-ghost" data-action="save" data-id="${t.id}" aria-pressed="${saved}">${saved?I.saveOn+'Saved':I.save+'Save'}</button>
@@ -4928,8 +4994,9 @@ function viewMember(){
 let unreadT=null;
 async function pollUnread(){
   clearTimeout(unreadT); if(!sb||!S.user) { S.unread=0; return; }
-  try{ const {count,error}=await sb.from('messages').select('id',{count:'exact',head:true}).eq('recipient_id',S.user.id).is('read_at',null);
-    if(!error){ const was=S.unread; S.unread=count||0; if(was!==S.unread){ renderNav(); feedPatch(); if(S.tab==='inbox') loadConvos(); } } }catch(_){}
+  try{ const [m,rq]=await Promise.all([sb.from('messages').select('id',{count:'exact',head:true}).eq('recipient_id',S.user.id).is('read_at',null), sb.rpc('my_request_count')]);
+    const rc=rq.error?0:(rq.data||0), wasR=S.reqCount; S.reqCount=rc;
+    if(!m.error){ const was=S.unread; S.unread=(m.count||0)+rc; if(was!==S.unread){ renderNav(); feedPatch(); if(S.tab==='inbox'){ loadConvos(); if(wasR!==rc){ S.reqs=null; loadReqs(); } } } } }catch(_){}
   unreadT=setTimeout(pollUnread,document.hidden?120000:(S.tab==='inbox'||S.tab==='chat'?10000:30000));
 }
 async function loadConvos(){
@@ -4948,6 +5015,7 @@ function viewInbox(){
   const me=S.user.id, list=S.convos.list;
   return `<h1 class="page-title">Messages</h1>
   <p class="lead">Who can message you: <b>${esc(dmLabel(myDm()))}</b>. <button class="link" data-action="edit-profile">Change</button></p>
+  ${reqsHtml()}
   ${S.convos.err?`<div class="empty"><b>Messages are getting set up</b>Check back in a little while.</div>`:!list.length?`<div class="empty"><b>No messages yet</b>Open a Star's or fan's page and tap Message to say hi.</div>`:''}
   <div class="convos">${list.map(c=>`<button class="convo${c.unread?' new':''}" data-action="chat" data-id="${c.id}">${personArt(c.id)}
     <span class="cv-mid"><b>${esc(nameOf(c.id))}</b><span>${c.last.sender_id===me?'You: ':''}${esc(c.last.body.slice(0,90))}</span></span>
@@ -5037,6 +5105,123 @@ function openSoon(kind,id){
     <div class="row-btns">${it&&it.real?`<button class="btn btn-gold" data-action="save" data-id="${it.id}" aria-pressed="${isSaved(it)}">${isSaved(it)?I.saveOn+'Saved':I.save+'Save for later'}</button><button class="btn btn-ghost" data-action="share-rel" data-id="${it.id}">${I.share}Share</button>`:''}
       ${kind==='tip'&&isReal(id)?`<button class="btn btn-gold" data-action="follow" data-id="${id}">${S.follows.has(id)?'Following':'Follow'}</button>`:''}
       <button class="btn btn-ghost" data-action="close">Close</button></div></div>`);
+}
+
+/* ---------- collabs, splits and tagged posts ---------- */
+const ROLES = [['feat','feat.'],['prod','prod. by'],['with','with'],['writer','written with'],['director','directed by'],['photo','photo by'],['other','with']];
+const roleLabel = r => (ROLES.find(x=>x[0]===r)||ROLES[2])[1];
+const pct = bp => { const v=bp/100; return (Math.round(v*100)/100).toString()+'%'; };
+function creditLine(it){
+  const cr=(it&&it.credits)||[]; if(!cr.length) return '';
+  const groups={}; cr.forEach(c=>{ const l=roleLabel(c.role); (groups[l]=groups[l]||[]).push(c.id); });
+  return Object.entries(groups).map(([l,ids])=>`${l} ${ids.map(id=>nameOf(id)).join(' & ')}`).join(' · ');
+}
+function creditHtml(it){
+  const cr=(it&&it.credits)||[]; if(!cr.length) return '';
+  const groups={}; cr.forEach(c=>{ const l=roleLabel(c.role); (groups[l]=groups[l]||[]).push(c.id); });
+  return `<div class="credits">${Object.entries(groups).map(([l,ids])=>`<span>${esc(l)} ${ids.map(id=>`<button data-action="person" data-id="${id}">${esc(nameOf(id))}</button>`).join(' & ')}</span>`).join('')}</div>`;
+}
+S.ce={}; S.reqs=null; S.reqCount=0;
+function ceShares(list){ const o={}; (list||[]).forEach(c=>{ const bp=Math.round((parseFloat(c.pct)||0)*100); if(bp>0) o[c.id]=bp; }); return o; }
+function ceSummary(ctx){
+  const list=S.ce[ctx]||[], used=Object.values(ceShares(list)).reduce((a,b)=>a+b,0), mine=10000-used;
+  if(used>10000) return `<b class="bad">The shares add up to more than 100%.</b>`;
+  if(!used) return list.length?`No money split. You keep your whole 85% artist share. Add a % next to someone to split it.`:'';
+  return `You keep <b>${pct(mine)}</b> of the artist share. On a $1.00 sale: you get ${money(0.85*mine/10000)}${list.filter(c=>parseFloat(c.pct)>0).map(c=>`, ${esc(c.name)} gets ${money(0.85*Math.round(parseFloat(c.pct)*100)/10000)}`).join('')}.`;
+}
+function ceRows(ctx){
+  const list=S.ce[ctx]||[], post=ctx==='post';
+  return list.map((c,i)=>`<div class="ce-row">
+    <span class="ce-name">${esc(c.name)}${c.status&&c.status!=='accepted'?` <small class="pill${c.status==='declined'?' hid':''}">${c.status==='pending'?'waiting':'declined'}</small>`:''}</span>
+    ${post?'':`<select data-ce-role="${ctx}" data-i="${i}" aria-label="Role for ${esc(c.name)}">${ROLES.filter(r=>r[0]!=='other').map(([v,l])=>`<option value="${v}" ${c.role===v?'selected':''}>${esc(l)}</option>`).join('')}</select>
+    <label class="ce-pct"><input type="number" min="0" max="100" step="0.5" inputmode="decimal" data-ce-pct="${ctx}" data-i="${i}" value="${c.pct||''}" placeholder="0" aria-label="Split % for ${esc(c.name)}">%</label>`}
+    <button type="button" class="ce-del" data-action="ce-del" data-ctx="${ctx}" data-i="${i}" aria-label="Remove ${esc(c.name)}">${I.close}</button></div>`).join('');
+}
+function collabEditor(ctx,intro){
+  return `<div class="ce" data-ctx="${ctx}">
+    ${intro?`<p class="small ce-intro">${intro}</p>`:''}
+    <div class="ce-rows" id="ceRows-${ctx}">${ceRows(ctx)}</div>
+    <div class="ce-search"><input id="ceq-${ctx}" data-ceq="${ctx}" type="search" autocomplete="off" placeholder="Type a Star's name to tag them" aria-label="Find a Star to tag"><div class="ce-results" id="ceRes-${ctx}"></div></div>
+    ${ctx==='post'?'':`<p class="small ce-sum" id="ceSum-${ctx}">${ceSummary(ctx)}</p>`}
+  </div>`;
+}
+function ceRefresh(ctx){ const r=document.getElementById('ceRows-'+ctx); if(r) r.innerHTML=ceRows(ctx); const s=document.getElementById('ceSum-'+ctx); if(s) s.innerHTML=ceSummary(ctx); }
+let ceT=null;
+function ceSearch(ctx,q){
+  clearTimeout(ceT); const box=document.getElementById('ceRes-'+ctx); if(!box) return;
+  if(q.trim().length<2){ box.innerHTML=''; return; }
+  ceT=setTimeout(async()=>{
+    const {data,error}=await sb.rpc('find_stars',{q:q.trim()}); const b2=document.getElementById('ceRes-'+ctx); if(!b2) return;
+    const have=new Set((S.ce[ctx]||[]).map(c=>c.id));
+    const list=(error?[]:(data||[])).filter(p=>!have.has(p.id)&&!(S.user&&p.id===S.user.id));
+    b2.innerHTML=list.length?list.map(p=>`<button type="button" data-action="ce-add" data-ctx="${ctx}" data-id="${p.id}" data-name="${esc(p.display_name)}">${art(faceKey(p.id,p.avatar_path),(p.display_name||'?')[0])}<span><b>${esc(p.display_name)}</b>${p.city?`<small>${esc(p.city)}</small>`:''}</span></button>`).join(''):`<div class="ce-none">${error?'Search is getting set up. Try again soon.':'No Stars with that name yet'}</div>`;
+  },250);
+}
+function ceAdd(ctx,id,name){
+  const list=S.ce[ctx]=S.ce[ctx]||[]; if(list.some(c=>c.id===id)) return;
+  if(list.length>=10){ toast('Up to 10 collaborators'); return; }
+  list.push({id,name,role:ctx==='post'?'with':'feat',pct:'',status:null});
+  const q=document.getElementById('ceq-'+ctx); if(q) q.value=''; const r=document.getElementById('ceRes-'+ctx); if(r) r.innerHTML='';
+  ceRefresh(ctx);
+}
+async function saveCollabs(releaseId,ctx,prevShares){
+  const list=S.ce[ctx]||[], shares=ceShares(list);
+  if(Object.values(shares).reduce((a,b)=>a+b,0)>10000){ toast('The shares add up to more than 100%'); return false; }
+  let r=await sb.rpc('set_credits',{p_release:releaseId,p_credits:list.map(c=>({artist_id:c.id,role:c.role||'with'}))});
+  if(r.error){ toast(r.error.message&&r.error.message.length<90?r.error.message:"Couldn't save the collaborators"); return false; }
+  const same=prevShares&&JSON.stringify(Object.entries(prevShares).sort())===JSON.stringify(Object.entries(shares).sort());
+  if(!same&&(Object.keys(shares).length||prevShares)){
+    r=await sb.rpc('propose_split',{p_release:releaseId,p_shares:shares});
+    if(r.error){ toast(r.error.message&&r.error.message.length<90?r.error.message:"Couldn't save the split"); return false; }
+  }
+  return true;
+}
+async function openCollabEdit(id){
+  const rel=(S.mine||[]).find(x=>x.id===id); if(!rel) return;
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px"><div class="empty">Loading…</div></div>`);
+  const {data,error}=await sb.rpc('release_collab',{p_release:id});
+  if(error||!data){ closeSheet(); toast('Collabs are getting set up. Try again soon.'); return; }
+  const cur=data.proposal||data.active, curShares={}; ((cur&&cur.shares)||[]).forEach(s=>curShares[s.artist_id]=s.bp);
+  S.ce.edit=(data.credits||[]).filter(c=>c.status!=='declined'||curShares[c.artist_id]).map(c=>({id:c.artist_id,name:c.name,role:c.role,pct:curShares[c.artist_id]?String(curShares[c.artist_id]/100):'',status:c.status}));
+  S.ceEdit={id,prev:cur?curShares:null};
+  const declined=(data.credits||[]).filter(c=>c.status==='declined'&&!curShares[c.artist_id]);
+  const splitTxt=s=>[`You ${pct(s.owner_bp)}`,...s.shares.map(x=>`${esc(x.name)} ${pct(x.bp)}`)].join(' · ');
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Collabs</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>“${esc(rel.title)}”. Tagged Stars must accept before their name shows. A money split only turns on when everyone in it agrees, and changing it later needs everyone to agree again.</p>
+    ${data.active?`<div class="split-box ok"><b>Active split</b>${splitTxt(data.active)}</div>`:''}
+    ${data.proposal?`<div class="split-box wait"><b>New split waiting for answers</b>${splitTxt(data.proposal)}<small>Waiting on: ${esc((data.proposal.approvals||[]).filter(a=>a.approved==null).map(a=>a.name).join(', ')||'nobody')}</small></div>`:''}
+    ${data.last_declined&&!data.proposal?`<div class="split-box bad"><b>Your last split change was declined</b><small>By ${esc(data.last_declined.by||'a collaborator')}. ${data.active?'The active split stays the same.':''}</small></div>`:''}
+    ${declined.length?`<p class="small" style="color:var(--dust)">Declined the tag: ${declined.map(c=>esc(c.name)).join(', ')}</p>`:''}
+    ${collabEditor('edit')}
+    <button class="btn btn-gold full" data-action="ce-save">Save collabs</button></div>`);
+}
+async function loadReqs(){
+  if(!sb||!S.user) return;
+  const {data,error}=await sb.rpc('my_collab_requests'); S.reqs=error?{credits:[],splits:[],posts:[]}:data;
+  if(S.tab==='inbox') render(true);
+}
+function reqsHtml(){
+  const q=S.reqs; if(!q) { loadReqs(); return ''; }
+  const n=q.credits.length+q.splits.length+q.posts.length; if(!n) return '';
+  const kind=k=>k==='song'?'song':k==='download'?'release':'video';
+  const btns=(type,id,yes,no)=>`<div class="row-btns"><button class="btn btn-gold btn-sm" data-action="req" data-type="${type}" data-id="${id}" data-ok="1">${yes}</button><button class="btn btn-ghost btn-sm" data-action="req" data-type="${type}" data-id="${id}" data-ok="0">${no}</button></div>`;
+  return `<section class="reqs"><h2>Collab requests <span class="pill">${n}</span></h2>
+    ${q.splits.map(s=>`<div class="req"><b>${esc(s.owner_name)} wants to split the money on “${esc(s.title)}”</b>
+      <p>The artist share is 85% of each sale. ${s.my_old_bp?`Your share goes from ${pct(s.my_old_bp)} to <b>${pct(s.my_bp)}</b>.`:s.my_bp?`You'd get <b>${pct(s.my_bp)}</b> of it, about ${money(0.85*s.my_bp/10000)} on a $1.00 sale.`:'This change takes you out of the split.'}</p>
+      <p class="small">Full split: ${esc(s.owner_name)} ${pct(s.owner_bp)}${s.shares.map(x=>` · ${esc(x.name)} ${pct(x.bp)}`).join('')}. Once everyone agrees, it's locked unless everyone agrees to a change.</p>
+      ${btns('split',s.split_id,'Agree','Decline')}</div>`).join('')}
+    ${q.credits.map(c=>`<div class="req"><b>${esc(c.owner_name)} tagged you on “${esc(c.title)}”</b><p>As “${esc(roleLabel(c.role))}” on their ${kind(c.kind)}. If you accept, it shows on your page too.</p>${btns('credit',c.release_id,'Accept','Decline')}</div>`).join('')}
+    ${q.posts.map(p=>`<div class="req"><b>${esc(p.author_name)} tagged you in a post</b><p>“${esc(p.body)}”</p>${btns('post',p.post_id,'Accept','Decline')}</div>`).join('')}
+  </section>`;
+}
+async function answerReq(type,id,ok){
+  const fn=type==='split'?'respond_split':type==='credit'?'respond_credit':'respond_post_tag';
+  const args=type==='split'?{p_split:id,p_ok:ok}:type==='credit'?{p_release:id,p_ok:ok}:{p_post:id,p_ok:ok};
+  const {data,error}=await sb.rpc(fn,args);
+  if(error){ toast(error.message&&error.message.length<90?error.message:"Couldn't do that right now"); }
+  else toast(!ok?'Declined':type==='split'?(data==='active'?'Agreed. The split is now on.':'Agreed. Waiting on the others.'):'Accepted. It shows on your page now.');
+  S.reqs=null; S.posts={}; await loadReqs(); pollUnread(); if(ok) refreshAll();
 }
 
 function render(keepScroll){
@@ -5147,7 +5332,7 @@ document.addEventListener('click',e=>{
   if(el.tagName==='B'&&el.dataset.action==='follow') e.stopPropagation();
   const d = el.dataset;
   switch(d.action){
-    case 'tab': if(scrim.classList.contains('open')) closeSheet(); S.drawer=false; S.artist=null; if(d.tab==='inbox'){ S.convos=null; } S.tab=d.tab; if(d.plan) S.signupPlan=d.plan; render(); break;
+    case 'tab': if(scrim.classList.contains('open')) closeSheet(); S.drawer=false; S.artist=null; if(d.tab==='inbox'){ S.convos=null; S.reqs=null; } S.tab=d.tab; if(d.plan) S.signupPlan=d.plan; render(); break;
     case 'plan': S.signupPlan=d.plan; el.parentElement.querySelectorAll('.plan').forEach(b=>b.setAttribute('aria-pressed', b===el)); break;
     case 'favgenre': el.setAttribute('aria-pressed', el.getAttribute('aria-pressed')!=='true'); break;
     case 'account': openAccountNames(); break;
@@ -5196,6 +5381,11 @@ document.addEventListener('click',e=>{
       const nl=f.querySelector('[name=name]'); if(nl&&nl.previousSibling) nl.previousSibling.textContent=d.role==='star'?'Artist or creator name':'Your name'; break; }
     case 'cashout': toast('Cash out opens when payments switch on. Your earnings will show here.'); break;
     case 'acat': S.acat=d.g; render(true); break;
+    case 'ce-add': ceAdd(d.ctx,d.id,d.name); break;
+    case 'ce-del': { const l=S.ce[d.ctx]||[]; l.splice(+d.i,1); ceRefresh(d.ctx); break; }
+    case 'ce-save': { if(!S.ceEdit) break; el.disabled=true; saveCollabs(S.ceEdit.id,'edit',S.ceEdit.prev).then(ok=>{ el.disabled=false; if(ok){ closeSheet(); toast('Saved. Your collaborators will see a request.'); refreshAll(); } }); break; }
+    case 'rel-collab': openCollabEdit(Number(d.id)); break;
+    case 'req': answerReq(d.type,Number(d.id),d.ok==='1'); break;
     case 'drawer': S.drawer=!S.drawer; feedPatch(); break;
     case 'feed-sound': { S.feedSound=!S.feedSound; feedPatch(); const i=FV.active; const hd=feedHolder(i); if(hd&&hd.querySelector('iframe')){ hd.innerHTML=''; feedActivate(i); } break; }
     case 'feed-share': { const it=V(d.id); if(it&&it.real) shareRelease(d.id); else if(isReal(d.artist)) qrShare(d.artist); else toast('Samples can\'t be shared'); break; }
@@ -5254,6 +5444,8 @@ document.addEventListener('input',e=>{
   if(e.target.id==='q'){ S.q=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('q'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='upPrice') updateSplit();
   if(e.target.id==='mq'||e.target.id==='vq'||e.target.id==='rq'){ S[e.target.id]=e.target.value; const id=e.target.id, pos=e.target.selectionStart; render(true); const q=document.getElementById(id); q.focus(); q.setSelectionRange(pos,pos); }
+  if(e.target.dataset&&e.target.dataset.ceq){ ceSearch(e.target.dataset.ceq,e.target.value); return; }
+  if(e.target.dataset&&e.target.dataset.cePct){ const l=S.ce[e.target.dataset.cePct]||[], c=l[+e.target.dataset.i]; if(c){ c.pct=e.target.value; const sm=document.getElementById('ceSum-'+e.target.dataset.cePct); if(sm) sm.innerHTML=ceSummary(e.target.dataset.cePct); } return; }
   if(e.target.id==='aq'){ S.aq=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('aq'); q.focus(); q.setSelectionRange(pos,pos); }
   if(e.target.id==='msgIn'){ S.msgDraft[S.chat.with]=e.target.value; e.target.style.height='auto'; e.target.style.height=Math.min(140,e.target.scrollHeight)+'px'; }
   if(e.target.id==='helpQ'){ S.helpQ=e.target.value; const pos=e.target.selectionStart; render(true); const q=document.getElementById('helpQ'); q.focus(); q.setSelectionRange(pos,pos); }
@@ -5274,6 +5466,7 @@ async function loadProfile(user){
 document.addEventListener('change',e=>{
   if(e.target.id==='upCover'){ const f=e.target.files[0]; if(!f) return; S.up=S.up||{}; S.up.cover=f; const c=document.getElementById('dropC');
     if(c){ const u=URL.createObjectURL(f); c.style.backgroundImage=`url("${u}")`; c.classList.add('has'); } }
+  if(e.target.dataset&&e.target.dataset.ceRole){ const c=(S.ce[e.target.dataset.ceRole]||[])[+e.target.dataset.i]; if(c) c.role=e.target.value; return; }
   if(e.target.id==='picFile'){ const f=e.target.files[0]; e.target.value=''; if(f) uploadPic(f); return; }
   if(e.target.id==='upFile'&&document.getElementById('upKind').value==='download'){ const f=e.target.files[0]; if(!f) return;
     S.up=S.up||{}; S.up.file=f; S.up.dur=0; const dr=document.getElementById('drop'); dr.classList.add('has');
@@ -5329,9 +5522,11 @@ document.addEventListener('submit',async e=>{
   if(f.id==='msgForm'){ e.preventDefault(); sendMsg(f); return; }
   if(f.id==='postForm'){
     e.preventDefault(); const body=(f.elements.body.value||'').trim(); if(!body){ toast('Write something first'); return; }
-    busy(f,true); const {error}=await sb.from('posts').insert({body:body.slice(0,1000)}); busy(f,false);
+    busy(f,true); const {data:np,error}=await sb.from('posts').insert({body:body.slice(0,1000)}).select('id').single();
+    let tagged=0; if(!error&&np&&np.id&&(S.ce.post||[]).length){ const tr=await sb.rpc('tag_post',{p_post:np.id,p_artists:S.ce.post.map(c=>c.id)}); if(!tr.error) tagged=S.ce.post.length; }
+    busy(f,false);
     if(error){ toast("Couldn't post that. Try again."); return; }
-    f.elements.body.value=''; S.posts={}; toast('Posted'); render(true); return;
+    f.elements.body.value=''; S.ce.post=[]; S.posts={}; toast(tagged?`Posted. ${tagged} Star${tagged>1?'s':''} will get your tag request.`:'Posted'); render(true); return;
   }
   if(f.classList&&f.classList.contains('cmt-form')){
     e.preventDefault(); const body=(f.elements.c.value||'').trim(); if(!body) return; const pid=Number(f.dataset.post);
@@ -5404,12 +5599,14 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&S.drawer){ S.drawer=false; feedPatch(); }
   if(e.key==='Escape' && bot.open && !scrim.classList.contains('open')) closeBot();
   if(e.key==='Escape' && scrim.classList.contains('open')) closeSheet();
+  if(e.key==='Enter' && e.target.dataset && e.target.dataset.ceq){ e.preventDefault(); const b=document.querySelector(`#ceRes-${e.target.dataset.ceq} button`); if(b) b.click(); return; }
   if(e.key==='Enter' && !e.shiftKey && e.target.id==='msgIn' && !e.isComposing && window.matchMedia('(hover:hover)').matches){ e.preventDefault(); const f=document.getElementById('msgForm'); if(f) f.requestSubmit(); }
   if((e.key==='Enter'||e.key===' ') && (e.target.id==='drop'||e.target.id==='dropC'||e.target.id==='dropBox')){ e.preventDefault(); e.target.click(); }
 });
 scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
 
 document.getElementById('botClose').innerHTML=I.close;
+(()=>{ try{ const lg=new URLSearchParams(location.search).get('legal'); if(lg&&LEGAL_DOCS[lg]){ S.tab='legal'; S.legal=lg; } }catch(_){} })();
 render();
 if(sb){
   loadCatalog().then(()=>{ render(true); if(DEEP) openDeepStar(); else openDeepRelease(); });
