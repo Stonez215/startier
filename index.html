@@ -703,6 +703,29 @@ body.chatmode .bot-fab,body.chatmode .mini{display:none!important}
 .slide-media.blur{filter:blur(22px) brightness(.55);transform:scale(1.15)}
 .vholder{container-type:size}
 .vholder iframe.fit{position:relative;inset:auto;width:min(100cqw,calc(100cqh * var(--ar)));height:min(100cqh,calc(100cqw / var(--ar)))}
+/* collections */
+.ccard{flex:none;width:clamp(150px,42vw,200px);text-align:left;scroll-snap-align:start}
+.ccard .art{aspect-ratio:1;border-radius:12px;--gs:130px;margin-bottom:9px;box-shadow:6px -6px 0 -2px var(--bark-3),12px -12px 0 -4px var(--bark-2)}
+.ccard.series .art{aspect-ratio:16/10}
+.ccard .badge:not(.form){left:auto;right:10px}
+.ccard .t{font-weight:600;line-height:1.3;margin-top:4px}
+.ccard .s{font-size:13px;color:var(--dust)}
+.col-head{display:flex;align-items:flex-end;gap:16px;padding:8px 22px 14px;flex-wrap:wrap}
+.col-head>.art{width:150px;height:150px;border-radius:14px;--gs:150px;flex:none}
+.col-head small{color:var(--gold);font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.5px}
+.col-head h1{margin:2px 0 4px;font-family:var(--display);font-size:clamp(26px,5vw,44px);line-height:1}
+.col-head .s{color:var(--dust);font-size:14px}
+.col-price{margin-top:6px;font-weight:700;color:var(--gold)}
+.col-price small{color:var(--dust);font-weight:500}
+.ep{display:grid;gap:4px}
+.ep-n{font-size:12px;font-weight:700;color:var(--dust);text-transform:uppercase;letter-spacing:.4px}
+.ep .vcard{width:auto}
+.col-pick{display:grid;gap:6px}
+.cp-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:10px;background:var(--bark-2)}
+.cp-row .n{width:20px;color:var(--dust);font-size:13px;text-align:right}
+.cp-t{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.cp-row>button[data-action="col-mv"]{width:30px;height:30px;border-radius:8px;background:var(--bark-3)}
+.cp-row>button[disabled]{opacity:.35}
 </style>
 </head>
 <body>
@@ -3572,6 +3595,7 @@ function viewHome(){
   <section class="section"><div class="section-head"><h2>Quick hits</h2><button class="link" data-action="vform" data-f="short" data-go="1">See all shorts</button></div>
     <div class="rail">${videos.filter(v=>v.form==='short').map(vcard).join('')}</div></section>
   ${starLight()}
+  ${colRail(cols.slice(0,12),'New albums, series and collections')}
   ${downloads.length?`<section class="section"><div class="section-head"><h2>New art and downloads</h2><button class="link" data-action="tab" data-tab="art">See all art</button></div>
     <div class="rail">${downloads.slice(0,12).map(dcard).join('')}</div></section>`:''}
   <section class="section"><div class="section-head"><h2>Featured Stars</h2><button class="link" data-action="tab" data-tab="music">Browse music by genre</button></div>
@@ -3596,6 +3620,7 @@ function viewMusic(){
   <div class="chips">${['All',...used].map(x=>`<button class="chip" data-action="mgenre" data-g="${esc(x)}" aria-pressed="${x===g}">${esc(x)}</button>`).join('')}</div>
   ${!ts.length&&!as.length?`<div class="empty"><b>No music matches${q?` “${esc(S.mq)}”`:''}</b>Try another genre or search word.</div>`:''}
   ${as.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>${g==='All'?'Music makers':esc(g)+' artists'}</h2></div><div class="rail">${as.map(acard).join('')}</div></section>`:''}
+  ${!q&&g==='All'?colRail(cols.filter(c=>c.kind==='album'),'Albums, EPs and mixtapes'):''}
   ${ts.length?`<section class="section"><div class="section-head"><h2>Songs</h2></div><div class="tracks two">${ts.map(trow).join('')}</div></section>`:''}`;
 }
 function viewVideos(){
@@ -3610,6 +3635,7 @@ function viewVideos(){
   <div class="chips">${['All',...used].map(x=>`<button class="chip" data-action="vcat" data-g="${esc(x)}" aria-pressed="${x===c}">${esc(x)}</button>`).join('')}</div>
   ${!vs.length?`<div class="empty"><b>No videos match${q?` “${esc(S.vq)}”`:''}</b>Try another category or switch to All videos.</div>`:''}
   ${sh.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>Short-form</h2></div><div class="grid shorts">${sh.map(vcard).join('')}</div></section>`:''}
+  ${!q&&c==='All'&&f!=='short'?colRail(cols.filter(x=>x.kind==='series'),'Series'):''}
   ${lo.length?`<section class="section"><div class="section-head"><h2>Long-form</h2></div><div class="grid">${lo.map(vcard).join('')}</div></section>`:''}`;
 }
 function viewDiscover(){
@@ -3669,6 +3695,7 @@ function viewArt(){
     :!arts.length&&!files.length?`<div class="empty"><b>Nothing matches${q?` “${esc(S.aq)}”`:''}</b>Try another category or search word.</div>`:''}
   ${arts.length?`<section class="section" style="padding-top:4px"><div class="section-head"><h2>Art and photos</h2></div><div class="grid art-grid">${arts.map(dcard).join('')}</div></section>`:''}
   ${files.length?`<section class="section"><div class="section-head"><h2>Downloads</h2></div><div class="grid art-grid">${files.map(dcard).join('')}</div></section>`:''}
+  ${!q&&c==='All'?colRail(cols.filter(x=>x.kind==='art'),'Collections'):''}
   ${makers.length?`<section class="section"><div class="section-head"><h2>Artists</h2></div><div class="rail">${makers.map(acard).join('')}</div></section>`:''}`;
 }
 function openDownload(id){
@@ -3754,6 +3781,7 @@ function viewStudio(){
     <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light. Selling opens when payments switch on; until then, paid items show as "coming soon" and free ones work right away.</p>
     <button class="btn btn-gold full" data-action="publish">Publish</button>
   </div>
+  ${colStudio()}
   <section class="section"><div class="section-head"><h2>Your releases</h2></div>${mine.length?'':'<div class="empty"><b>No releases yet</b>Upload your first song or video above.</div>'}
     <div class="tracks">${mine.map((r,i)=>`<div class="trow" style="grid-template-columns:auto 52px minmax(0,1fr) auto">${'<span class="n">'+(i+1)+'</span>'}${art(covKey(r),r.title[0])}<div class="meta"><div class="t">${esc(r.title)}</div><div class="s">${r.kind==='song'?'Song':r.kind==='download'?esc(r.category||'Download'):(r.form==='short'?'Short video':'Video')} · ${r.price_cents?money(r.price_cents/100):'Free'} · <span class="pill ${r.status==='hidden'?'hid':''}">${r.status==='hidden'?'Hidden':'Live'}</span></div></div>
       <div class="rel-actions"><button data-action="rel-collab" data-id="${r.id}">Collabs</button><button data-action="rel" data-op="${r.status==='hidden'?'show':'hide'}" data-id="${r.id}">${r.status==='hidden'?'Show':'Hide'}</button><button class="danger" data-action="rel" data-op="delete" data-id="${r.id}">Delete</button></div></div>`).join('')}</div></section>`;
@@ -3786,6 +3814,7 @@ function viewArtist(){
   ${at.length?`<section class="section"><div class="section-head"><h2>Music</h2></div><div class="tracks">${at.map(trow).join('')}</div></section>`:''}
   ${av.length?`<section class="section"><div class="section-head"><h2>Videos</h2></div><div class="rail">${av.map(vcard).join('')}</div></section>`:''}
   ${as2.length?`<section class="section"><div class="section-head"><h2>Shorts</h2></div><div class="rail">${as2.map(vcard).join('')}</div></section>`:''}
+  ${colRail(cols.filter(x=>x.artist===a.id&&x.kind==='album'),'Albums')}${colRail(cols.filter(x=>x.artist===a.id&&x.kind==='series'),'Series')}${colRail(cols.filter(x=>x.artist===a.id&&x.kind==='art'),'Collections')}
   ${ad.length?`<section class="section"><div class="section-head"><h2>Art and downloads</h2></div><div class="rail">${ad.map(dcard).join('')}</div></section>`:''}
   ${a.real?plSection(a.id,'Constellations'):''}
   ${ct.length||cv.length||cd.length?`<section class="section"><div class="section-head"><h2>Collabs</h2></div>${ct.length?`<div class="tracks">${ct.map(trow).join('')}</div>`:''}${cv.length||cd.length?`<div class="rail">${cv.map(vcard).join('')}${cd.map(dcard).join('')}</div>`:''}</section>`:''}
@@ -3882,6 +3911,7 @@ const FAQ = [
  {g:'Getting started', q:'What is the difference between a Star and a Supporter?', a:'A Star is an artist or content creator who uploads and sells work. A Supporter is a fan who discovers, streams, buys, and tips. Pick the one that fits you when you sign up.', k:'star supporter difference artist fan account type'},
  {g:'For Stars', q:'How much of each sale do I keep?', a:'Rising Stars keep 85% of every sale and tip, Star Pro keeps 90%, and Supernova keeps 92%. StarTier keeps the rest to run the platform.', k:'keep percent cut fee commission 15 85 earn money sale'},
  {g:'For Stars', q:'What are Star Pro and Supernova?', a:'Rising Star is free: 10 songs, 5 videos and 20 pieces of art or downloads, unlimited Shorts, and you keep 85%. Star Pro is $8.99 a month: unlimited uploads, a Featured badge, higher placement in search, plays and saves stats, Constellations, and you keep 90%. Supernova is $24.99 a month: everything in Star Pro, plus your Shorts in the Shooting Stars top 10, your page in the Supernova Spotlight on the homepage, play on StarTier Radio, and you keep 92%. Paid plans switch on with payments.', k:'star pro supernova upgrade featured promo visibility boost plan tier price'},
+ {g:'For Stars', q:'Can I sell an album, a series or an art collection?', a:'Yes. In your Studio, under Albums, series and collections, tap New. Pick Album, EP or Mixtape for songs, Series or Season for videos, or Collection for art. Add your uploads in order, set one price for the whole thing (or make it free), and publish. Each song, video or piece still has its own price too.', k:'album ep mixtape series season collection bundle sell set together'},
  {g:'For Stars', q:'What is a Galaxy?', a:'A Galaxy is your fan club. You name it, pick a monthly price, and mark songs, videos and posts as Galaxy only. Members get it all plus a badge. Until payments switch on, fans can join the waitlist so you can see who is ready. You can also gift free memberships from your Studio.', k:'galaxy fan club members exclusive subscription patreon'},
  {g:'For Supporters', q:'What is a Constellation?', a:'A Constellation is a playlist. StarPass members and Star Pro or Supernova artists can make them from any song on StarTier. Make one public and it shows on your profile.', k:'constellation playlist queue list songs'},
  {g:'For Stars', q:'How do I get paid?', a:'Buying, tips and payouts are switching on soon. You will connect your bank account securely through Stripe, and your earnings will be sent to you from your Studio. Until then, paid items show as coming soon, and free items work right away.', k:'paid payout payment bank cash out withdraw stripe tip'},
@@ -4051,6 +4081,7 @@ async function loadCatalog(){
   videos.length=0; videos.push(...list.v,...(S.samples?SAMPLES.v:[]));
   tracks.length=0; tracks.push(...list.t,...(S.samples?SAMPLES.t:[]));
   downloads.length=0; downloads.push(...list.d.filter(x=>x.file));
+  await loadCollections();
   const proHero=videos.find(v=>v.real&&v.form==='long'&&A(v.artist)&&A(v.artist).pro);
   if(!V(S.hero)||(!V(S.hero).real&&proHero)) S.hero=(proHero||videos.find(v=>v.real&&v.form==='long')||videos.find(v=>v.form==='long')||{}).id;
 }
@@ -5563,6 +5594,137 @@ function uploadQuota(){
   return `<div class="quota"><b>Rising Star uploads:</b> ${songs} of 10 songs · ${vids} of 5 videos · ${arts} of 20 art and downloads. Shorts are unlimited. <button class="link" data-action="upgrade">Get unlimited</button></div>`;
 }
 
+/* ---------- albums, series and art collections ---------- */
+const lowLabel = l => l==='EP'?'EP':String(l).toLowerCase();
+const COL_LABELS = {album:['Album','EP','Mixtape'], series:['Series','Season'], art:['Collection','Series','Zine']};
+const COL_ITEM = {album:'song', series:'video', art:'download'};
+const COL_WORD = {album:['song','songs'], series:['episode','episodes'], art:['piece','pieces']};
+const cols = [];
+const C = id => cols.find(c=>c.id===id);
+function colKey(c){
+  if(c.cover_path&&PATH_OK.test(c.cover_path)){ const key='c_col'+c.id; P[key]=cssUrl(pubUrl('covers',c.cover_path))+' center/cover'; return key; }
+  const first=(c.items||[]).map(relByRid).find(Boolean); return first?first.p:PALS[c.id%7];
+}
+function relByRid(rid){ return T('r'+rid)||V('r'+rid)||D('r'+rid); }
+const colItems = c => (c.items||[]).map(relByRid).filter(Boolean);
+async function loadCollections(){
+  if(!sb) return;
+  const {data,error}=await sb.from('collections').select('id,artist_id,kind,label,title,description,cover_path,price_cents,status,created_at').eq('status','live').order('created_at',{ascending:false}).limit(500);
+  if(error){ cols.length=0; return; }
+  const ids=(data||[]).map(c=>c.id); let items=[];
+  if(ids.length){ const r=await sb.from('collection_items').select('collection_id,release_id,position').in('collection_id',ids).order('position').limit(5000); items=r.error?[]:(r.data||[]); }
+  cols.length=0;
+  for(const c of data||[]){ if(!A(c.artist_id)||S.blocked.has(c.artist_id)) continue;
+    const o={id:c.id,artist:c.artist_id,kind:c.kind,label:c.label,title:c.title,desc:c.description||'',cover_path:c.cover_path,price:(c.price_cents||0)/100,created:c.created_at,items:items.filter(i=>i.collection_id===c.id).map(i=>i.release_id)};
+    o.p=colKey(o); if(colItems(o).length) cols.push(o); }
+}
+function ccard(c){
+  const a=A(c.artist)||{name:'Star'}, n=colItems(c).length;
+  return `<button class="ccard ${c.kind}" data-action="col" data-id="${c.id}">
+    <div class="art${String(c.p).startsWith('c_')?' cov':''}" style="--g:${P[c.p]};position:relative"><span class="glyph" aria-hidden="true">${esc(c.title[0])}</span><span class="badge form">${esc(c.label)}</span>${c.price?`<span class="badge">${money(c.price)}</span>`:'<span class="badge free">Free</span>'}</div>
+    <div class="t">${esc(c.title)}</div><div class="s">${esc(a.name)} · ${n} ${COL_WORD[c.kind][n===1?0:1]}</div></button>`;
+}
+function colRail(list,title,more){ return list.length?`<section class="section"><div class="section-head"><h2>${esc(title)}</h2>${more||''}</div><div class="rail">${list.map(ccard).join('')}</div></section>`:''; }
+function openCol(id){ if(scrim.classList.contains('open')) closeSheet(); S.artist=null; if(S.tab!=='collection') S.prevTab=S.tab; S.tab='collection'; S.colId=id; render(); }
+function viewCollection(){
+  const c=C(S.colId); const back=`<button class="back-link" data-action="tab" data-tab="${S.prevTab&&S.prevTab!=='collection'?S.prevTab:'home'}">${I.back}Back</button>`;
+  if(!c) return back+`<div class="empty"><b>We couldn't find that</b>It may have been removed.</div>`;
+  const a=A(c.artist)||{id:c.artist,name:'Star',p:'night'}, list=colItems(c), mine=S.user&&S.user.id===c.artist;
+  const sum=list.reduce((s2,x)=>s2+(x.price||0),0), total=c.kind==='album'?list.reduce((s2,t)=>s2+(t.len||0),0):0;
+  const n=list.length, w=COL_WORD[c.kind][n===1?0:1];
+  return `${back}<div class="col-head">${art(c.p,c.title[0])}<div><small>${esc(c.label)}</small><h1>${esc(c.title)}</h1>
+    <div class="s"><button class="namelink" data-action="artist" data-id="${a.id}">${esc(a.name)}</button> · ${n} ${w}${total?' · '+hm(total):''}</div>
+    <div class="col-price">${c.price?`${money(c.price)}${sum>c.price?` <small>(${money(sum)} if bought one by one)</small>`:''}`:'Free'}</div></div></div>
+  ${c.desc?`<p class="bio" style="padding-top:0">${esc(c.desc)}</p>`:''}
+  <div class="row-btns" style="padding:12px 22px">
+    ${c.kind==='album'?`<button class="btn btn-gold" data-action="col-play" data-id="${c.id}">${I.play}Play all</button><button class="btn btn-ghost" data-action="col-play" data-id="${c.id}" data-shuffle="1">Shuffle</button>`
+      :c.kind==='series'?`<button class="btn btn-gold" data-action="video" data-id="${list[0].id}">${I.play}Watch ${esc(c.label==='Season'?'episode 1':'from the start')}</button>`:''}
+    ${c.price&&!mine?`<button class="btn btn-clay" data-action="col-buy" data-id="${c.id}">${I.bag}Buy the ${esc(lowLabel(c.label))} ${money(c.price)}</button>`:''}
+    <button class="btn btn-ghost" data-action="col-share" data-id="${c.id}">${I.share}Share</button>
+    ${mine?`<button class="btn btn-ghost" data-action="col-edit" data-id="${c.id}">Edit</button>`:''}</div>
+  ${c.kind==='album'?`<div class="tracks" style="padding:0 14px">${list.map(trow).join('')}</div>`
+    :c.kind==='series'?`<div class="grid">${list.map((v,i)=>`<div class="ep"><span class="ep-n">${c.label==='Season'||c.label==='Series'?'Episode '+(i+1):''}</span>${vcard(v)}</div>`).join('')}</div>`
+    :`<div class="grid art-grid">${list.map(dcard).join('')}</div>`}`;
+}
+/* studio: make and edit collections */
+function myCols(){ return S.myCols||[]; }
+async function loadMyCols(){
+  if(!sb||!S.user) return; const {data,error}=await sb.from('collections').select('id,kind,label,title,description,cover_path,price_cents,status,created_at').eq('artist_id',S.user.id).order('created_at',{ascending:false});
+  if(error){ S.myCols=[]; return; } const ids=(data||[]).map(c=>c.id); let items=[];
+  if(ids.length){ const r=await sb.from('collection_items').select('collection_id,release_id,position').in('collection_id',ids).order('position'); items=r.data||[]; }
+  S.myCols=(data||[]).map(c=>({...c,items:items.filter(i=>i.collection_id===c.id).map(i=>i.release_id)}));
+  if(S.tab==='studio'&&!S.artist) render(true);
+}
+function colStudio(){
+  if(!S.user||S.user.role!=='star') return '';
+  if(!S.myCols){ loadMyCols(); }
+  const list=myCols();
+  return `<section class="section" style="padding-top:0"><div class="section-head"><h2>Albums, series and collections</h2><button class="link" data-action="col-new">+ New</button></div>
+    ${list.length?`<div class="tracks">${list.map(c=>`<div class="trow" style="grid-template-columns:52px minmax(0,1fr) auto">${art(colKey({...c,items:c.items}),c.title[0])}<div class="meta"><div class="t">${esc(c.title)}</div><div class="s">${esc(c.label)} · ${c.items.length} ${COL_WORD[c.kind][c.items.length===1?0:1]} · ${c.price_cents?money(c.price_cents/100):'Free'}${c.status==='hidden'?' · <span class="pill hid">Hidden</span>':''}</div></div>
+      <div class="rel-actions"><button data-action="col-edit" data-id="${c.id}">Edit</button></div></div>`).join('')}</div>`
+    :`<div class="empty">Put your songs together as an album, EP or mixtape, your videos into a series, or your art into a collection. Set one price for the whole thing.<br><button class="btn btn-gold" data-action="col-new">Make one</button></div>`}</section>`;
+}
+function openColEdit(id){
+  const c=id?myCols().find(x=>x.id===id):null;
+  const kind=c?c.kind:(S.colDraft&&S.colDraft.kind)||'album';
+  S.colDraft={id:c?c.id:null,kind,label:c?c.label:COL_LABELS[kind][0],items:c?[...c.items]:[],cover:null,old_cover:c?c.cover_path:null};
+  drawColEdit(c);
+}
+function drawColEdit(c){
+  const d=S.colDraft, pool=(S.mine||[]).filter(r=>r.kind===COL_ITEM[d.kind]&&r.status!=='removed');
+  const inList=d.items.map(rid=>pool.find(r=>r.id===rid)).filter(Boolean), rest=pool.filter(r=>!d.items.includes(r.id));
+  const val=(id,def)=>{ const el=document.getElementById(id); return el?el.value:def; };
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${d.id?'Edit':'New'} ${esc(lowLabel(d.label))}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    ${d.id?'':`<div class="seg" style="padding:0 0 12px" role="group" aria-label="What are you putting together?">${[['album','Album / EP / Mixtape'],['series','Video series'],['art','Art collection']].map(([k2,l])=>`<button type="button" data-action="col-kind" data-k="${k2}" aria-pressed="${d.kind===k2}">${l}</button>`).join('')}</div>`}
+    <div class="form" style="margin:0;padding:0;background:none;max-width:none">
+      <div class="two-col"><label class="field">Type<select id="colLabel">${COL_LABELS[d.kind].map(l=>`<option ${d.label===l?'selected':''}>${l}</option>`).join('')}</select></label>
+        <label class="field">Price for the whole thing (USD)<input id="colPrice" type="number" min="0" step="0.01" value="${esc(val('colPrice',c?(c.price_cents/100).toFixed(2):'0'))}"></label></div>
+      <label class="field">Title<input id="colTitle" maxlength="120" value="${esc(val('colTitle',c?c.title:''))}" placeholder="What's it called?"></label>
+      <label class="field">Description (optional)<textarea id="colDesc" maxlength="2000" rows="2">${esc(val('colDesc',c?c.description||'':''))}</textarea></label>
+      <label class="field">Cover (optional, JPG or PNG under 5 MB. We use the first item's cover if you skip it.)<input id="colCover" type="file" accept="image/jpeg,image/png,image/webp"></label>
+      <h3 style="margin:4px 0 0">In this ${esc(lowLabel(d.label))} (${inList.length})</h3>
+      ${inList.length?`<div class="col-pick">${inList.map((r,i)=>`<div class="cp-row"><span class="n">${i+1}</span><span class="cp-t">${esc(r.title)}</span>
+        <button type="button" data-action="col-mv" data-i="${i}" data-d="-1" ${i?'':'disabled'} aria-label="Move up">↑</button><button type="button" data-action="col-mv" data-i="${i}" data-d="1" ${i<inList.length-1?'':'disabled'} aria-label="Move down">↓</button>
+        <button type="button" class="ce-del" data-action="col-rm" data-id="${r.id}" aria-label="Remove">${I.close}</button></div>`).join('')}</div>`:`<p class="small" style="margin:0;color:var(--dust)">Add your ${COL_WORD[d.kind][1]} below, in order.</p>`}
+      ${rest.length?`<h3 style="margin:4px 0 0">Your ${COL_WORD[d.kind][1]}</h3><div class="col-pick">${rest.map(r=>`<div class="cp-row"><span class="cp-t">${esc(r.title)}${r.status==='hidden'?' <small class="pill hid">Hidden</small>':''}</span><button type="button" class="btn btn-ghost btn-sm" data-action="col-add" data-id="${r.id}">Add</button></div>`).join('')}</div>`
+        :pool.length?'':`<p class="small" style="margin:0;color:var(--dust)">Upload your ${COL_WORD[d.kind][1]} first, then come back to group them.</p>`}
+      <button class="btn btn-gold full" data-action="col-save">${d.id?'Save':'Publish'}</button>
+      ${d.id?'<button class="btn btn-ghost full" data-action="col-del">Delete this (your uploads stay)</button>':''}
+    </div></div>`);
+}
+function colRedraw(){ const keep={t:document.getElementById('colTitle'),p:document.getElementById('colPrice'),d:document.getElementById('colDesc'),l:document.getElementById('colLabel')}; const v={t:keep.t&&keep.t.value,p:keep.p&&keep.p.value,d:keep.d&&keep.d.value,l:keep.l&&keep.l.value};
+  if(v.l) S.colDraft.label=COL_LABELS[S.colDraft.kind].includes(v.l)?v.l:COL_LABELS[S.colDraft.kind][0];
+  const c=S.colDraft.id?myCols().find(x=>x.id===S.colDraft.id):null; drawColEdit(c);
+  if(v.t!=null) document.getElementById('colTitle').value=v.t; if(v.p!=null) document.getElementById('colPrice').value=v.p; if(v.d!=null) document.getElementById('colDesc').value=v.d; }
+async function colSave(btn){
+  const d=S.colDraft, title=(document.getElementById('colTitle').value||'').trim(), label=document.getElementById('colLabel').value;
+  const pr=Math.round((parseFloat(document.getElementById('colPrice').value)||0)*100), desc=(document.getElementById('colDesc').value||'').trim().slice(0,2000);
+  const file=(document.getElementById('colCover').files||[])[0];
+  if(!title){ toast('Add a title'); return; } if(!d.items.length){ toast(`Add at least one ${COL_WORD[d.kind][0]}`); return; }
+  if(pr>0&&pr<50){ toast('Paid items need to be at least $0.50'); return; } if(pr>100000){ toast('Price must be under $1,000'); return; }
+  if(file&&(file.size>5*MB||!/^image\/(jpeg|png|webp)$/.test(file.type))){ toast('Cover must be a JPG, PNG or WEBP under 5 MB'); return; }
+  btn.disabled=true;
+  try{
+    let cover=d.old_cover;
+    if(file){ const ext=file.type==='image/png'?'png':file.type==='image/webp'?'webp':'jpg', path=`${S.user.id}/${rid()}k.${ext}`; const r=await sb.storage.from('covers').upload(path,file,{contentType:file.type}); if(r.error) throw r.error; cover=path; }
+    const row={kind:d.kind,label,title,description:desc||null,price_cents:pr,cover_path:cover||null,updated_at:new Date().toISOString()};
+    let id=d.id;
+    if(id){ const r=await sb.from('collections').update(row).eq('id',id); if(r.error) throw r.error; const r2=await sb.from('collection_items').delete().eq('collection_id',id); if(r2.error) throw r2.error; }
+    else { const r=await sb.from('collections').insert(row).select('id').single(); if(r.error) throw r.error; id=r.data.id; }
+    const r3=await sb.from('collection_items').insert(d.items.map((rid2,i)=>({collection_id:id,release_id:rid2,position:i}))); if(r3.error) throw r3.error;
+    if(file&&d.old_cover&&PATH_OK.test(d.old_cover)) sb.storage.from('covers').remove([d.old_cover]).catch(()=>{});
+    closeSheet(); toast(d.id?'Saved':`Your ${lowLabel(label)} is live`); S.myCols=null; await loadCollections(); loadMyCols(); render(true);
+  }catch(e){ toast(/relation|schema/i.test(String(e.message||''))?'Collections are getting set up. Try again soon.':upErr(e)); }
+  finally{ btn.disabled=false; }
+}
+async function colDelete(){
+  const d=S.colDraft; if(!d.id||!confirm('Delete this? Your songs, videos and art stay up on their own.')) return;
+  const {error}=await sb.from('collections').delete().eq('id',d.id); if(error){ toast("Couldn't delete it"); return; }
+  if(d.old_cover&&PATH_OK.test(d.old_cover)) sb.storage.from('covers').remove([d.old_cover]).catch(()=>{});
+  closeSheet(); toast('Deleted'); S.myCols=null; await loadCollections(); loadMyCols(); render(true);
+}
+
 function render(keepScroll){
   const y = window.scrollY;
   const v = document.getElementById('view');
@@ -5573,7 +5735,7 @@ function render(keepScroll){
   if(!feedOn){ S.drawer=false; if(FV.obs){ FV.obs.disconnect(); FV.obs=null; } FV.active=-1; }
   const fd = document.getElementById('feed');
   if(feedOn && fd && fd.dataset.key===feedKey()){ feedPatch(); renderNav(); return; }
-  const VIEWS = {feed:viewFeed,home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,art:viewArt,radio:viewRadio,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset,finish:viewFinish,'become-star':viewFinish,member:viewMember,inbox:viewInbox,chat:viewChat,constellation:viewConstellation};
+  const VIEWS = {feed:viewFeed,home:viewHome,discover:viewDiscover,music:viewMusic,videos:viewVideos,art:viewArt,radio:viewRadio,library:viewLibrary,studio:viewStudio,join:viewJoin,'join-star':viewJoinStar,'join-supporter':viewJoinSupporter,login:viewLogin,help:viewHelp,legal:viewLegal,admin:viewAdmin,'check-email':viewCheckEmail,reset:viewReset,finish:viewFinish,'become-star':viewFinish,member:viewMember,inbox:viewInbox,chat:viewChat,constellation:viewConstellation,collection:viewCollection};
   document.body.classList.toggle('chatmode', !S.artist && S.tab==='chat');
   v.innerHTML = (S.user&&S.user.banned&&S.tab!=='feed'?`<div class="paused-note"><b>Your account is paused.</b> You can browse, but you can't post, upload or message right now. Questions? Email ${esc(LEGAL.email)}.</div>`:'') + (S.artist ? viewArtist() : (VIEWS[S.tab]||viewHome)());
   if(feedOn) feedBind();
@@ -5708,7 +5870,7 @@ document.addEventListener('click',e=>{
       if(!sb){ toast('Accounts are not connected yet'); break; }
       sb.auth.resetPasswordForEmail(em.trim(),{redirectTo:location.origin}).then(({error})=>toast(error?error.message:'Check your email for a reset link'));
       break; }
-    case 'signout': if(S.radioOn) radioStop(); S.su={makes:null,vform:null,role:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.saved=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; S.convos=null; S.unread=0; S.chat={with:null,msgs:[],more:false}; S.cards={}; S.myGal=new Set(); S.myWait=new Set(); S.pls=null; S.queue=null; clearTimeout(unreadT); clearTimeout(chatT); audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
+    case 'signout': if(S.radioOn) radioStop(); S.su={makes:null,vform:null,role:null}; S.mine=[]; S.follows=new Set(); S.blocked=new Set(); S.saved=new Set(); S.isAdmin=false; S.posts={}; S.reports=null; S.convos=null; S.unread=0; S.chat={with:null,msgs:[],more:false}; S.cards={}; S.myGal=new Set(); S.myWait=new Set(); S.pls=null; S.queue=null; S.myCols=null; clearTimeout(unreadT); clearTimeout(chatT); audio.pause(); if(sb) sb.auth.signOut(); if(scrim.classList.contains('open')) closeSheet(); S.user=null; S.artist=null; S.tab='home'; render(); updateMini(); toast('Signed out'); break;
     case 'hero': S.hero=d.id; render(true); break;
     case 'video': if(V(d.id)&&V(d.id).form==='short'&&!d.autoplay){ openFeedAt(d.id); break; } openVideo(d.id, d.autoplay==='1'); break;
     case 'trailer': startTrailer(); break;
@@ -5734,6 +5896,18 @@ document.addEventListener('click',e=>{
     case 'cashout': toast('Cash out opens when payments switch on. Your earnings will show here.'); break;
     case 'acat': S.acat=d.g; render(true); break;
     case 'ce-add': ceAdd(d.ctx,d.id,d.name); break;
+    case 'col': openCol(Number(d.id)); break;
+    case 'col-play': { const c=C(Number(d.id)); if(c) playQueue(colItems(c).map(t=>t.id),d.shuffle==='1'); break; }
+    case 'col-buy': { const c=C(Number(d.id)); if(!c) break; const a=A(c.artist)||{name:'the artist'}; openSheet(`<div class="sheet-body checkout" style="padding-top:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Buying opens soon</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div><p>Payments are switching on soon. Then you can buy “${esc(c.title)}” for ${money(c.price)}, and ${esc(a.name)} keeps most of it.</p><div class="row-btns"><button class="btn btn-ghost" data-action="col-share" data-id="${c.id}">${I.share}Share</button><button class="btn btn-ghost" data-action="close">Close</button></div></div>`); break; }
+    case 'col-share': { const c=C(Number(d.id)); if(!c) break; const a=A(c.artist)||{name:'a Star'}; const mine=S.user&&S.user.id===c.artist; openShare({title:`${c.title} by ${a.name}`,text:mine?`My new ${lowLabel(c.label)} “${c.title}” is on StarTier`:`Check out “${c.title}” by ${a.name} on StarTier`,link:SITE+'/?c='+c.id}); break; }
+    case 'col-new': if(!S.mine){ toast('One moment…'); break; } S.colDraft=null; openColEdit(null); break;
+    case 'col-edit': { const id=Number(d.id); if(!S.myCols){ loadMyCols().then(()=>openColEdit(id)); break; } openColEdit(id); break; }
+    case 'col-kind': S.colDraft.kind=d.k; S.colDraft.label=COL_LABELS[d.k][0]; S.colDraft.items=[]; colRedraw(); break;
+    case 'col-add': S.colDraft.items.push(Number(d.id)); colRedraw(); break;
+    case 'col-rm': S.colDraft.items=S.colDraft.items.filter(x=>x!==Number(d.id)); colRedraw(); break;
+    case 'col-mv': { const it=S.colDraft.items, i=+d.i, j=i+(+d.d); if(j<0||j>=it.length) break; [it[i],it[j]]=[it[j],it[i]]; colRedraw(); break; }
+    case 'col-save': colSave(el); break;
+    case 'col-del': colDelete(); break;
     case 'gal-wait': galaxyWait(d.id,true); break;
     case 'gal-leave': galaxyWait(d.id,false); break;
     case 'gal-save': galaxySave(); break;
@@ -5981,11 +6155,12 @@ document.addEventListener('keydown',e=>{
 scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
 
 document.getElementById('botClose').innerHTML=I.close;
+const DEEP_C=(()=>{ try{ const x=new URLSearchParams(location.search).get('c'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
 const DEEP_PL=(()=>{ try{ const x=new URLSearchParams(location.search).get('pl'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
 (()=>{ try{ const lg=new URLSearchParams(location.search).get('legal'); if(lg&&LEGAL_DOCS[lg]){ S.tab='legal'; S.legal=lg; } }catch(_){} })();
 render();
 if(sb){
-  loadCatalog().then(()=>{ render(true); if(DEEP) openDeepStar(); else if(DEEP_PL){ S.deepDone=true; openPl(DEEP_PL); } else openDeepRelease(); });
+  loadCatalog().then(()=>{ render(true); if(DEEP) openDeepStar(); else if(DEEP_PL){ S.deepDone=true; openPl(DEEP_PL); } else if(DEEP_C){ S.deepDone=true; openCol(DEEP_C); } else openDeepRelease(); });
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&S.user){ pollUnread(); if(S.tab==='chat') loadChat(false); } });
   radioFetch(true).then(()=>render(true));
   sb.auth.getSession().then(async ({data})=>{ if(data.session){ await loadProfile(data.session.user); await loadMine(); render(true); updateMini(); } });
