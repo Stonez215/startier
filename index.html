@@ -3607,6 +3607,29 @@ const SAMPLE_UNTIL = 6;   // sample artists hide by themselves once this many re
 const S = {tab:'feed',artist:null,hero:'v1',genre:'All',q:'',vform:'all',vcat:'All',vq:'',mgenre:'All',mq:'',acat:'All',aq:'',su:{makes:null,vform:null,role:null},owned:new Set(),following:new Set(),saved:new Set(),samples:true,
   now:null,playing:false,pos:0,timer:null,trailer:null,user:null,signupPlan:'free',people:{},cards:{},unread:0,convos:null,chat:{with:null,msgs:[],more:false},msgDraft:{}};
 const hasPass = () => !!(S.user && S.user.pass && !S.user.banned);
+/* ---------- payments (Stripe through the stripe-pay function) ---------- */
+S.money=null; S.payable=new Set();
+const payable = aid => !!(aid && S.payable.has(aid));
+const svcFee = dollars => { const c=Math.round(dollars*100); return (Math.ceil((c+30)/0.971)-c)/100; };
+const owns = it => !!(it && it.rid && S.money && (S.money.owned||[]).includes(it.rid));
+async function loadMoney(){
+  if(!sb) return;
+  try{ const {data}=await sb.rpc('payable_stars'); S.payable=new Set((data||[]).map(x=>typeof x==='string'?x:(x.payable_stars||Object.values(x)[0]))); }catch(_){}
+  if(!S.user){ S.money=null; return; }
+  try{ const {data}=await sb.rpc('my_money'); S.money=data||null; }catch(_){ S.money=null; }
+}
+async function payCall(action, body, btn){
+  if(!sb){ toast('Payments need the live app'); return null; }
+  if(needLogin(action==='tip'?'send a tip':action==='buy'?'buy this':action==='galaxy'?'join a Galaxy':'get a plan')) return null;
+  const label=btn&&btn.textContent; if(btn){ btn.disabled=true; btn.textContent='Opening checkout…'; }
+  try{
+    const {data,error}=await sb.functions.invoke('stripe-pay',{body:Object.assign({action},body||{})});
+    if(error){ let m=''; try{ const j=await error.context.json(); m=j&&j.error; }catch(_){} throw new Error(m||"Payments aren't available right now. Try again soon."); }
+    if(data&&data.url){ location.href=data.url; return data; }
+    if(btn){ btn.disabled=false; btn.textContent=label; }
+    return data;
+  }catch(e){ toast(e.message&&e.message.length<140?e.message:"Couldn't start checkout. Try again."); if(btn){ btn.disabled=false; btn.textContent=label; } return null; }
+}
 const priceOf = item => hasPass() ? item.price*(1-PASS_OFF) : item.price;
 const priceTag = item => !item.price ? 'Free' : hasPass() ? `<span class="strike">${money(item.price)}</span>${money(priceOf(item))}` : money(item.price);
 const sortedArtists = () => [...artists].sort((a,b)=>((b.nova?2:b.pro?1:0)-(a.nova?2:a.pro?1:0)));
@@ -3827,8 +3850,8 @@ function viewStudio(){
   <div class="taglist" style="margin:-8px 0 16px"><span>${makesLabel(mk)}</span>${[...(S.user.genres||[]),...(S.user.cats||[]),...(S.user.artCats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
   ${statsCard()}
   ${qrCard()}
-  <div class="earn"><div><div class="s">Your earnings this month</div><div class="big">${sb?'$0.00':'$412.60'}</div><div class="s">${sb?'Your sales and tips will show up here':'From 226 sales and 14 tips'}</div></div>
-    <button class="btn btn-ghost btn-sm" data-action="cashout">Cash out</button></div>
+  <div class="earn"><div><div class="s">Sales and tips, last 30 days</div><div class="big">${sb?money(((S.money&&S.money.sales_30)||0)/100):'$412.60'}</div><div class="s">${sb?(S.money&&S.money.payouts_ready?`${(S.money.sales_count_30||0)} sale${S.money.sales_count_30===1?'':'s'} and tips${S.money.galaxy_paid?` · ${S.money.galaxy_paid} paid Galaxy member${S.money.galaxy_paid===1?'':'s'}`:''}. Payouts go to your bank automatically.`:'Turn on payouts so fans can buy, tip and join your Galaxy.'):'From 226 sales and 14 tips'}</div></div>
+    <button class="btn ${sb&&S.money&&S.money.payouts_ready?'btn-ghost':'btn-gold'} btn-sm" data-action="cashout">${sb&&S.money&&S.money.payouts_ready?'Payouts dashboard':sb&&S.money&&S.money.payouts_started?'Finish payout setup':'Turn on payouts'}</button></div>
   ${S.user.nova
     ? `<div class="fee-note" style="margin:0 22px 18px;max-width:640px"><b>Supernova is on.</b> Your Shorts are in the Shooting Stars top 10, your page is in the Supernova Spotlight, and you have unlimited uploads, stats and Constellations.</div>`
     : S.user.pro ? `<div class="pass" style="margin:0 22px 18px;max-width:640px"><div><h3>Star Pro is on</h3><p>Go Supernova for the Shooting Stars top 10, the homepage Spotlight and radio play. ${money(NOVA_PRICE)} a month.</p></div><button class="btn btn-gold" data-action="upgrade">See Supernova</button></div>`
@@ -3867,7 +3890,7 @@ function viewStudio(){
     ${S.gal[S.user.id]?`<label class="agree"><input type="checkbox" id="upGalaxy"><span><b>Galaxy only.</b> Only your Galaxy members get the full version. Everyone else gets a 30-second preview.</span></label>`:''}
     <div class="field"><b class="ce-title">Collaborators (optional)</b>${collabEditor('up','Tag other Stars who worked on this, like "feat." or "prod. by". You can also split your 85% with them. Each person has to accept before their name or split goes live.')}</div>
     <div class="prog-wrap" id="upProg" hidden><div class="progress"><i></i></div><span></span></div>
-    <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light. Selling opens when payments switch on; until then, paid items show as "coming soon" and free ones work right away.</p>
+    <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light. Paid items sell once you turn on payouts in your Studio; until then, they show as not for sale yet and free ones work right away.</p>
     <button class="btn btn-gold full" data-action="publish">Publish</button>
   </div>
   ${colStudio()}
@@ -3941,7 +3964,7 @@ function viewJoinStar(){
       <button type="button" class="plan" data-action="plan" data-plan="pro" aria-pressed="${plan==='pro'}"><span class="tag">More reach</span><b>Star Pro</b><span class="pr">${money(PRO_PRICE)}<small> /month</small></span><ul><li>Unlimited uploads</li><li>Featured badge, higher in search</li><li>Plays and saves stats</li><li>Constellations (playlists)</li><li>Keep 90% of every sale</li></ul></button>
       <button type="button" class="plan nova" data-action="plan" data-plan="nova" aria-pressed="${plan==='nova'}"><span class="tag">Top tier</span><b>Supernova</b><span class="pr">${money(NOVA_PRICE)}<small> /month</small></span><ul><li>Everything in Star Pro</li><li>Your Shorts in the Shooting Stars top 10</li><li>Supernova Spotlight on the homepage</li><li>Radio play on StarTier Radio</li><li>Keep 92% of every sale</li></ul></button>
     </div>
-    <div class="fee-note">Paid plans switch on with payments. Until then everyone starts as a Rising Star.</div>
+    <div class="fee-note">Everyone starts free as a Rising Star. If you picked a paid plan, you can start it right after you sign up.</div>
     <label class="agree"><input type="checkbox" name="agree"><span>I'm at least 13, and I agree to the <button type="button" data-action="legal" data-doc="terms">Terms</button>, <button type="button" data-action="legal" data-doc="guidelines">Community Guidelines</button> and <button type="button" data-action="legal" data-doc="privacy">Privacy Policy</button>.</span></label>
     <button class="btn btn-gold full" type="submit">Create my Star account</button>
     <p class="small">Already have an account? <button type="button" class="link" data-action="tab" data-tab="login">Log in</button><br>Are you a fan? <button type="button" class="link" data-action="tab" data-tab="join-supporter">Sign up as a Supporter</button></p>
@@ -4005,11 +4028,11 @@ const FAQ = [
  {g:'Getting started', q:'Is it free to join?', a:'Yes. Fans join free as Stargazers, and artists join free as Rising Stars. Paid plans add more: All-Access for fans ($6.99 a month), Galaxies for one artist ($1.50 a month each), and Star Pro ($8.99) or Supernova ($24.99) for artists.', k:'free cost join price sign up'},
  {g:'Getting started', q:'What is the difference between a Star and a Supporter?', a:'A Star is an artist or content creator who uploads and sells work. A Supporter is a fan who discovers, streams, buys, and tips. Pick the one that fits you when you sign up.', k:'star supporter difference artist fan account type'},
  {g:'For Stars', q:'How much of each sale do I keep?', a:'Rising Stars keep 85% of every sale and tip, Star Pro keeps 90%, and Supernova keeps 92%. StarTier keeps the rest to run the platform.', k:'keep percent cut fee commission 15 85 earn money sale'},
- {g:'For Stars', q:'What are Star Pro and Supernova?', a:'Rising Star is free: 10 songs, 5 videos and 20 pieces of art or downloads, unlimited Shorts, and you keep 85%. Star Pro is $8.99 a month: unlimited uploads, a Featured badge, higher placement in search, plays and saves stats, Constellations, and you keep 90%. Supernova is $24.99 a month: everything in Star Pro, plus your Shorts in the Shooting Stars top 10, your page in the Supernova Spotlight on the homepage, play on StarTier Radio, and you keep 92%. Paid plans switch on with payments.', k:'star pro supernova upgrade featured promo visibility boost plan tier price'},
+ {g:'For Stars', q:'What are Star Pro and Supernova?', a:'Rising Star is free: 10 songs, 5 videos and 20 pieces of art or downloads, unlimited Shorts, and you keep 85%. Star Pro is $8.99 a month: unlimited uploads, a Featured badge, higher placement in search, plays and saves stats, Constellations, and you keep 90%. Supernova is $24.99 a month: everything in Star Pro, plus your Shorts in the Shooting Stars top 10, your page in the Supernova Spotlight on the homepage, play on StarTier Radio, and you keep 92%. Upgrade anytime from your account page.', k:'star pro supernova upgrade featured promo visibility boost plan tier price'},
  {g:'For Stars', q:'Can I sell an album, a series or an art collection?', a:'Yes. In your Studio, under Albums, series and collections, tap New. Pick Album, EP or Mixtape for songs, Series or Season for videos, or Collection for art. Add your uploads in order, set one price for the whole thing (or make it free), and publish. Each song, video or piece still has its own price too.', k:'album ep mixtape series season collection bundle sell set together'},
- {g:'For Stars', q:'What is a Galaxy?', a:'A Galaxy is your fan club. Every Galaxy is $1.50 a month. Members get everything you make, in full, plus the perks you pick from a menu: members-only posts, early drops, livestreams, discounts and more. You can also mark songs, videos and posts as Galaxy only. Until payments switch on, fans can join the waitlist so you can see who is ready. You can also gift free memberships from your Studio.', k:'galaxy fan club members exclusive subscription patreon'},
+ {g:'For Stars', q:'What is a Galaxy?', a:'A Galaxy is your fan club. Every Galaxy is $1.50 a month. Members get everything you make, in full, plus the perks you pick from a menu: members-only posts, early drops, livestreams, discounts and more. You can also mark songs, videos and posts as Galaxy only. Fans join with a card once your payouts are on; before that, they can save a spot so you can see who is ready. You can also gift free memberships from your Studio.', k:'galaxy fan club members exclusive subscription patreon'},
  {g:'For Supporters', q:'What is a Constellation?', a:'A Constellation is a playlist. All-Access members and Star Pro or Supernova artists can make them from any song on StarTier. Make one public and it shows on your profile.', k:'constellation playlist queue list songs'},
- {g:'For Stars', q:'How do I get paid?', a:'Buying, tips and payouts are switching on soon. You will connect your bank account securely through Stripe, and your earnings will be sent to you from your Studio. Until then, paid items show as coming soon, and free items work right away.', k:'paid payout payment bank cash out withdraw stripe tip'},
+ {g:'For Stars', q:'How do I get paid?', a:'Open your Studio and tap Turn on payouts. You connect your bank account securely through Stripe (it takes a few minutes), and your sales, tips and Galaxy money are sent to your bank automatically. Until payouts are on, your paid items show as not for sale yet, and free items work right away.', k:'paid payout payment bank cash out withdraw stripe tip'},
  {g:'For Stars', q:'What can I upload?', a:'Songs (MP3, WAV, M4A or FLAC), videos (MP4 or MOV), and art and downloads: paintings, photos, digital art, e-books, PDFs, coloring books, sample packs and more (images, PDF or ZIP, up to 50 MB). Open your Studio and use Upload a release. Only upload work you made or have the rights to share.', k:'upload music video file format mp3 wav mp4 mov art photo painting pdf zip download'},
  {g:'For Stars', q:'I paint, take photos, or make designs. Can I sell on StarTier?', a:'Yes. Sign up as a Star and pick Art, or add art from any Star account. In your Studio, choose "Art or download", upload the full file, and set a price or make it free. We make a smaller preview for your page automatically, with a watermark if it is paid. Buyers get the full file.', k:'art painter painting photographer photo photography design artwork sell prints download digital'},
  {g:'For Stars', q:'Will my music be played on StarTier Radio?', a:'It can be. StarTier Radio is our free live station, and the StarTier team picks songs from what Stars upload. Artists on the radio also get featured in Star Light, our artist promo spot. Radio plays are free promotion and are not paid per play. If you do not want a song on the radio, send us a message and we will take it off.', k:'radio station play my song star light spotlight promo featured airplay'},
@@ -4017,7 +4040,7 @@ const FAQ = [
  {g:'For Stars', q:'Where is my QR code?', a:'Every Star gets their own QR code as soon as they sign up. Open your Studio and it is at the top. Tap Download to save it as a picture for flyers, merch and posters, or Share to send it. Fans who scan it land right on your StarTier page.', k:'qr code scan share link flyer poster my page'},
  {g:'For Stars', q:'Can I set my own prices?', a:'Yes. You choose the price for every song and video you sell. The Studio shows exactly how much you get from each sale.', k:'price set pricing how much charge'},
  {g:'For Supporters', q:'What is the difference between All-Access and a Galaxy?', a:'All-Access ($6.99 a month) streams every song and video from every artist in full. A Galaxy ($1.50 a month) is for one artist: everything they make in full, plus the perks they pick, like members-only posts and early drops. All-Access does not include Galaxy perks, so superfans often have both. Everything goes on one monthly bill.', k:'galaxy all access difference both price fan club'},
- {g:'For Supporters', q:'What is All-Access?', a:'All-Access is $6.99 a month. Free Stargazers hear 30-second clips of paid songs and videos; All-Access plays everything from every artist in full, lets you make Constellations (playlists), and gives you 20% off anything you buy. Free songs, videos, art, Shorts and the radio are free for everyone. You can cancel anytime. Paid plans are switching on soon.', k:'starpass all access allaccess subscription stream monthly pass discount'},
+ {g:'For Supporters', q:'What is All-Access?', a:'All-Access is $6.99 a month. Free Stargazers hear 30-second clips of paid songs and videos; All-Access plays everything from every artist in full, lets you make Constellations (playlists), and gives you 20% off anything you buy. Free songs, videos, art, Shorts and the radio are free for everyone. You can cancel anytime from Manage billing.', k:'starpass all access allaccess subscription stream monthly pass discount'},
  {g:'For Supporters', q:'Do I own what I buy?', a:'Yes. Anything you buy is yours to keep and lives in your Library, whether or not you have All-Access.', k:'own buy purchase keep library download'},
  {g:'For Supporters', q:'How do I find new artists?', a:'Use the Music, Videos and Art tabs to search by name or browse by genre and category. Featured Stars also show up on the home page. Follow artists to keep up with what they drop.', k:'find discover search genre browse new artists follow'},
  {g:'For Supporters', q:'How do I save something?', a:'Tap Save on any song, video or artwork. It shows up in your Library. Things you buy will live there too once buying opens.', k:'save library keep bookmark favorite'},
@@ -4159,7 +4182,7 @@ const REL_COLS='id,artist_id,kind,form,title,description,genre,category,price_ce
 function addRelease(r,list){ const o=releaseToItem(r); (r.kind==='song'?list.t:r.kind==='download'?list.d:list.v).push(o); return o; }
 async function loadCatalog(){
   if(!sb) return;
-  loadGalaxies();
+  loadGalaxies(); loadMoney().then(()=>render(true));
   const {data:rels,error}=await sb.from('releases').select(REL_COLS).eq('status','live').order('created_at',{ascending:false}).limit(1000);
   if(error||!rels) return;
   let credits=[];
@@ -4182,7 +4205,7 @@ async function loadCatalog(){
   if(!V(S.hero)||(!V(S.hero).real&&proHero)) S.hero=(proHero||videos.find(v=>v.real&&v.form==='long')||videos.find(v=>v.form==='long')||{}).id;
 }
 async function loadMine(){
-  S.mine=[]; await loadSocial(); pollUnread(); if(!sb||!S.user||S.user.role!=='star') return;
+  S.mine=[]; await loadSocial(); await loadMoney(); pollUnread(); if(!sb||!S.user||S.user.role!=='star') return;
   const {data}=await sb.from('releases').select(REL_COLS).eq('artist_id',S.user.id).neq('status','removed').order('created_at',{ascending:false});
   S.mine=data||[];
 }
@@ -4410,7 +4433,7 @@ terms: { title:'Terms of Service', body:[
 ['StarTier Radio and Star Light', `By uploading music, you also let StarTier play your songs in full on StarTier Radio, our free live station, and feature you, your name, your artwork and your music in Star Light, our artist promotion, on and off StarTier. Radio plays and Star Light features are free promotion. They aren't sales and don't pay per play. If you don't want a song on the radio, email ${LEGAL.email} and we'll take it off the show.`],
 ['You need the rights to what you upload', `Only upload work you created or have permission to share. That includes the beats, samples, lyrics, footage and images in it. You're responsible for getting any licenses, clearances and permissions, and for paying anyone you owe, like producers, featured artists or collaborators.`],
 ['Collabs and splits', `Stars can tag other Stars on a release or post, and can split their share of the money from a release with collaborators. A tag only shows after the tagged Star accepts. A split only takes effect after every person in it agrees, and it can only be changed if everyone in the new split, and everyone in the old one, agrees again. When payments are on, StarTier pays each person their share of the artist's part of a sale, based on the split that was active at the time of the sale. Splits are an agreement between the collaborators. StarTier isn't a party to it and doesn't settle disagreements between collaborators, but we may pause payouts on a release while a dispute is reported to us.`],
-['Sales, prices and our fee', `Stars set their own prices, including free. When you buy a download, you get a personal license to keep and enjoy it, not ownership of the artwork or the right to resell or reprint it, unless the Star says otherwise. When paid sales and tips are switched on, StarTier keeps 15% of each sale and tip (10% on Star Pro, 8% on Supernova), and the Star gets the rest, minus any payment processing or tax amounts the law requires. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
+['Sales, prices and our fee', `Stars set their own prices, including free. When you buy a download, you get a personal license to keep and enjoy it, not ownership of the artwork or the right to resell or reprint it, unless the Star says otherwise. StarTier keeps 15% of each sale and tip (10% on Star Pro, 8% on Supernova), and the Star gets the rest, minus any tax amounts the law requires. Buyers pay a small service fee on each purchase and tip that covers card processing, so it doesn't come out of the Star's share. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
 ['Galaxies', `A Galaxy is a Star's paid fan club. Members pay $1.50 a month and, for as long as they stay members, get that Star's work in full plus the perks the Star offers. StarTier keeps the same share it keeps on that Star's sales (15%, 10% on Star Pro, 8% on Supernova). Stars decide what goes in their Galaxy and can gift free memberships.`],
 ['Paid plans', `Star Pro, Supernova, All-Access and Galaxies are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
 ['Merch and outside links', `Stars can link to their own merch stores. Those stores are run by the Star or by other companies, not StarTier. Any purchase you make there is between you and that store, including shipping, returns and refunds. We aren't responsible for outside websites.`],
@@ -5025,7 +5048,7 @@ function statsCard(){
   return `<div class="stats-card"><h3>Your stats <span class="pill">${S.user.nova?'Supernova':'Star Pro'}</span></h3>
     <div class="sc-row"><div><b>${k(d.plays_7||0)}</b><span>Plays, 7 days</span></div><div><b>${k(d.plays_30||0)}</b><span>Plays, 30 days</span></div><div><b>${k(d.saves||0)}</b><span>Saves</span></div><div><b>${k(d.followers||0)}</b><span>Followers</span></div></div>
     ${rl.length?`<table class="sc-table"><thead><tr><th>Release</th><th>30 days</th><th>All time</th><th>Saves</th></tr></thead><tbody>${rl.map(r=>`<tr><td>${esc(r.title)}</td><td>${r.plays_30}</td><td>${r.plays_all}</td><td>${r.saves}</td></tr>`).join('')}</tbody></table>`:''}
-    <p>Sales will show here when payments switch on.</p></div>`;
+    <p>Sales and tips show on your Studio earnings card.</p></div>`;
 }
 
 function viewReports(){
@@ -5083,7 +5106,7 @@ function openAccount(){
   openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${esc(u.name)}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
     <div class="s">${u.role==='star'?'Star':'Supporter'} account, ${planName}${paid&&u.comped?' (free from StarTier)':''}${u.email?' · '+esc(u.email):''}</div>
-    ${!paid && u.wanted && u.wanted!=='free' ? `<div class="fee-note" style="margin-bottom:12px">You picked ${u.wanted==='pro'?'Star Pro':u.wanted==='nova'?'Supernova':'All-Access'}. Paid plans switch on soon; you're on the free plan until then.</div>` : ''}
+    ${!paid && u.wanted && u.wanted!=='free' ? `<div class="fee-note" style="margin-bottom:12px">You picked ${u.wanted==='pro'?'Star Pro':u.wanted==='nova'?'Supernova':'All-Access'} when you joined. <button class="link" data-action="upgrade">Start it now</button></div>` : ''}
     ${u.nova&&u.role==='star'?'':`<button class="btn btn-gold full" style="margin-bottom:10px" data-action="upgrade">${u.role==='star'?(u.pro?`Go Supernova, ${money(NOVA_PRICE)}/mo`:'See Star Pro and Supernova'):(u.pass?'Your All-Access':`Get All-Access, ${money(PASS_PRICE)}/mo`)}</button>`}
     <div class="acct-grid"><button class="btn btn-ghost" data-action="edit-profile">Edit profile</button><button class="btn btn-ghost" data-action="tab" data-tab="inbox">${I.msg}Messages${S.unread?` (${S.unread})`:''}</button>
     ${u.role==='star'?`<button class="btn btn-ghost" data-action="tab" data-tab="studio">Your studio</button><button class="btn btn-ghost" data-action="mypage">View my page</button>`:`<button class="btn btn-ghost" data-action="person" data-id="${u.id}">View my page</button><button class="btn btn-ghost" data-action="tab" data-tab="become-star">I'm an artist too</button>`}</div>
@@ -5385,8 +5408,8 @@ function openSoon(kind,id){
   const a=kind==='tip'?(A(id)||{name:nameOf(id)}):(it&&A(it.artist))||{name:'the artist'};
   const price=it?priceOf(it):0;
   openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
-    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${kind==='tip'?'Tips are coming soon':'Buying opens soon'}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
-    <p>${kind==='tip'?`Soon you'll be able to tip ${esc(a.name)} right here. ${esc(a.name.split(' ')[0])} keeps 85% of every tip.`:`Payments are switching on soon. Then you can buy “${esc(it.title)}” for ${money(price)}, and ${esc(a.name)} gets ${money(price*(1-FEE))} of it.`}</p>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${kind==='tip'?'Tips aren\'t on yet':'Buying isn\'t on yet'}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>${kind==='tip'?`${esc(a.name)} hasn't turned on payouts yet. Once they do, you can tip them right here, and they keep 85% of every tip.`:`${esc(a.name)} hasn't turned on payouts yet. Once they do, you can buy “${esc(it.title)}” for ${money(price)}, and they get most of it.`}</p>
     <p class="small" style="color:var(--dust)">For now, you can support ${esc(a.name.split(' ')[0])} by following, saving and sharing.</p>
     <div class="row-btns">${it&&it.real?`<button class="btn btn-gold" data-action="save" data-id="${it.id}" aria-pressed="${isSaved(it)}">${isSaved(it)?I.saveOn+'Saved':I.save+'Save for later'}</button><button class="btn btn-ghost" data-action="share-rel" data-id="${it.id}">${I.share}Share</button>`:''}
       ${kind==='tip'&&isReal(id)?`<button class="btn btn-gold" data-action="follow" data-id="${id}">${S.follows.has(id)?'Following':'Follow'}</button>`:''}
@@ -5519,6 +5542,7 @@ function fullAccess(it){
   if(inGalaxy(it.artist) && it.kind!=='download') return true;
   if(it.galaxy) return inGalaxy(it.artist);
   if(!it.price) return true;
+  if(owns(it)) return true;
   return it.kind==='download' ? false : hasPass();
 }
 const galBadge = it => it&&it.galaxy&&!fullAccess(it) ? '<span class="badge gal">Galaxy</span>' : '';
@@ -5555,15 +5579,15 @@ function galaxyCard(a){
   return `<section class="galaxy-card"><div class="gx-top"><span class="gx-ico"></span><div><small>${esc(a.name)}'s Galaxy</small><h3>${esc(g.name)}</h3></div><b class="gx-price">${money(GALAXY_PRICE)}<small>/mo</small></b></div>
     ${galaxyPerksHtml(g,a)}
     <div class="gx-foot">${c?`<small>${c.members?k(c.members)+' member'+(c.members===1?'':'s')+' · ':''}${k(c.waitlist)} saved a spot</small>`:'<small></small>'}
-    ${mine?`<button class="btn btn-ghost btn-sm" data-action="tab" data-tab="studio">Manage</button>`:inG?`<span class="pill gx-in">You're in ✦</span>`:wait?`<button class="btn btn-ghost btn-sm" data-action="gal-leave" data-id="${a.id}">Spot saved ✓</button>`:`<button class="btn btn-gold btn-sm" data-action="gal-wait" data-id="${a.id}">Join for ${money(GALAXY_PRICE)}/mo</button>`}</div>
-    ${!mine&&!inG&&!wait?'<small class="gx-soon">Payments switch on soon. Tap to save your spot and we\'ll let you know.</small>':''}</section>`;
+    ${mine?`<button class="btn btn-ghost btn-sm" data-action="tab" data-tab="studio">Manage</button>`:inG?`<span class="pill gx-in">You're in ✦</span>`:payable(a.id)?`<button class="btn btn-gold btn-sm" data-action="gal-join" data-id="${a.id}">Join for ${money(GALAXY_PRICE)}/mo</button>`:wait?`<button class="btn btn-ghost btn-sm" data-action="gal-leave" data-id="${a.id}">Spot saved ✓</button>`:`<button class="btn btn-gold btn-sm" data-action="gal-wait" data-id="${a.id}">Save my spot</button>`}</div>
+    ${!mine&&!inG&&!wait&&!payable(a.id)?'<small class="gx-soon">Joining opens when this artist turns on payouts. Save your spot and we\'ll let you know.</small>':''}</section>`;
 }
 async function galaxyWait(aid,on){
   if(needLogin('join a Galaxy')) return;
   const {error}= on ? await sb.from('galaxy_members').insert({artist_id:aid}) : await sb.from('galaxy_members').delete().eq('artist_id',aid).eq('user_id',S.user.id);
   if(error&&!/duplicate/i.test(error.message||'')){ toast("Couldn't do that right now"); return; }
   on?S.myWait.add(aid):S.myWait.delete(aid); delete S.galCounts[aid];
-  toast(on?"Spot saved. We'll let you know when payments switch on.":'Spot removed'); render(true);
+  toast(on?"Spot saved. We'll let you know when you can join.":'Spot removed'); render(true);
   if(on && !hasPass() && S.myGal.size+S.myWait.size>=5) allAccessNudge();
 }
 function allAccessNudge(){
@@ -5885,21 +5909,40 @@ function stopTrailer(){ clearInterval(S.trailer); S.trailer=null; }
 function openBuy(kind,id){
   const item = kind==='video'?V(id):kind==='download'?D(id):T(id); if(!item) return;
   if(!item.price){ toggleSave(id); return; }
-  openSoon(kind==='video'?'video':kind==='download'?'download':'track',id);
+  if(!sb||!item.real||!payable(item.artist)){ openSoon(kind==='video'?'video':kind==='download'?'download':'track',id); return; }
+  if(owns(item)){ toast('You already own this'); return; }
+  const a=A(item.artist)||{name:'the artist'}, price=priceOf(item), keep=a.nova?0.92:a.pro?0.90:1-FEE;
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Buy “${esc(item.title)}”</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>${money(price)}${hasPass()?` <small style="color:var(--dust)">(20% All-Access discount)</small>`:''} + ${money(svcFee(price))} service fee. It's yours to keep: ${kind==='download'?'download it anytime':'play it in full anytime'} from StarTier. ${esc(a.name)} gets ${money(price*keep)} of it.</p>
+    <div class="row-btns"><button class="btn btn-gold" data-action="pay-buy" data-rid="${item.rid}">Pay ${money(price+svcFee(price))} with card</button><button class="btn btn-ghost" data-action="close">Not now</button></div>
+    <p class="small" style="color:var(--dust)">Secure checkout by Stripe.</p></div>`);
 }
-function openTip(id){ openSoon('tip',id); }
+function openTip(id){
+  const a=A(id)||{name:nameOf(id)};
+  if(!sb||!isReal(id)||!payable(id)){ openSoon('tip',id); return; }
+  if(S.user&&S.user.id===id){ toast("You can't tip yourself"); return; }
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Tip ${esc(a.name)}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>${esc(a.name.split(' ')[0])} keeps 85% of every tip. A small service fee covers card processing.</p>
+    <div class="row-btns">${[200,500,1000,2000].map(c=>`<button class="btn btn-gold" data-action="pay-tip" data-id="${esc(id)}" data-c="${c}">${money(c/100)}</button>`).join('')}</div>
+    <p class="small" style="color:var(--dust)">Secure checkout by Stripe.</p></div>`);
+}
 function openPlans(){
   const star=S.user&&S.user.role==='star', u=S.user||{};
-  const card=(name,price,items,cur,tag)=>`<div class="plan-card${cur?' cur':''}">${tag?`<span class="tag">${tag}</span>`:''}<b>${name}</b><span class="pr">${price}</span><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>${cur?'<span class="pill">Your plan</span>':''}</div>`;
+  const plans=(S.money&&S.money.plans)||[], paidKinds=new Set(plans.map(p=>p.kind)), canPay=!!sb;
+  const btnFor=(key,cur)=>{ if(!key) return ''; if(cur) return paidKinds.has(key)?'<button class="btn btn-ghost btn-sm" data-action="pay-portal">Manage billing</button>':'';
+    return canPay?`<button class="btn btn-gold btn-sm" data-action="pay-plan" data-plan="${key}">${key==='pass'?'Get All-Access':key==='pro'?(paidKinds.has('supernova')?'Switch to Star Pro':'Get Star Pro'):(paidKinds.has('pro')?'Upgrade to Supernova':'Get Supernova')}</button>`:''; };
+  const card=(name,price,items,cur,tag,key)=>`<div class="plan-card${cur?' cur':''}">${tag?`<span class="tag">${tag}</span>`:''}<b>${name}</b><span class="pr">${price}</span><ul>${items.map(x=>`<li>${x}</li>`).join('')}</ul>${cur?'<span class="pill">Your plan</span>':''}${btnFor(key,cur)}</div>`;
   openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>${star?'Artist plans':'Fan plans'}</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
-    <p>Paid plans switch on as soon as payments are ready. We'll let you know.</p>
+    <p>${sb?'Cancel anytime from Manage billing. Secure checkout by Stripe.':'Paid plans are available in the live app.'}</p>
     <div class="plan-cards">${star?[
       card('Rising Star','Free',['10 songs, 5 videos and 20 art pieces','Unlimited Shorts','Keep 85% of every sale'],!u.pro&&!u.nova),
-      card('Star Pro',money(PRO_PRICE)+'/mo',['Unlimited uploads','Featured badge, higher in search','Plays and saves stats','Constellations (playlists)','Keep 90% of every sale'],u.pro,'More reach'),
-      card('Supernova',money(NOVA_PRICE)+'/mo',['Everything in Star Pro','Shooting Stars top 10 in Shorts','Supernova Spotlight on the homepage','Play on StarTier Radio','Keep 92% of every sale'],u.nova,'Top tier')].join('')
+      card('Star Pro',money(PRO_PRICE)+'/mo',['Unlimited uploads','Featured badge, higher in search','Plays and saves stats','Constellations (playlists)','Keep 90% of every sale'],u.pro&&!u.nova,'More reach','pro'),
+      card('Supernova',money(NOVA_PRICE)+'/mo',['Everything in Star Pro','Shooting Stars top 10 in Shorts','Supernova Spotlight on the homepage','Play on StarTier Radio','Keep 92% of every sale'],u.nova,'Top tier','supernova')].join('')
       :[card('Stargazer','Free',['30-second clips of paid songs and videos','Free songs, videos and art in full','All Shorts and the radio'],!u.pass),
-        card('All-Access',money(PASS_PRICE)+'/mo',['Every song and video from every artist, in full','Make Constellations (playlists)','20% off everything you buy'],u.pass,'Best value'),
+        card('All-Access',money(PASS_PRICE)+'/mo',['Every song and video from every artist, in full','Make Constellations (playlists)','20% off everything you buy'],u.pass,'Best value','pass'),
         card('Galaxy',money(GALAXY_PRICE)+'/mo per artist',['Everything one artist makes, in full','Perks that artist picks: early drops, members-only posts and more','Join from any artist\'s page'],false,'For superfans')].join('')}</div>
     ${star?'':'<p class="small" style="color:var(--dust);margin-top:12px">All your plans go on one monthly bill.</p>'}</div>`);
 }
@@ -6008,12 +6051,14 @@ document.addEventListener('click',e=>{
     case 'pickrole': { S.su.role=d.role; const f=el.closest('form'); f.querySelectorAll('[data-action=pickrole]').forEach(b=>{ b.setAttribute('aria-pressed',b===el); b.classList.toggle('on',b===el); });
       f.querySelectorAll('[data-role-sec]').forEach(x=>x.hidden=x.dataset.roleSec!==d.role);
       const nl=f.querySelector('[name=name]'); if(nl&&nl.previousSibling) nl.previousSibling.textContent=d.role==='star'?'Artist or creator name':'Your name'; break; }
-    case 'cashout': toast('Cash out opens when payments switch on. Your earnings will show here.'); break;
+    case 'cashout': payCall('connect',{},el); break;
     case 'acat': S.acat=d.g; render(true); break;
     case 'ce-add': ceAdd(d.ctx,d.id,d.name); break;
     case 'col': openCol(Number(d.id)); break;
     case 'col-play': { const c=C(Number(d.id)); if(c) playQueue(colItems(c).map(t=>t.id),d.shuffle==='1'); break; }
-    case 'col-buy': { const c=C(Number(d.id)); if(!c) break; const a=A(c.artist)||{name:'the artist'}; openSheet(`<div class="sheet-body checkout" style="padding-top:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Buying opens soon</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div><p>Payments are switching on soon. Then you can buy “${esc(c.title)}” for ${money(c.price)}, and ${esc(a.name)} keeps most of it.</p><div class="row-btns"><button class="btn btn-ghost" data-action="col-share" data-id="${c.id}">${I.share}Share</button><button class="btn btn-ghost" data-action="close">Close</button></div></div>`); break; }
+    case 'col-buy': { const c=C(Number(d.id)); if(!c) break; const a=A(c.artist)||{name:'the artist'};
+      if(sb&&payable(c.artist)){ if(S.money&&(S.money.owned_collections||[]).includes(c.id)){ toast('You already own this'); break; } payCall('buy',{collection_id:c.id},el); break; }
+      openSheet(`<div class="sheet-body checkout" style="padding-top:22px"><div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Buying isn't on yet</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div><p>${esc(a.name)} hasn't turned on payouts yet. Once they do, you can buy “${esc(c.title)}” for ${money(c.price)}, and they keep most of it.</p><div class="row-btns"><button class="btn btn-ghost" data-action="col-share" data-id="${c.id}">${I.share}Share</button><button class="btn btn-ghost" data-action="close">Close</button></div></div>`); break; }
     case 'col-share': { const c=C(Number(d.id)); if(!c) break; const a=A(c.artist)||{name:'a Star'}; const mine=S.user&&S.user.id===c.artist; openShare({title:`${c.title} by ${a.name}`,text:mine?`My new ${lowLabel(c.label)} “${c.title}” is on StarTier`:`Check out “${c.title}” by ${a.name} on StarTier`,link:SITE+'/?c='+c.id}); break; }
     case 'col-new': if(!S.mine){ toast('One moment…'); break; } S.colDraft=null; openColEdit(null); break;
     case 'col-edit': { const id=Number(d.id); if(!S.myCols){ loadMyCols().then(()=>openColEdit(id)); break; } openColEdit(id); break; }
@@ -6060,6 +6105,11 @@ document.addEventListener('click',e=>{
     case 'adm': adminMember(d.op,d.id); break;
     case 'toggle': if(S.radioOn){ radioStop(); S.radioBack=true; updateMini(); render(true); break; } { const tr=T(S.now); if(tr&&tr.real){ playReal(tr); break; } S.playing=!S.playing; updateMini(); render(true); break; }
     case 'buy': openBuy(d.kind,d.id); break;
+    case 'pay-buy': payCall('buy',{release_id:Number(d.rid)},el); break;
+    case 'pay-tip': payCall('tip',{artist_id:d.id,cents:Number(d.c)},el); break;
+    case 'pay-plan': payCall('plan',{plan:d.plan},el).then(r=>{ if(r&&r.done){ closeSheet(); toast('Your plan is updated'); afterPay(); } }); break;
+    case 'pay-portal': payCall('portal',{},el); break;
+    case 'gal-join': payCall('galaxy',{artist_id:d.id},el); break;
     case 'close': closeSheet(); break;
     case 'follow': toggleFollow(d.id); break;
     case 'legal': if(scrim.classList.contains('open')) closeSheet(); S.legal=d.doc; S.artist=null; S.tab='legal'; render(); break;
@@ -6282,12 +6332,22 @@ document.getElementById('botClose').innerHTML=I.close;
 const DEEP_C=(()=>{ try{ const x=new URLSearchParams(location.search).get('c'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
 const DEEP_PL=(()=>{ try{ const x=new URLSearchParams(location.search).get('pl'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
 (()=>{ try{ const lg=new URLSearchParams(location.search).get('legal'); if(lg&&LEGAL_DOCS[lg]){ S.tab='legal'; S.legal=lg; } }catch(_){} })();
+const PAID_BACK=(()=>{ try{ const q=new URLSearchParams(location.search), p=q.get('paid'); if(!p) return null; q.delete('paid'); q.delete('s'); history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash); return p; }catch(_){ return null; } })();
+async function afterPay(){ if(!S.authUser) return; await loadProfile(S.authUser); await loadMine(); render(true); }
+function paidWelcome(){
+  if(!PAID_BACK) return;
+  const msg={plan:'Payment done. Your plan is turning on…',galaxy:"Payment done. You're joining the Galaxy…",buy:"Payment done. It's yours to keep.",tip:'Tip sent. Thank you for supporting artists!',
+    connect:'Payouts set up. Stripe may take a minute to finish checking.','connect-retry':'Payout setup was not finished. Tap Turn on payouts to continue.',back:'Billing updated.',cancel:'Checkout cancelled. No charge was made.'}[PAID_BACK];
+  if(msg) toast(msg);
+  if(PAID_BACK==='connect'||PAID_BACK==='connect-retry'){ S.artist=null; S.tab='studio'; render(); sb.functions.invoke('stripe-pay',{body:{action:'connect_status'}}).then(afterPay).catch(()=>{}); }
+  if(['plan','galaxy','buy','back'].includes(PAID_BACK)){ setTimeout(afterPay,2500); setTimeout(afterPay,8000); }
+}
 render();
 if(sb){
   loadCatalog().then(()=>{ render(true); if(DEEP) openDeepStar(); else if(DEEP_PL){ S.deepDone=true; openPl(DEEP_PL); } else if(DEEP_C){ S.deepDone=true; openCol(DEEP_C); } else openDeepRelease(); });
   document.addEventListener('visibilitychange',()=>{ if(!document.hidden&&S.user){ pollUnread(); if(S.tab==='chat') loadChat(false); } });
   radioFetch(true).then(()=>render(true));
-  sb.auth.getSession().then(async ({data})=>{ if(data.session){ await loadProfile(data.session.user); await loadMine(); render(true); updateMini(); } });
+  sb.auth.getSession().then(async ({data})=>{ if(data.session){ await loadProfile(data.session.user); await loadMine(); render(true); updateMini(); } paidWelcome(); });
   sb.auth.onAuthStateChange((ev,session)=>{
     if(ev==='PASSWORD_RECOVERY'){ S.artist=null; S.tab='reset'; render(); }
     else if(ev==='SIGNED_IN' && session && !S.user){ loadProfile(session.user).then(loadMine).then(()=>{ render(true); updateMini(); }); }
