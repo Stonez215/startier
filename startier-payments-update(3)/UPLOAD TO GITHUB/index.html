@@ -14,6 +14,11 @@
 <meta property="og:image" content="https://startier.app/startier-og.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="apple-touch-icon" href="/startier-app-icon-512.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="StarTier">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -802,6 +807,7 @@ body.chatmode .bot-fab,body.chatmode .mini{display:none!important}
 body:has(.mini.show) .bot-fab{bottom:calc(var(--tabh) + 150px + env(safe-area-inset-bottom,0px))}
 @media (min-width:900px){body:has(.mini.show) .bot-fab{bottom:112px}}
 </style>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
 </head>
 <body>
 <div class="sky" aria-hidden="true"></div>
