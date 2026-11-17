@@ -3623,6 +3623,7 @@ async function loadMoney(){
   try{ const {data}=await sb.rpc('payable_stars'); S.payable=new Set((data||[]).map(x=>typeof x==='string'?x:(x.payable_stars||Object.values(x)[0]))); }catch(_){}
   if(!S.user){ S.money=null; return; }
   try{ const {data}=await sb.rpc('my_money'); S.money=data||null; }catch(_){ S.money=null; }
+  try{ const {data,error}=await sb.rpc('my_earnings'); S.earn=error?null:(data||null); }catch(_){ S.earn=null; }
 }
 async function payCall(action, body, btn){
   if(!sb){ toast('Payments need the live app'); return null; }
@@ -3856,7 +3857,7 @@ function viewStudio(){
   <div class="taglist" style="margin:-8px 0 16px"><span>${makesLabel(mk)}</span>${[...(S.user.genres||[]),...(S.user.cats||[]),...(S.user.artCats||[])].map(x=>`<span>${esc(x)}</span>`).join('')}</div>
   ${statsCard()}
   ${qrCard()}
-  <div class="earn"><div><div class="s">Sales and tips, last 30 days</div><div class="big">${sb?money(((S.money&&S.money.sales_30)||0)/100):'$412.60'}</div><div class="s">${sb?(S.money&&S.money.payouts_ready?`${(S.money.sales_count_30||0)} sale${S.money.sales_count_30===1?'':'s'} and tips${S.money.galaxy_paid?` · ${S.money.galaxy_paid} paid Galaxy member${S.money.galaxy_paid===1?'':'s'}`:''}. Payouts go to your bank automatically.`:'Turn on payouts so fans can buy, tip and join your Galaxy.'):'From 226 sales and 14 tips'}</div></div>
+  <div class="earn"><div><div class="s">Sales and tips, last 30 days</div><div class="big">${sb?money(((S.money&&S.money.sales_30)||0)/100):'$412.60'}</div><div class="s">${sb?(S.money&&S.money.payouts_ready?`${(S.money.sales_count_30||0)} sale${S.money.sales_count_30===1?'':'s'} and tips${S.money.galaxy_paid?` · ${S.money.galaxy_paid} paid Galaxy member${S.money.galaxy_paid===1?'':'s'}`:''}. Stripe pays your bank on the 1st of each month.${S.earn&&S.earn.allaccess_cents?` · All-Access stream share so far: ${money(S.earn.allaccess_cents/100)}`:''}${S.earn&&S.earn.pending_cents?` · Waiting to be sent: ${money(S.earn.pending_cents/100)}`:''}`:'Turn on payouts so fans can buy, tip and join your Galaxy.'):'From 226 sales and 14 tips'}</div></div>
     <button class="btn ${sb&&S.money&&S.money.payouts_ready?'btn-ghost':'btn-gold'} btn-sm" data-action="cashout">${sb&&S.money&&S.money.payouts_ready?'Payouts dashboard':sb&&S.money&&S.money.payouts_started?'Finish payout setup':'Turn on payouts'}</button></div>
   ${S.user.nova
     ? `<div class="fee-note" style="margin:0 22px 18px;max-width:640px"><b>Supernova is on.</b> Your Shorts are in the Shooting Stars top 10, your page is in the Supernova Spotlight, and you have unlimited uploads, stats and Constellations.</div>`
@@ -3896,13 +3897,13 @@ function viewStudio(){
     ${S.gal[S.user.id]?`<label class="agree"><input type="checkbox" id="upGalaxy"><span><b>Galaxy only.</b> Only your Galaxy members get the full version. Everyone else gets a 30-second preview.</span></label>`:''}
     <div class="field"><b class="ce-title">Collaborators (optional)</b>${collabEditor('up','Tag other Stars who worked on this, like "feat." or "prod. by". You can also split your 85% with them. Each person has to accept before their name or split goes live.')}</div>
     <div class="prog-wrap" id="upProg" hidden><div class="progress"><i></i></div><span></span></div>
-    <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. Songs you upload may be played on StarTier Radio and featured in Star Light. Paid items sell once you turn on payouts in your Studio; until then, they show as not for sale yet and free ones work right away.</p>
+    <p class="small" style="margin:0;color:var(--dust);font-size:13px">Only upload work you made or have the rights to share. Paid songs get a free 30-second preview automatically. For paid or Galaxy-only videos, add a short preview clip (30 seconds or less) with Add preview under Your releases, so fans can sample it. Songs you upload may be played on StarTier Radio and featured in Star Light. Paid items sell once you turn on payouts in your Studio; until then, they show as not for sale yet and free ones work right away.</p>
     <button class="btn btn-gold full" data-action="publish">Publish</button>
   </div>
   ${colStudio()}
   <section class="section"><div class="section-head"><h2>Your releases</h2></div>${mine.length?'':'<div class="empty"><b>No releases yet</b>Upload your first song or video above.</div>'}
-    <div class="tracks">${mine.map((r,i)=>`<div class="trow" style="grid-template-columns:auto 52px minmax(0,1fr) auto">${'<span class="n">'+(i+1)+'</span>'}${art(covKey(r),r.title[0])}<div class="meta"><div class="t">${esc(r.title)}</div><div class="s">${r.kind==='song'?'Song':r.kind==='download'?esc(r.category||'Download'):(r.form==='short'?'Short video':'Video')} · ${r.price_cents?money(r.price_cents/100):'Free'} · <span class="pill ${r.status==='hidden'?'hid':''}">${r.status==='hidden'?'Hidden':'Live'}</span></div></div>
-      <div class="rel-actions"><button data-action="rel-collab" data-id="${r.id}">Collabs</button><button data-action="rel" data-op="${r.status==='hidden'?'show':'hide'}" data-id="${r.id}">${r.status==='hidden'?'Show':'Hide'}</button><button class="danger" data-action="rel" data-op="delete" data-id="${r.id}">Delete</button></div></div>`).join('')}</div></section>`;
+    <div class="tracks">${mine.map((r,i)=>`<div class="trow" style="grid-template-columns:auto 52px minmax(0,1fr) auto">${'<span class="n">'+(i+1)+'</span>'}${art(covKey(r),r.title[0])}<div class="meta"><div class="t">${esc(r.title)}</div><div class="s">${r.kind==='song'?'Song':r.kind==='download'?esc(r.category||'Download'):(r.form==='short'?'Short video':'Video')} · ${r.price_cents?money(r.price_cents/100):'Free'} · <span class="pill ${r.status==='hidden'?'hid':''}">${r.status==='hidden'?'Hidden':'Live'}</span>${needsPreview(r)&&!r.preview_bunny_id?' <span class="pill hid">No preview</span>':''}</div></div>
+      <div class="rel-actions">${needsPreview(r)?`<button data-action="rel-preview" data-id="${r.id}">${r.preview_bunny_id?'Change preview':'Add preview'}</button>`:''}<button data-action="rel-collab" data-id="${r.id}">Collabs</button><button data-action="rel" data-op="${r.status==='hidden'?'show':'hide'}" data-id="${r.id}">${r.status==='hidden'?'Show':'Hide'}</button><button class="danger" data-action="rel" data-op="delete" data-id="${r.id}">Delete</button></div></div>`).join('')}</div></section>`;
 }
 
 function viewArtist(){
@@ -4038,7 +4039,7 @@ const FAQ = [
  {g:'For Stars', q:'Can I sell an album, a series or an art collection?', a:'Yes. In your Studio, under Albums, series and collections, tap New. Pick Album, EP or Mixtape for songs, Series or Season for videos, or Collection for art. Add your uploads in order, set one price for the whole thing (or make it free), and publish. Each song, video or piece still has its own price too.', k:'album ep mixtape series season collection bundle sell set together'},
  {g:'For Stars', q:'What is a Galaxy?', a:'A Galaxy is your fan club. Every Galaxy is $1.50 a month. Members get everything you make, in full, plus the perks you pick from a menu: members-only posts, early drops, livestreams, discounts and more. You can also mark songs, videos and posts as Galaxy only. Fans join with a card once your payouts are on; before that, they can save a spot so you can see who is ready. You can also gift free memberships from your Studio.', k:'galaxy fan club members exclusive subscription patreon'},
  {g:'For Supporters', q:'What is a Constellation?', a:'A Constellation is a playlist. All-Access members and Star Pro or Supernova artists can make them from any song on StarTier. Make one public and it shows on your profile.', k:'constellation playlist queue list songs'},
- {g:'For Stars', q:'How do I get paid?', a:'Open your Studio and tap Turn on payouts. You connect your bank account securely through Stripe (it takes a few minutes), and your sales, tips and Galaxy money are sent to your bank automatically. Until payouts are on, your paid items show as not for sale yet, and free items work right away.', k:'paid payout payment bank cash out withdraw stripe tip'},
+ {g:'For Stars', q:'How do I get paid?', a:'Open your Studio and tap Turn on payouts. You connect your bank account securely through Stripe (it takes a few minutes), and your sales, tips, Galaxy money and All-Access stream share go to your Stripe account, and Stripe pays your bank once a month, on the 1st. New Stars wait 7 extra days on their first payouts. Until payouts are on, your paid items show as not for sale yet, and free items work right away.', k:'paid payout payment bank cash out withdraw stripe tip'},
  {g:'For Stars', q:'What can I upload?', a:'Songs (MP3, WAV, M4A or FLAC), videos (MP4 or MOV), and art and downloads: paintings, photos, digital art, e-books, PDFs, coloring books, sample packs and more (images, PDF or ZIP, up to 50 MB). Open your Studio and use Upload a release. Only upload work you made or have the rights to share.', k:'upload music video file format mp3 wav mp4 mov art photo painting pdf zip download'},
  {g:'For Stars', q:'I paint, take photos, or make designs. Can I sell on StarTier?', a:'Yes. Sign up as a Star and pick Art, or add art from any Star account. In your Studio, choose "Art or download", upload the full file, and set a price or make it free. We make a smaller preview for your page automatically, with a watermark if it is paid. Buyers get the full file.', k:'art painter painting photographer photo photography design artwork sell prints download digital'},
  {g:'For Stars', q:'Will my music be played on StarTier Radio?', a:'It can be. StarTier Radio is our free live station, and the StarTier team picks songs from what Stars upload. Artists on the radio also get featured in Star Light, our artist promo spot. Radio plays are free promotion and are not paid per play. If you do not want a song on the radio, send us a message and we will take it off.', k:'radio station play my song star light spotlight promo featured airplay'},
@@ -4060,7 +4061,7 @@ const FAQ = [
  {g:'For Supporters', q:'Can I get a refund?', a:'If something went wrong with a purchase, like a file that will not play or a charge you did not mean to make, send the team a message with what you bought and what happened. We look at every request.', k:'refund money back accident mistake charge wrong purchase'},
  {g:'Your account', q:'I forgot my password', a:'Go to Log in, type your email, and tap "Forgot your password?". We will email you a link to set a new one.', k:'forgot password reset change login cant log in'},
  {g:'Your account', q:'I did not get the confirmation email', a:'Check your spam or promotions folder and give it a few minutes. If it still has not arrived, send us a message below and we will help.', k:'email confirm confirmation not received didnt get verify link spam'},
- {g:'Your account', q:'How do I change my email or delete my account?', a:'Send us a message using the contact form below, from the email on your account, and we will take care of it.', k:'delete account change email close remove'},
+ {g:'Your account', q:'How do I change my email or delete my account?', a:'To delete your account, open your account (the circle with your initials, top right) and tap Delete my account at the bottom. It cancels your paid plans right away. To change your email, send us a message using the contact form below, from the email on your account.', k:'delete account change email close remove'},
  {g:'Safety', q:'Someone uploaded my work without permission', a:'We take copyright seriously. Send us a message with the link to the content and proof that the work is yours, and we will review it and take it down if it belongs to you.', k:'copyright stolen my work permission dmca takedown report'},
  {g:'Safety', q:'How do I report something inappropriate?', a:'Send us a message with a link to it and what is wrong. We review every report.', k:'report inappropriate abuse offensive spam harassment'}
 ];
@@ -4184,7 +4185,7 @@ function releaseToItem(r){
     fileName:String(r.file_name||'').slice(0,120), size:r.file_size||0 });
   return Object.assign(base,{ form:r.form||'long', cat:r.category||'Other', kind:r.category||'Video', len:r.duration_sec?mmss(r.duration_sec):'', desc:r.description||'', vw:r.video_w||0, vh:r.video_h||0 });
 }
-const REL_COLS='id,artist_id,kind,form,title,description,genre,category,price_cents,duration_sec,cover_path,audio_path,preview_path,file_path,file_name,file_size,galaxy_only,video_w,video_h,status,created_at';
+const REL_COLS='id,artist_id,kind,form,title,description,genre,category,price_cents,duration_sec,cover_path,audio_path,preview_path,preview_bunny_id,file_path,file_name,file_size,galaxy_only,video_w,video_h,status,created_at';
 function addRelease(r,list){ const o=releaseToItem(r); (r.kind==='song'?list.t:r.kind==='download'?list.d:list.v).push(o); return o; }
 async function loadCatalog(){
   if(!sb) return;
@@ -4261,7 +4262,7 @@ function openRealVideo(v){
     let {data:vid}=await sb.rpc('video_to_play',{p_release_id:v.rid}); let preview=false;
     if(!vid){ const r2=await sb.rpc('video_preview',{p_release_id:v.rid}); vid=r2.data; preview=!!vid; }
     if(!document.getElementById('player')) return;
-    if(!vid){ if(msg()) msg().innerHTML=`This video is getting ready<small>Try again in a few minutes.</small>`; return; }
+    if(!vid){ const m=msg(); if(m){ m.className='lockmsg pv-end'; m.innerHTML=previewEndHtml(v,true); } return; }
     const res=await videoCall({action:'play',video_id:vid});
     const pl=document.getElementById('player'); if(!pl) return;
     if(res.status!==200||!res.url||!/^https:\/\/player\.mediadelivery\.net\//.test(res.url)){ if(msg()) msg().innerHTML=`Video can't play right now<small>Try again in a moment.</small>`; return; }
@@ -4403,12 +4404,36 @@ async function publishRelease(btn){
     r=await sb.from('releases').insert(row).select('id').single(); if(r.error) throw r.error;
     if((S.ce.up||[]).length&&r.data&&r.data.id){ setProg(99,'Tagging your collaborators…'); if(await saveCollabs(r.data.id,'up',null)) S.ce.up=[]; }
     setProg(100,'Published!');
-    toast(`Published “${title}”${isSong||isDl?'':'. Bunny takes a few minutes to get it ready to play.'}`);
+    toast(`Published “${title}”${isSong||isDl?'':(row.form!=='short'&&(price>0||galaxyOnly)?'. Now add a preview clip under Your releases so fans can sample it.':'. Bunny takes a few minutes to get it ready to play.')}`);
     S.up={}; await refreshAll(); setTimeout(()=>setProg(null),1500);
   }catch(err){
     for(const [b,pth] of done) sb.storage.from(b).remove([pth]).catch(()=>{});
     setProg(null); toast(upErr(err));
   }finally{ btn.disabled=false; window.onbeforeunload=null; }
+}
+const needsPreview=r=>r.kind==='video'&&r.form!=='short'&&(r.price_cents>0||r.galaxy_only);
+function pickPreview(id){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='video/*';
+  inp.onchange=()=>{ const f=inp.files&&inp.files[0]; if(f) uploadPreview(id,f); }; inp.click();
+}
+async function uploadPreview(id,file){
+  const r=(S.mine||[]).find(x=>x.id===id); if(!r) return;
+  if(!/^video\//.test(file.type||'')){ toast('Pick a video file for the preview'); return; }
+  if(file.size>300*MB){ toast('Keep the preview clip under 300 MB'); return; }
+  const sec=await readDuration(file,true);
+  if(sec>35){ toast('Keep the preview to 30 seconds or less'); return; }
+  const title=`Preview: ${r.title}`.slice(0,120);
+  setProg(1,'Uploading your preview…');
+  try{
+    const c=await videoCall({action:'upload',title});
+    if(c.status!==200||!c.signature) throw new Error(c.error||'Video upload is not set up yet');
+    await tusSend(file,{endpoint:'https://video.bunnycdn.com/tusupload',
+      headers:{AuthorizationSignature:c.signature,AuthorizationExpire:String(c.expirationTime),VideoId:c.videoId,LibraryId:String(c.libraryId)},
+      metadata:{filetype:file.type,title}},p=>setProg(2+p*0.95,`Uploading your preview… ${Math.round(p)}%`));
+    const {error}=await sb.rpc('set_video_preview',{p_release:id,p_bunny:c.videoId}); if(error) throw error;
+    setProg(100,'Preview added!'); setTimeout(()=>setProg(null),1500);
+    toast('Preview added. Bunny takes a few minutes to get it ready.'); await refreshAll();
+  }catch(err){ setProg(null); toast(upErr(err)); }
 }
 async function relAction(action,id){
   const r=(S.mine||[]).find(x=>x.id===id); if(!r) return;
@@ -4428,7 +4453,7 @@ async function relAction(action,id){
   }
 }
 
-const LEGAL = { name:'StarTier', site:'startier.kingjordanapps.com', email:'support@kingjordanapps.com', updated:'October 22, 2026', state:'Florida', county:'Broward County', company:'King Jordan Media LLC' };
+const LEGAL = { name:'StarTier', site:'startier.kingjordanapps.com', email:'support@kingjordanapps.com', updated:'November 17, 2026', state:'Florida', county:'Broward County', company:'King Jordan Media LLC' };
 const LEGAL_DOCS = {
 terms: { title:'Terms of Service', body:[
 ['Welcome to StarTier', `These Terms are an agreement between you and ${LEGAL.company}, a Florida company that runs StarTier ("StarTier", "we", "us"). By creating an account or using StarTier at ${LEGAL.site}, you agree to these Terms, our Privacy Policy, our Community Guidelines and our Copyright Policy. If you don't agree, please don't use StarTier.`],
@@ -4440,7 +4465,9 @@ terms: { title:'Terms of Service', body:[
 ['You need the rights to what you upload', `Only upload work you created or have permission to share. That includes the beats, samples, lyrics, footage and images in it. You're responsible for getting any licenses, clearances and permissions, and for paying anyone you owe, like producers, featured artists or collaborators.`],
 ['Collabs and splits', `Stars can tag other Stars on a release or post, and can split their share of the money from a release with collaborators. A tag only shows after the tagged Star accepts. A split only takes effect after every person in it agrees, and it can only be changed if everyone in the new split, and everyone in the old one, agrees again. When payments are on, StarTier pays each person their share of the artist's part of a sale, based on the split that was active at the time of the sale. Splits are an agreement between the collaborators. StarTier isn't a party to it and doesn't settle disagreements between collaborators, but we may pause payouts on a release while a dispute is reported to us.`],
 ['Sales, prices and our fee', `Stars set their own prices, including free. When you buy a download, you get a personal license to keep and enjoy it, not ownership of the artwork or the right to resell or reprint it, unless the Star says otherwise. StarTier keeps 15% of each sale and tip (10% on Star Pro, 8% on Supernova), and the Star gets the rest, minus any tax amounts the law requires. Buyers pay a small service fee on each purchase and tip that covers card processing, so it doesn't come out of the Star's share. Payments and payouts will be handled by our payment partner (Stripe), and you may need to agree to their terms. Digital purchases are generally final, but if something goes wrong with a purchase, contact us and we'll review it. Prices and fees may change, and we'll tell you before changes affect you.`],
-['Galaxies', `A Galaxy is a Star's paid fan club. Members pay $1.50 a month and, for as long as they stay members, get that Star's work in full plus the perks the Star offers. StarTier keeps the same share it keeps on that Star's sales (15%, 10% on Star Pro, 8% on Supernova). Stars decide what goes in their Galaxy and can gift free memberships.`],
+['Galaxies', `A Galaxy is a Star's paid fan club. Members pay $1.50 a month and, for as long as they stay members, get that Star's work in full plus the perks the Star offers. Of each $1.50, the Star gets $0.80. The rest covers card processing and StarTier. Stars decide what goes in their Galaxy and can gift free memberships.`],
+['All-Access stream share', `All-Access members pay $6.99 a month to stream every song and video in full. Each month, StarTier shares 85% of All-Access money (after card processing fees) among Stars, based on how much All-Access members streamed their songs and videos that month. Each member counts once per song or video per day, and Stars' own plays don't count. A Star's share is split with collaborators the same way as their sales. All-Access shares are paid once a Star's total reaches $5; until then they carry over to the next month. We may hold or remove shares that come from fake or automated streams.`],
+['Getting paid', `Stars get paid through Stripe once they turn on payouts in their Studio. Money from sales, tips, Galaxies and All-Access goes to the Star's Stripe account, and Stripe sends it to their bank once a month, on the 1st. For a new Star's first 60 days, money waits 7 extra days before it can be paid out, to protect against fraud. If a buyer gets a refund or disputes a charge, the Star's share of that charge is taken back. We may pause payouts while we look into fraud, a dispute, or a report that content isn't the Star's. You must be 18 or older to receive payouts, and Stripe may ask for tax information.`],
 ['Paid plans', `Star Pro, Supernova, All-Access and Galaxies are monthly plans that renew automatically until you cancel. When they're switched on, you can cancel anytime, and you keep the plan until the end of the period you paid for. Plan perks may change over time.`],
 ['Merch and outside links', `Stars can link to their own merch stores. Those stores are run by the Star or by other companies, not StarTier. Any purchase you make there is between you and that store, including shipping, returns and refunds. We aren't responsible for outside websites.`],
 ['Rules', `Follow our Community Guidelines. Don't break the law, steal other people's work, harass people, spam, scrape or copy StarTier, try to get around locks on paid content, upload viruses, or interfere with how StarTier works.`],
@@ -4458,8 +4485,8 @@ privacy: { title:'Privacy Policy', body:[
 ['What other people can see', `Your name, profile picture, bio, social links, and follower and following counts are public on your profile page. A Star's releases, posts and city are also public. Your display name shows next to your comments. Private messages can only be seen by you and the person you're talking with (and by us if a message is reported or we need to review it for safety or legal reasons). Your email, password, saves, blocks and reports are private.`],
 ['Companies that help us', `We use trusted providers to run StarTier: Supabase (accounts, database and file storage), Google (if you choose to sign in with Google), Hetzner (our server), Cloudflare (domain and security), Bunny.net (video hosting and streaming), Resend (sending emails), Anthropic (the AI that powers our help chat, which receives your chat messages to answer them), and, when payments launch, Stripe (payments and payouts). They can only use your information to provide their services to us.`],
 ['When we share information', `We share information only with the providers above, when the law requires it, to protect people's safety or StarTier's rights, or as part of a business sale or merger (and we'd tell you).`],
-['How long we keep it', `We keep your information while your account is open. When you delete your account, we delete or anonymize your personal information within a reasonable time, except what we must keep for legal, tax, safety or fraud reasons.`],
-['Your choices and rights', `You can update your profile, delete your releases and posts, and block people at any time. To get a copy of your information, fix it, or delete your account, email ${LEGAL.email}. Depending on where you live, you may have more rights under your local law, and we'll honor them.`],
+['How long we keep it', `We keep your information while your account is open. When you delete your account, we delete your personal information right away, or within 30 days for Stars who have sales or payouts, except what we must keep for legal, tax, safety or fraud reasons.`],
+['Your choices and rights', `You can update your profile, delete your releases and posts, and block people at any time. You can delete your account yourself in the app: open your account and tap Delete my account, or go to ${LEGAL.site}/delete-account. Paid plans are cancelled right away. To get a copy of your information or fix it, email ${LEGAL.email}. Depending on where you live, you may have more rights under your local law, and we'll honor them.`],
 ['Kids', `StarTier is not for children under 13. If we learn we've collected information from a child under 13, we'll delete it. If you believe that's happened, contact us.`],
 ['Security', `We use encryption, secure logins and access rules to protect your information, but no system is perfectly secure.`],
 ['Changes and contact', `We'll update this policy as StarTier grows and tell you about important changes. Questions? Email ${LEGAL.email}.`]
@@ -4467,6 +4494,7 @@ privacy: { title:'Privacy Policy', body:[
 copyright: { title:'Copyright Policy', body:[
 ['We respect artists\' rights', `StarTier is built for artists, so we take copyright seriously. Only upload work you own or have permission to share.`],
 ['Report stolen work', `If you believe something on StarTier uses your work without permission, tap Report on it and choose "Stolen work or copyright," or send a notice to ${LEGAL.email} with: your name and contact information; a description of your work; a link to the content on StarTier; a statement that you believe in good faith the use isn't authorized by you, your agent or the law; a statement that the information is accurate and, under penalty of perjury, that you are the owner or authorized to act for the owner; and your physical or electronic signature.`],
+['Our copyright agent', `Send copyright notices and counter-notices to our designated agent: King Jordan Media LLC, Attn: Copyright Agent, 8540 NW 3rd St, Pembroke Pines, FL 33024. Email: ${LEGAL.email}.`],
 ['What happens next', `We'll review the notice, remove or disable the content if it's valid, and let the uploader know.`],
 ['If your content was removed by mistake', `You can send a counter-notice to ${LEGAL.email} with your name and contact information; the content that was removed and where it was; a statement under penalty of perjury that you believe it was removed by mistake; your consent to the jurisdiction of the federal court for your area; and your signature. We may restore the content unless the person who complained tells us they've filed a court action.`],
 ['Repeat infringers', `We close the accounts of people who repeatedly upload work that isn't theirs.`],
@@ -5118,7 +5146,33 @@ function openAccount(){
     ${u.role==='star'?`<button class="btn btn-ghost" data-action="tab" data-tab="studio">Your studio</button><button class="btn btn-ghost" data-action="mypage">View my page</button>`:`<button class="btn btn-ghost" data-action="person" data-id="${u.id}">View my page</button><button class="btn btn-ghost" data-action="tab" data-tab="become-star">I'm an artist too</button>`}</div>
     ${S.blocked.size?`<h3 style="margin:14px 0 8px;font-size:16px">Blocked</h3><div class="blist" style="margin-bottom:12px">${[...S.blocked].map(id=>`<div><span>${esc(nameOf(id))}</span><button class="btn btn-ghost btn-sm" data-action="unblock" data-id="${id}">Unblock</button></div>`).join('')}</div>`:''}
     <button class="btn btn-ghost full" data-action="signout">Sign out</button>
+    <p class="small" style="text-align:center;margin-top:14px"><button class="link" data-action="delete-account" style="color:#ffb3b3">Delete my account</button></p>
   </div>`);
+}
+function openDeleteAccount(){
+  if(!S.user){ S.goDelete=true; S.artist=null; S.tab='login'; render(); toast('Log in first, then you can delete your account.'); return; }
+  const star=S.user.role==='star';
+  openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>Delete your account</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
+    <p>This deletes your StarTier account and cancels any paid plans and Galaxies right away. You won't be charged again.</p>
+    <p>${star?'Your page, songs, videos, art and posts are removed. If you have sold anything or set up payouts, we finish deleting within 30 days, so we can pay you what you are owed and fans keep what they bought.':'Your profile, playlists, saves, follows and messages are removed. Things you bought are removed from your Library.'}</p>
+    <p class="small" style="color:var(--dust)">We keep sales and tax records the law requires. This can't be undone.</p>
+    <label class="field">Type DELETE to confirm<input id="delConfirm" autocomplete="off" autocapitalize="characters"></label>
+    <button class="btn btn-gold full" data-action="delete-confirm" style="background:#b4413c;border-color:#b4413c;color:#fff">Delete my account</button>
+  </div>`);
+}
+async function deleteAccount(){
+  const v=(document.getElementById('delConfirm')||{}).value||'';
+  if(v.trim().toUpperCase()!=='DELETE'){ toast('Type DELETE to confirm'); return; }
+  const b=document.querySelector('[data-action="delete-confirm"]'); if(b){ b.disabled=true; b.textContent='Deleting…'; }
+  try{
+    const {data,error}=await sb.functions.invoke('delete-account',{body:{confirm:'DELETE'}});
+    if(error){ let m=''; try{ m=(await error.context.json()).error; }catch(_){} throw new Error(m||"Couldn't delete your account. Try again."); }
+    closeSheet();
+    if(data&&data.queued){ toast('Got it. Your account is closed and will be fully deleted within 30 days.'); }
+    else toast('Your account has been deleted.');
+    await sb.auth.signOut().catch(()=>{}); location.href=location.pathname;
+  }catch(err){ toast(err.message||"Couldn't delete your account."); if(b){ b.disabled=false; b.textContent='Delete my account'; } }
 }
 
 /* ---------- Google sign-in ---------- */
@@ -5327,10 +5381,10 @@ function viewInbox(){
 const ageOf = d => { const b=new Date(d+'T00:00:00'); if(isNaN(b)) return null; const n=new Date(); let a=n.getFullYear()-b.getFullYear(); if(n.getMonth()<b.getMonth()||(n.getMonth()===b.getMonth()&&n.getDate()<b.getDate())) a--; return a; };
 function dobProblem(d){ if(!d) return 'Add your date of birth'; const a=ageOf(d); if(a===null||a>120) return 'Check your date of birth'; if(a<13) return 'You need to be 13 or older to join StarTier'; return ''; }
 async function saveBirthdate(d){ const {error}=await sb.rpc('set_birthdate',{p_birthdate:d}); if(error){ toast(error.message&&error.message.length<90?error.message:"Couldn't save that"); return false; } S.user.birthdate=d; return true; }
-function askBirthdate(then){
+function askBirthdate(then,why){
   openSheet(`<div class="sheet-body checkout" style="padding-top:22px">
     <div style="display:flex;justify-content:space-between;align-items:flex-start"><h2>One quick thing</h2><button class="icon-btn" data-action="close" aria-label="Close">${I.close}</button></div>
-    <p>Before you send messages, add your date of birth. It keeps younger members safe and is never shown on your page.</p>
+    <p>${why||'Before you send messages, add your date of birth.'} It keeps younger members safe and is never shown on your page.</p>
     <form class="form" id="dobForm" novalidate style="padding:0;margin:0"><label class="field">Date of birth<input name="dob" type="date" autocomplete="bday" max="${new Date().toISOString().slice(0,10)}"></label>
     <button class="btn btn-gold full" type="submit">Save</button></form></div>`);
   S.afterDob=then;
@@ -5566,10 +5620,10 @@ function limitFrame(f,limit,end){
   PV.set(f,{limit,end});
   f.addEventListener('load',()=>{ pvPost(f,'addEventListener','timeupdate'); setTimeout(()=>{ if(PV.has(f)&&f.isConnected){ PV.delete(f); end(); } },(limit+20)*1000); },{once:true});
 }
-function previewEndHtml(v){
-  const a=A(v.artist)||{name:'this Star'};
-  return v.galaxy?`<div class="vmsg">That was the 30-second preview<small>The full video is for ${esc(a.name)}'s Galaxy.</small><div class="row-btns"><button class="btn btn-gold btn-sm" data-action="artist" data-id="${v.artist}">See the Galaxy</button></div></div>`
-    :`<div class="vmsg">That was the 30-second preview<small>Watch it all with All-Access, ${money(PASS_PRICE)}/mo${v.price?`, or buy it for ${money(v.price)}`:''}.</small><div class="row-btns"><button class="btn btn-gold btn-sm" data-action="upgrade">Get All-Access</button>${v.price?`<button class="btn btn-ghost btn-sm" data-action="buy" data-kind="video" data-id="${v.id}">Buy</button>`:''}</div></div>`;
+function previewEndHtml(v,none){
+  const a=A(v.artist)||{name:'this Star'}, head=none?'No preview for this one yet':'That was the 30-second preview';
+  return v.galaxy?`<div class="vmsg">${head}<small>The full video is for ${esc(a.name)}'s Galaxy.</small><div class="row-btns"><button class="btn btn-gold btn-sm" data-action="artist" data-id="${v.artist}">See the Galaxy</button></div></div>`
+    :`<div class="vmsg">${head}<small>Watch it all with All-Access, ${money(PASS_PRICE)}/mo${v.price?`, or buy it for ${money(v.price)}`:''}.</small><div class="row-btns"><button class="btn btn-gold btn-sm" data-action="upgrade">Get All-Access</button>${v.price?`<button class="btn btn-ghost btn-sm" data-action="buy" data-kind="video" data-id="${v.id}">Buy</button>`:''}</div></div>`;
 }
 
 /* ---------- Galaxies (fan clubs) ---------- */
@@ -6095,6 +6149,9 @@ document.addEventListener('click',e=>{
     case 'ce-del': { const l=S.ce[d.ctx]||[]; l.splice(+d.i,1); ceRefresh(d.ctx); break; }
     case 'ce-save': { if(!S.ceEdit) break; el.disabled=true; saveCollabs(S.ceEdit.id,'edit',S.ceEdit.prev).then(ok=>{ el.disabled=false; if(ok){ closeSheet(); toast('Saved. Your collaborators will see a request.'); refreshAll(); } }); break; }
     case 'rel-collab': openCollabEdit(Number(d.id)); break;
+    case 'rel-preview': pickPreview(Number(d.id)); break;
+    case 'delete-account': openDeleteAccount(); break;
+    case 'delete-confirm': deleteAccount(); break;
     case 'req': answerReq(d.type,Number(d.id),d.ok==='1'); break;
     case 'drawer': S.drawer=!S.drawer; feedPatch(); break;
     case 'feed-sound': { S.feedSound=!S.feedSound; feedPatch(); const i=FV.active; const hd=feedHolder(i); if(hd&&hd.querySelector('iframe')){ hd.innerHTML=''; feedActivate(i); } break; }
@@ -6179,6 +6236,8 @@ async function loadProfile(user){
     artCats:(p&&p.art_categories)||[], bio:(p&&p.bio)||'', socials:(p&&p.socials)||{}, dm:(p&&p.dm_policy)||null, avatarPath:(p&&p.avatar_path)||null, av:avUrl(p&&p.avatar_path),
     setup:p?p.setup_done!==false:true, banned:!!(p&&p.banned), comped:!!(p&&p.comped_by), birthdate:null };
   try{ const bd=await sb.from('member_birthdates').select('birthdate').eq('user_id',user.id).maybeSingle(); S.dobReady=!bd.error; if(bd.data) S.user.birthdate=bd.data.birthdate; }catch(_){ S.dobReady=false; }
+  if(S.goDelete){ S.goDelete=false; setTimeout(openDeleteAccount,400); }
+  else if(S.dobReady&&!S.user.birthdate&&S.user.setup&&!S.user.banned&&!S.dobAsked){ S.dobAsked=true; setTimeout(()=>{ if(S.user&&!S.user.birthdate&&!document.querySelector('.sheet.open, #scrim.open')) askBirthdate(null,'Please add your date of birth.'); },1500); }
 }
 document.addEventListener('change',e=>{
   if(e.target.id==='upCover'){ const f=e.target.files[0]; if(!f) return; S.up=S.up||{}; S.up.cover=f; const c=document.getElementById('dropC');
@@ -6337,6 +6396,7 @@ scrim.addEventListener('click',e=>{ if(e.target===scrim) closeSheet(); });
 document.getElementById('botClose').innerHTML=I.close;
 const DEEP_C=(()=>{ try{ const x=new URLSearchParams(location.search).get('c'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
 const DEEP_PL=(()=>{ try{ const x=new URLSearchParams(location.search).get('pl'); return x&&/^\d{1,12}$/.test(x)?Number(x):null; }catch(_){ return null; } })();
+(()=>{ try{ if(new URLSearchParams(location.search).get('go')==='delete'){ S.goDelete=true; S.tab='login'; } }catch(_){} })();
 (()=>{ try{ const lg=new URLSearchParams(location.search).get('legal'); if(lg&&LEGAL_DOCS[lg]){ S.tab='legal'; S.legal=lg; } }catch(_){} })();
 const PAID_BACK=(()=>{ try{ const q=new URLSearchParams(location.search), p=q.get('paid'); if(!p) return null; q.delete('paid'); q.delete('s'); history.replaceState(null,'',location.pathname+(q.toString()?'?'+q:'')+location.hash); return p; }catch(_){ return null; } })();
 async function afterPay(){ if(!S.authUser) return; await loadProfile(S.authUser); await loadMine(); render(true); }
