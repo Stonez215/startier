@@ -5,10 +5,14 @@ KEY_ID, ISSUER, P8 = os.environ["ASC_KEY_ID"], os.environ["ASC_ISSUER_ID"], os.e
 BUNDLE, PRIVACY = "app.startier", "https://startier.app/?legal=privacy"
 B = "https://api.appstoreconnect.apple.com"
 def tok():
-    now = int(time.time())
-    return jwt.encode({"iss": ISSUER, "iat": now, "exp": now + 900, "aud": "appstoreconnect-v1"}, P8, algorithm="ES256", headers={"kid": KEY_ID, "typ": "JWT"})
+    now = int(time.time()) - 60
+    return jwt.encode({"iss": ISSUER, "iat": now, "exp": now + 1000, "aud": "appstoreconnect-v1"}, P8, algorithm="ES256", headers={"kid": KEY_ID, "typ": "JWT"})
+TOKEN = tok()
 def call(m, path, body=None):
-    r = requests.request(m, B + path, headers={"Authorization": "Bearer " + tok(), "Content-Type": "application/json"}, data=json.dumps(body) if body else None)
+    for attempt in range(6):
+        r = requests.request(m, B + path, headers={"Authorization": "Bearer " + TOKEN, "Content-Type": "application/json"}, data=json.dumps(body) if body else None)
+        if r.status_code != 401: break
+        print(m, path.split("?")[0], "401, retrying"); time.sleep(5 * (attempt + 1))
     print(m, path.split("?")[0], r.status_code)
     if r.status_code >= 400: print(r.text[:1500])
     return r
