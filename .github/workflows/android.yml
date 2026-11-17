@@ -1,0 +1,51 @@
+# Builds the StarTier Android app on GitHub (no Android Studio needed).
+# - Every push that changes mobile/: a test build.
+# - "Run workflow" on the Actions tab (with the secrets set): a signed .aab to upload to Google Play.
+#   Download it from the run's "Artifacts" section at the bottom of the run page.
+# Secrets: ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD
+name: Android app
+on:
+  workflow_dispatch:
+  push:
+    paths: ['mobile/**', '.github/workflows/android.yml']
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: mobile
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npx cap sync android
+      - name: Test build
+        if: github.event_name != 'workflow_dispatch'
+        working-directory: mobile/android
+        run: ./gradlew assembleDebug --no-daemon
+      - name: Signed release build
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: mobile/android
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          VERSION_CODE: ${{ github.run_number }}
+        run: |
+          if [ -z "$ANDROID_KEYSTORE_BASE64" ]; then echo "Add the Android signing secrets first."; exit 1; fi
+          echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/upload.jks"
+          export ANDROID_KEYSTORE_PATH="$RUNNER_TEMP/upload.jks"
+          ./gradlew bundleRelease --no-daemon
+      - uses: actions/upload-artifact@v4
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          name: startier-android-${{ github.run_number }}
+          path: mobile/android/app/build/outputs/bundle/release/*.aab

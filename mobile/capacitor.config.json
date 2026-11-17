@@ -1,0 +1,42 @@
+{
+  "appId": "app.startier",
+  "appName": "StarTier",
+  "webDir": "www",
+  "backgroundColor": "#0B0B0B",
+  "server": {
+    "url": "https://startier.app",
+    "cleartext": false,
+    "errorPath": "offline.html",
+    "allowNavigation": [
+      "startier.app",
+      "*.startier.app",
+      "startier.kingjordanapps.com",
+      "wdrdfwfbnzvqodnmdvnv.supabase.co",
+      "player.mediadelivery.net",
+      "*.b-cdn.net",
+      "n8n.kingjordanapps.com"
+    ]
+  },
+  "ios": {
+    "contentInset": "never",
+    "scheme": "StarTier",
+    "backgroundColor": "#0B0B0B",
+    "limitsNavigationsToAppBoundDomains": false
+  },
+  "android": {
+    "backgroundColor": "#0B0B0B",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#0B0B0B",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0B0B0B",
+      "overlaysWebView": false
+    }
+  }
+}

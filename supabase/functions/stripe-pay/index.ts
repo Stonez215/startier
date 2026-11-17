@@ -4,7 +4,7 @@
 //
 // Actions (POST JSON { action, ... } with the member's login):
 //   plan      { plan: 'pass' | 'pro' | 'supernova' }  All-Access, Star Pro, Supernova (monthly)
-//   galaxy    { artist_id }                           $1.50/mo Galaxy, the artist is paid through Stripe Connect
+//   galaxy    { artist_id }                           $1.75/mo Galaxy, the artist is paid through Stripe Connect
 //   buy       { release_id } or { collection_id }     one-time purchase; the webhook pays the artist and split partners
 //   tip       { artist_id, cents }                    one-time tip
 //   portal    {}                                      Stripe page to update the card or cancel plans
@@ -18,9 +18,9 @@ const PLAN = {
   pro:       { cents: 899,  name: "StarTier Star Pro", flag: "is_pro" },
   supernova: { cents: 2499, name: "StarTier Supernova", flag: "is_supernova" },
 } as const;
-const GALAXY_CENTS = 150;          // fan pays
-const GALAXY_ARTIST_CENTS = 80;    // artist gets
-const PASS_OFF = 0.20;             // All-Access members get 20% off purchases
+const GALAXY_CENTS = 175;          // fan pays
+const GALAXY_ARTIST_CENTS = 99;    // artist gets
+const PASS_OFF = 0.10;             // All-Access members get 10% off purchases (StarTier pays for it)
 const KEEP = { rising: 0.85, pro: 0.90, supernova: 0.92 }; // artist's share of sales and tips
 const TIP_MIN = 100, TIP_MAX = 50000;
 // Buyers pay a service fee on purchases and tips that covers card processing (2.9% + 30c),
@@ -189,18 +189,19 @@ Deno.serve(async (req) => {
         if (cents <= 0) throw new Oops("This one is free.");
         if (artistId === me.id) throw new Oops("That's your own release.");
         const { a, keep } = await payee(artistId);
+        // The artist's share is always figured on the full price; StarTier pays for the All-Access discount.
+        const artistCents = Math.floor(cents * keep);
         if (me.has_pass) cents = Math.round(cents * (1 - PASS_OFF));
         cents = Math.max(50, cents);
         const svc = serviceFee(cents);
         // StarTier collects the payment; the webhook then pays the artist (and any collaborators in
         // the release's split) their share, so splits and refunds can be handled exactly.
-        const artistCents = Math.floor(cents * keep);
         const s = await stripe("POST", "/checkout/sessions", {
           mode: "payment", customer: await customer(me, user.email ?? ""), client_reference_id: me.id,
           "line_items[0][quantity]": "1", "line_items[0][price_data][currency]": "usd",
           "line_items[0][price_data][unit_amount]": String(cents),
           "line_items[0][price_data][product_data][name]": `${title} by ${a.display_name}`.slice(0, 120),
-          ...(me.has_pass ? { "line_items[0][price_data][product_data][description]": "All-Access 20% off applied" } : {}),
+          ...(me.has_pass ? { "line_items[0][price_data][product_data][description]": "All-Access 10% off applied" } : {}),
           ...feeLine(1, svc),
           "payment_intent_data[transfer_group]": `sale-${crypto.randomUUID()}`,
           "payment_intent_data[description]": `${title} on StarTier`.slice(0, 200),
