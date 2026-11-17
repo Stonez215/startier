@@ -45,7 +45,7 @@ jobs:
           xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release \
             -sdk iphoneos -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/StarTier.xcarchive" archive \
-            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic \
+            DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic CODE_SIGN_IDENTITY="Apple Distribution" \
             CURRENT_PROJECT_VERSION="${{ github.run_number }}" $AUTH | tail -60
           cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
@@ -60,4 +60,5 @@ jobs:
           PLIST
           xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/StarTier.xcarchive" \
             -exportOptionsPlist "$RUNNER_TEMP/ExportOptions.plist" -exportPath "$RUNNER_TEMP/out" $AUTH
+          IPA=$(ls "$RUNNER_TEMP"/out/*.ipa 2>/dev/null | head -1); if [ -n "$IPA" ]; then (cd "$RUNNER_TEMP" && rm -rf chk && mkdir chk && cd chk && unzip -q "$IPA" && codesign -d --entitlements - Payload/*.app 2>/dev/null | grep -A2 applesignin || echo "Note: no Sign in with Apple permission in this build"); fi
           echo "Uploaded build ${{ github.run_number }} to App Store Connect. It shows in TestFlight after Apple processes it."
