@@ -50,6 +50,11 @@ jobs:
             DEVELOPMENT_TEAM="$APPLE_TEAM_ID" CODE_SIGN_STYLE=Automatic CODE_SIGNING_ALLOWED=NO \
             CURRENT_PROJECT_VERSION="${{ github.run_number }}" archive | tail -40
           test -d "$RUNNER_TEMP/StarTier.xcarchive"
+          # Put the app's permissions (Sign in with Apple) on the unsigned build so the App Store signing keeps them.
+          APP=$(ls -d "$RUNNER_TEMP"/StarTier.xcarchive/Products/Applications/*.app)
+          for f in "$APP"/Frameworks/*; do [ -e "$f" ] && codesign --force --sign - "$f"; done
+          codesign --force --sign - --entitlements ios/App/App/App.entitlements "$APP"
+          codesign -d --entitlements - "$APP" | grep -A1 applesignin
           cat > "$RUNNER_TEMP/ExportOptions.plist" <<PLIST
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
