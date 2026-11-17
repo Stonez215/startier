@@ -1,0 +1,17 @@
+# Sets StarTier's privacy link, free price and U.S.-only availability through Apple's API.
+# Run it from GitHub: Actions > App Store setup > Run workflow.
+name: App Store setup
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    env:
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install "pyjwt[crypto]" requests
+      - run: python .github/scripts/store_setup.py
