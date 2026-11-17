@@ -19,33 +19,19 @@ def call(m, path, body=None):
 ok = True
 app = call("GET", f"/v1/apps?filter[bundleId]={BUNDLE}").json()["data"][0]["id"]
 print("App id", app)
-# 1. Privacy policy link
-infos = call("GET", f"/v1/apps/{app}/appInfos").json()["data"]
-for info in infos:
-    for loc in call("GET", f"/v1/appInfos/{info['id']}/appInfoLocalizations").json()["data"]:
-        r = call("PATCH", f"/v1/appInfoLocalizations/{loc['id']}", {"data": {"type": "appInfoLocalizations", "id": loc["id"], "attributes": {"privacyPolicyUrl": PRIVACY}}})
-        ok &= r.status_code < 400
-# 2. Free price
-pts, url = [], f"/v1/apps/{app}/appPricePoints?filter[territory]=USA&limit=200"
-while url:
-    j = call("GET", url).json(); pts += j["data"]
-    nxt = j.get("links", {}).get("next"); url = nxt.replace(B, "") if nxt else None
-free = next(p["id"] for p in pts if float(p["attributes"]["customerPrice"]) == 0)
-r = call("POST", "/v1/appPriceSchedules", {
-  "data": {"type": "appPriceSchedules", "relationships": {
-     "app": {"data": {"type": "apps", "id": app}},
-     "baseTerritory": {"data": {"type": "territories", "id": "USA"}},
-     "manualPrices": {"data": [{"type": "appPrices", "id": "${price1}"}]}}},
-  "included": [{"type": "appPrices", "id": "${price1}", "attributes": {"startDate": None},
-     "relationships": {"appPricePoint": {"data": {"type": "appPricePoints", "id": free}}}}]})
-ok &= r.status_code < 400
+# 1-2. Privacy policy link and free price: already set (Nov 17).
 # 3. United States only
+terrs, url = [], "/v1/territories?limit=200"
+while url:
+    j = call("GET", url).json(); terrs += [t["id"] for t in j["data"]]
+    nxt = j.get("links", {}).get("next"); url = nxt.replace(B, "") if nxt else None
+print(len(terrs), "countries; turning on only USA")
 r = call("POST", "/v2/appAvailabilities", {
   "data": {"type": "appAvailabilities", "attributes": {"availableInNewTerritories": False}, "relationships": {
      "app": {"data": {"type": "apps", "id": app}},
-     "territoryAvailabilities": {"data": [{"type": "territoryAvailabilities", "id": "${usa}"}]}}},
-  "included": [{"type": "territoryAvailabilities", "id": "${usa}", "attributes": {"available": True},
-     "relationships": {"territory": {"data": {"type": "territories", "id": "USA"}}}}]})
+     "territoryAvailabilities": {"data": [{"type": "territoryAvailabilities", "id": "${" + t + "}"} for t in terrs]}}},
+  "included": [{"type": "territoryAvailabilities", "id": "${" + t + "}", "attributes": {"available": t == "USA"},
+     "relationships": {"territory": {"data": {"type": "territories", "id": t}}}} for t in terrs]})
 ok &= r.status_code < 400
 # 4. Who can see this app (the 'user access could not be saved' message)
 for u in call("GET", "/v1/users?limit=50").json().get("data", []):
