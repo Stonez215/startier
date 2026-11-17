@@ -1,13 +1,20 @@
 // StarTier: Stripe tells us when someone paid, renewed, cancelled, got a refund or opened a dispute.
 // Deploy in Supabase as "stripe-webhook" with "Enforce JWT verification" OFF (Stripe can't log in).
-// Secrets: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET (whsec_... from the Stripe webhook endpoint)
+// Secrets: STRIPE_SECRET_KEY. The signing secret is saved in the vault by stripe-setup (or set STRIPE_WEBHOOK_SECRET).
 // Stripe events to send: checkout.session.completed, checkout.session.async_payment_succeeded,
 //   customer.subscription.created, customer.subscription.updated, customer.subscription.deleted,
 //   invoice.paid, charge.refunded, charge.dispute.created
 import { createClient } from "npm:@supabase/supabase-js@2.45.4";
 
 const STRIPE_KEY = Deno.env.get("STRIPE_SECRET_KEY") ?? "";
-const SECRET = Deno.env.get("STRIPE_WEBHOOK_SECRET") ?? "";
+// The signing secret lives in the database vault (saved by stripe-setup); an Edge Function secret also works.
+let SECRET = Deno.env.get("STRIPE_WEBHOOK_SECRET") ?? "";
+async function webhookSecret() {
+  if (SECRET) return SECRET;
+  const { data } = await admin.rpc("st_webhook_secret");
+  SECRET = typeof data === "string" ? data : "";
+  return SECRET;
+}
 const admin = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, { auth: { persistSession: false } });
 
 const FLAG: Record<string, string> = { pass: "has_pass", pro: "is_pro", supernova: "is_supernova" };
@@ -168,7 +175,7 @@ async function handle(evt: any) {
 Deno.serve(async (req) => {
   if (req.method !== "POST") return new Response("ok");
   const raw = await req.text();
-  if (!SECRET || !(await verified(raw, req.headers.get("stripe-signature") || ""))) return new Response("bad signature", { status: 400 });
+  if (!(await webhookSecret()) || !(await verified(raw, req.headers.get("stripe-signature") || ""))) return new Response("bad signature", { status: 400 });
   try {
     await handle(JSON.parse(raw));
     return new Response(JSON.stringify({ received: true }), { headers: { "Content-Type": "application/json" } });
