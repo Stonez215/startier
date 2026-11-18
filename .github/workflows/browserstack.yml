@@ -34,7 +34,7 @@ jobs:
         run: |
           set -o pipefail
           T=${APPLE_TEAM_ID:-$TEAM}; KID=${ASC_KEY_ID:-$KEY_ID}; ISS=${ASC_ISSUER_ID:-$ISSUER}; P8=${ASC_KEY_P8:-$KEY_P8}
-          mkdir -p ~/.appstoreconnect/private_keys; K=~/.appstoreconnect/private_keys/AuthKey_$KID.p8; printf '%s' "$P8" > "$K"
+          mkdir -p ~/.appstoreconnect/private_keys; K=~/.appstoreconnect/private_keys/AuthKey_$KID.p8; if printf %s "$P8" | grep -q "BEGIN PRIVATE KEY"; then printf '%s\n' "$P8" > "$K"; else { echo "-----BEGIN PRIVATE KEY-----"; printf %s "$P8" | tr -d ' \r\n\t' | fold -w 64; echo; echo "-----END PRIVATE KEY-----"; } > "$K"; fi
           cd $GITHUB_WORKSPACE/mobile
           xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' \
             -archivePath "$RUNNER_TEMP/StarTier.xcarchive" DEVELOPMENT_TEAM="$T" CODE_SIGN_STYLE=Automatic CODE_SIGNING_ALLOWED=NO archive | tail -30

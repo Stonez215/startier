@@ -2,6 +2,8 @@
 # BrowserStack re-signs uploaded apps with its own certificate, so this entry is only a placeholder.
 import os, time, json, jwt, requests
 KEY_ID, ISSUER, P8 = os.environ["ASC_KEY_ID"], os.environ["ASC_ISSUER_ID"], os.environ["ASC_KEY_P8"]
+if "BEGIN PRIVATE KEY" not in P8:  # only the key's middle lines were saved; add the BEGIN/END lines
+    import re, textwrap; b = re.sub(r"\s+", "", P8); P8 = "-----BEGIN PRIVATE KEY-----\n" + "\n".join(textwrap.wrap(b, 64)) + "\n-----END PRIVATE KEY-----\n"
 now = int(time.time()) - 60
 T = jwt.encode({"iss": ISSUER, "iat": now, "exp": now + 1100, "aud": "appstoreconnect-v1"}, P8, algorithm="ES256", headers={"kid": KEY_ID, "typ": "JWT"})
 def call(m, p, b=None):
