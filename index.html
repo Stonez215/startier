@@ -807,6 +807,13 @@ body.chatmode .bot-fab,body.chatmode .mini{display:none!important}
 .bot-fab{width:50px;height:50px}
 body:has(.mini.show) .bot-fab{bottom:calc(var(--tabh) + 150px + env(safe-area-inset-bottom,0px))}
 @media (min-width:900px){body:has(.mini.show) .bot-fab{bottom:112px}}
+
+/* phone turned sideways while a video plays: video fills the whole screen */
+.player.vfull{position:fixed;inset:0;z-index:2147483000;width:100vw;height:100vh;height:100dvh;max-height:none;margin:0;border-radius:0;background:#000;aspect-ratio:auto}
+.player.vfull .vframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.player.vfull .close{top:max(10px,env(safe-area-inset-top));right:max(10px,env(safe-area-inset-right));z-index:2}
+body.vfull-on{overflow:hidden}
+body.vfull-on .sheet{animation:none;transform:none;filter:none;contain:none}
 </style>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
 </head>
@@ -3731,9 +3738,10 @@ function viewHome(){
 
 function viewMusic(){
   const q=S.mq.toLowerCase().trim(), g=S.mgenre;
-  const used=MUSIC_GENRES.filter(x=>artists.some(a=>a.makes!=='video'&&(a.genres||[]).includes(x)));
-  const aOk=a=>a.makes!=='video'&&(g==='All'||(a.genres||[]).includes(g));
-  const ts=tracks.filter(t=>{const a=A(t.artist);return aOk(a)&&(!q||t.title.toLowerCase().includes(q)||a.name.toLowerCase().includes(q));});
+  const tagUsed=[...new Set(tracks.flatMap(tagsOf))];
+  const used=[...MUSIC_GENRES.filter(x=>tagUsed.includes(x)||artists.some(a=>a.makes!=='video'&&(a.genres||[]).includes(x))),...tagUsed.filter(x=>!MUSIC_GENRES.includes(x))];
+  const aOk=a=>a.makes!=='video'&&(g==='All'||(a.genres||[]).includes(g)||tracks.some(t=>t.artist===a.id&&tagsOf(t).includes(g)));
+  const ts=tracks.filter(t=>{const a=A(t.artist);return a&&a.makes!=='video'&&(g==='All'||tagsOf(t).includes(g)||(!(t.tags&&t.tags.length)&&(a.genres||[]).includes(g)))&&(!q||t.title.toLowerCase().includes(q)||a.name.toLowerCase().includes(q));});
   const as=sortedArtists().filter(a=>aOk(a)&&(!q||a.name.toLowerCase().includes(q)));
   return `<h1 class="page-title">Music</h1>
   <label class="search">${I.search}<input id="mq" type="search" placeholder="Search songs and artists" value="${esc(S.mq)}" aria-label="Search music"></label>
@@ -3746,8 +3754,9 @@ function viewMusic(){
 function viewVideos(){
   const q=S.vq.toLowerCase().trim(), c=S.vcat, f=S.vform;
   const pool=videos.filter(v=>f==='all'||v.form===f);
-  const used=VIDEO_CATS.filter(x=>pool.some(v=>v.cat===x));
-  const vs=pool.filter(v=>(c==='All'||v.cat===c)&&(!q||v.title.toLowerCase().includes(q)||A(v.artist).name.toLowerCase().includes(q)));
+  const vUsed=[...new Set(pool.flatMap(tagsOf))];
+  const used=[...VIDEO_CATS.filter(x=>vUsed.includes(x)),...vUsed.filter(x=>!VIDEO_CATS.includes(x))];
+  const vs=pool.filter(v=>(c==='All'||tagsOf(v).includes(c))&&(!q||v.title.toLowerCase().includes(q)||A(v.artist).name.toLowerCase().includes(q)));
   const sh=vs.filter(v=>v.form==='short'), lo=vs.filter(v=>v.form==='long');
   return `<h1 class="page-title">Videos</h1>
   <label class="search">${I.search}<input id="vq" type="search" placeholder="Search videos and creators" value="${esc(S.vq)}" aria-label="Search videos"></label>
@@ -3794,6 +3803,21 @@ function viewLibrary(){
 
 /* ---------- art and downloads ---------- */
 const isImgCat = c => ART_CATS.includes(c);
+const TAG_MAX = 5;
+// Pick several genres/categories from a list, plus up to 2 of your own (typed, comma-separated).
+function tagPicker(id,kind,label,opts,first,k0){
+  return `<div class="field" data-up="${kind}" ${k0===kind?'':'hidden'}>${label} <span class="small" style="color:var(--dust)">(pick up to ${TAG_MAX})</span>
+    <div class="chips wrap" id="${id}">${opts.map(g=>`<button type="button" class="chip" data-action="uptag" aria-pressed="${g===first}">${esc(g)}</button>`).join('')}</div>
+    <input id="${id}Own" maxlength="70" placeholder="Not listed? Type your own, like Afro-drill" style="margin-top:8px"></div>`;
+}
+function pickedTags(id){
+  const box=document.getElementById(id); if(!box) return [];
+  const picked=[...box.querySelectorAll('[aria-pressed=true]')].map(b=>b.textContent.trim());
+  const own=String((document.getElementById(id+'Own')||{}).value||'').split(',').map(x=>x.replace(/[^\p{L}\p{N} &'\/.+-]/gu,'').replace(/\s+/g,' ').trim().slice(0,30)).filter(Boolean).slice(0,2);
+  const out=[]; for(const t of [...picked,...own]){ if(!out.some(o=>o.toLowerCase()===t.toLowerCase())) out.push(t); }
+  return out.slice(0,TAG_MAX);
+}
+const tagsOf = x => (x.tags&&x.tags.length?x.tags:[x.genre||x.cat].filter(Boolean));
 const fsize = n => !n?'':n>=MB?(n/MB).toFixed(n>=10*MB?0:1)+' MB':Math.max(1,Math.round(n/1024))+' KB';
 function dcard(x){
   const a = A(x.artist)||{name:'Star'}, saved = isSaved(x);
@@ -3803,8 +3827,9 @@ function dcard(x){
 }
 function viewArt(){
   const q=S.aq.toLowerCase().trim(), c=S.acat;
-  const used=ALL_DL.filter(x=>downloads.some(d=>d.cat===x));
-  const ok=x=>(c==='All'||x.cat===c)&&(!q||x.title.toLowerCase().includes(q)||(A(x.artist)||{name:''}).name.toLowerCase().includes(q));
+  const dUsed=[...new Set(downloads.flatMap(tagsOf))];
+  const used=[...ALL_DL.filter(x=>dUsed.includes(x)),...dUsed.filter(x=>!ALL_DL.includes(x))];
+  const ok=x=>(c==='All'||tagsOf(x).includes(c))&&(!q||x.title.toLowerCase().includes(q)||(A(x.artist)||{name:''}).name.toLowerCase().includes(q));
   const arts=downloads.filter(x=>isImgCat(x.cat)&&ok(x)), files=downloads.filter(x=>!isImgCat(x.cat)&&ok(x));
   const makers=sortedArtists().filter(a=>a.real&&(a.makes==='art'||downloads.some(d=>d.artist===a.id)));
   return `<h1 class="page-title">Art and downloads</h1>
@@ -3878,9 +3903,9 @@ function viewStudio(){
     <div class="two-col">
       <label class="field">What are you uploading?<select id="upKind">${kinds.map(([k2,l])=>`<option value="${k2}">${l}</option>`).join('')}</select></label>
       <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Video length<select id="upForm"><option value="short">Short (under 3 min, always free)</option><option value="long">Long-form (3 min or more)</option></select></label>
-      <label class="field" data-up="song" ${k0==='song'?'':'hidden'}>Genre<select id="upGenre">${myG.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
-      <label class="field" data-up="download" ${k0==='download'?'':'hidden'}>Category<select id="upDlCat">${myA.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
     </div>
+    ${tagPicker('upGenre','song','Genres',[...new Set([...myG,...MUSIC_GENRES])].filter(g=>g!=='Other'),myG[0],k0)}
+    ${tagPicker('upDlCat','download','Categories',myA,myA[0],k0)}
     <p class="small up-help" data-up="download" ${k0==='download'?'':'hidden'}>Upload the full file fans get (a high-res photo, scan of your painting, PDF, ZIP pack…). For pictures, we make a smaller preview for the page automatically, with a StarTier watermark if it's paid. You can also add your own cover.</p>
     <div class="up-row">
       <div class="coverpick" data-action="pick" data-target="upCover" role="button" tabindex="0" id="dropC" aria-label="Choose cover art">Cover art<br>JPG or PNG</div>
@@ -3891,9 +3916,9 @@ function viewStudio(){
     <label class="field">Title<input id="upTitle" maxlength="120" placeholder="What’s it called?"></label>
     <label class="field">Description (optional)<textarea id="upDesc" maxlength="2000" rows="3" placeholder="Tell fans about it"></textarea></label>
     <div class="two-col">
-      <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Category<select id="upCat">${myC.map(g=>`<option>${esc(g)}</option>`).join('')}</select></label>
       <label class="field">Your price (USD)<input id="upPrice" type="number" min="0" step="0.01" value="${UP_PRICE[k0]}"></label>
     </div>
+    ${tagPicker('upCat','video','Categories',[...new Set([...myC,...VIDEO_CATS])].filter(g=>g!=='Other'),myC[0],k0)}
     <label class="field" data-up="video" ${k0==='video'?'':'hidden'}>Paid video preview starts at<input id="upPvStart" placeholder="0:00" value="0:00" inputmode="numeric"><small class="small" style="color:var(--dust)">We cut 30 seconds from here for fans who haven't paid. Leave 0:00 for the start.</small></label>
     <div class="split" id="split"></div>
     ${S.gal[S.user.id]?`<label class="agree"><input type="checkbox" id="upGalaxy"><span><b>Galaxy only.</b> Only your Galaxy members get the full version. Everyone else gets a 30-second preview.</span></label>`:''}
@@ -4200,7 +4225,7 @@ function artistFromProfile(p){
     p:faceKey(p.id,p.avatar_path), av:avUrl(p.avatar_path), followers:0, pro:!!(p.is_pro||p.is_supernova), nova:!!p.is_supernova, bio:p.bio||'', socials:p.socials||{}, merch:safeUrl(p.merch_url) };
 }
 function releaseToItem(r){
-  const base={ id:'r'+r.id, rid:r.id, real:true, title:r.title, artist:r.artist_id, price:(r.price_cents||0)/100, p:covKey(r), status:r.status, galaxy:!!r.galaxy_only, created:r.created_at };
+  const base={ id:'r'+r.id, rid:r.id, real:true, tags:Array.isArray(r.tags)?r.tags.slice(0,TAG_MAX):[], title:r.title, artist:r.artist_id, price:(r.price_cents||0)/100, p:covKey(r), status:r.status, galaxy:!!r.galaxy_only, created:r.created_at };
   if(r.kind==='song') return Object.assign(base,{ len:r.duration_sec||0, audio:r.audio_path, genre:r.genre,
     preview:(r.preview_path&&PATH_OK.test(r.preview_path))?pubUrl('previews',r.preview_path):null });
   if(r.kind==='download') return Object.assign(base,{ kind:'download', cat:r.category||'Other downloads', desc:r.description||'',
@@ -4208,7 +4233,7 @@ function releaseToItem(r){
     fileName:String(r.file_name||'').slice(0,120), size:r.file_size||0 });
   return Object.assign(base,{ form:r.form||'long', cat:r.category||'Other', kind:r.category||'Video', len:r.duration_sec?mmss(r.duration_sec):'', desc:r.description||'', vw:r.video_w||0, vh:r.video_h||0 });
 }
-const REL_COLS='id,artist_id,kind,form,title,description,genre,category,price_cents,duration_sec,cover_path,audio_path,preview_path,preview_bunny_id,file_path,file_name,file_size,galaxy_only,video_w,video_h,status,created_at';
+const REL_COLS='id,artist_id,kind,form,title,description,genre,category,tags,price_cents,duration_sec,cover_path,audio_path,preview_path,preview_bunny_id,file_path,file_name,file_size,galaxy_only,video_w,video_h,status,created_at';
 function addRelease(r,list){ const o=releaseToItem(r); (r.kind==='song'?list.t:r.kind==='download'?list.d:list.v).push(o); return o; }
 async function loadCatalog(){
   if(!sb) return;
@@ -4270,6 +4295,15 @@ async function videoCall(body){
   let j={}; try{ j=await r.json(); }catch(_){}
   return Object.assign({status:r.status},j);
 }
+const LAND_MQ = window.matchMedia ? matchMedia('(orientation: landscape) and (pointer: coarse)') : null;
+function vfullCheck(){
+  const pl=document.getElementById('player'), on=!!(pl&&LAND_MQ&&LAND_MQ.matches);
+  if(pl) pl.classList.toggle('vfull',on);
+  document.body.classList.toggle('vfull-on',on);
+  try{ if(on&&pl&&pl.requestFullscreen&&!document.fullscreenElement) pl.requestFullscreen().catch(()=>{});
+       else if(!on&&document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){}
+}
+if(LAND_MQ){ (LAND_MQ.addEventListener?LAND_MQ.addEventListener('change',vfullCheck):LAND_MQ.addListener(vfullCheck)); window.addEventListener('orientationchange',()=>setTimeout(vfullCheck,250)); }
 function openRealVideo(v){
   const a=A(v.artist), mine=S.user&&S.user.id===v.artist;
   if(S.radioOn) radioPause(); audio.pause(); if(S.playing){ S.playing=false; updateMini(); }
@@ -4290,7 +4324,7 @@ function openRealVideo(v){
     const pl=document.getElementById('player'); if(!pl) return;
     if(res.status!==200||!res.url||!/^https:\/\/player\.mediadelivery\.net\//.test(res.url)){ if(msg()) msg().innerHTML=`Video can't play right now<small>Try again in a moment.</small>`; return; }
     const f=document.createElement('iframe'); f.className='vframe'; f.src=res.url; f.allow='accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture'; f.allowFullscreen=true; f.title=v.title;
-    if(msg()) msg().remove(); pl.appendChild(f); logPlay(v.rid);
+    if(msg()) msg().remove(); pl.appendChild(f); logPlay(v.rid); vfullCheck();
     if(preview){ const tag=document.createElement('span'); tag.className='pv-tag'; tag.textContent='30-second preview'; pl.appendChild(tag);
       limitFrame(f,30,()=>{ const p2=document.getElementById('player'); if(!p2) return; f.remove(); tag.remove(); p2.insertAdjacentHTML('beforeend',`<div class="lockmsg pv-end">${previewEndHtml(v)}</div>`); }); }
   })();
@@ -4385,6 +4419,7 @@ async function publishRelease(btn){
   if(isSong&&up.file.size>50*MB){ toast('Songs must be under 50 MB. Try an MP3.'); return; }
   if(!isSong&&!/^video\//.test(up.file.type)){ toast('Choose a video file (MP4 or MOV)'); return; }
   if(!isSong&&up.file.size>4096*MB){ toast('Videos must be under 4 GB'); return; }
+  if(!pickedTags(kind==='song'?'upGenre':kind==='download'?'upDlCat':'upCat').length){ toast(kind==='song'?'Pick at least one genre':'Pick at least one category'); return; }
   const uid=S.user.id, key=rid(), done=[];
   btn.disabled=true; window.onbeforeunload=()=>'Your upload is still going';
   try{
@@ -4396,7 +4431,8 @@ async function publishRelease(btn){
     const row={kind,title,description:desc||null,price_cents:price,duration_sec:Math.round(up.dur||0)||null,cover_path:cpath};
     if(galaxyOnly) row.galaxy_only=true;
     if(isSong){
-      row.genre=$('upGenre').value;
+      const tg=pickedTags('upGenre'); if(!tg.length) throw new Error('Pick at least one genre');
+      row.genre=tg[0]; row.tags=tg;
       const apath=`${uid}/${key}.${ext}`;
       await storageTus('songs',apath,up.file,up.file.type||AUDIO_TYPES[ext],p=>setProg(5+p*(price>0||galaxyOnly?0.7:0.9),`Uploading your song… ${Math.round(p)}%`));
       done.push(['songs',apath]); row.audio_path=apath;
@@ -4407,13 +4443,15 @@ async function publishRelease(btn){
         done.push(['previews',ppath]); row.preview_path=ppath;
       }
     } else if(isDl){
-      row.category=$('upDlCat').value;
+      const tg=pickedTags('upDlCat'); if(!tg.length) throw new Error('Pick at least one category');
+      row.category=tg.find(isImgCat)||tg.find(t=>ALL_DL.includes(t))||tg[0]; row.tags=[row.category,...tg.filter(t=>t!==row.category)];
       const fpath=`${uid}/${key}f.${dext}`;
       await storageTus('downloads',fpath,up.file,up.file.type||DL_TYPES[dext],p=>setProg(5+p*0.9,`Uploading your file… ${Math.round(p)}%`));
       done.push(['downloads',fpath]); row.file_path=fpath; row.file_size=up.file.size;
       row.file_name=(String(up.file.name||'file').replace(/[^A-Za-z0-9 ._()-]+/g,'').replace(/\s+/g,' ').trim().slice(0,100)||'file')+(/\.[a-z0-9]{1,5}$/i.test(up.file.name||'')?'':'.'+dext);
     } else {
-      row.form=$('upForm').value; row.category=$('upCat').value;
+      row.form=$('upForm').value; const tg=pickedTags('upCat'); if(!tg.length) throw new Error('Pick at least one category');
+      row.category=tg[0]; row.tags=tg;
       if(up.vw>0&&up.vh>0&&up.vw<20000&&up.vh<20000){ row.video_w=up.vw; row.video_h=up.vh; }
       setProg(5,'Getting your video ready…');
       const c=await videoCall({action:'upload',title});
@@ -6027,7 +6065,7 @@ function render(keepScroll){
 const scrim = document.getElementById('scrim'), sheet = document.getElementById('sheet');
 let lastFocus = null;
 function openSheet(html){ lastFocus = document.activeElement; sheet.innerHTML = html; scrim.classList.add('open'); document.body.style.overflow='hidden'; const f = sheet.querySelector('button'); f&&f.focus(); }
-function closeSheet(){ stopTrailer(); scrim.classList.remove('open'); if(sheet.querySelector('iframe')) sheet.innerHTML=''; document.body.style.overflow=''; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
+function closeSheet(){ document.body.classList.remove('vfull-on'); try{ if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); }catch(e){} stopTrailer(); scrim.classList.remove('open'); if(sheet.querySelector('iframe')) sheet.innerHTML=''; document.body.style.overflow=''; lastFocus&&lastFocus.focus&&lastFocus.focus(); }
 
 function openVideo(id,autoplay){
   if(V(id)&&V(id).real) return openRealVideo(V(id));
@@ -6155,6 +6193,9 @@ document.addEventListener('click',e=>{
     case 'tab': if(scrim.classList.contains('open')) closeSheet(); S.drawer=false; S.artist=null; if(d.tab==='inbox'){ S.convos=null; S.reqs=null; } S.tab=d.tab; if(d.plan) S.signupPlan=d.plan; render(); break;
     case 'plan': S.signupPlan=d.plan; el.parentElement.querySelectorAll('.plan').forEach(b=>b.setAttribute('aria-pressed', b===el)); break;
     case 'favgenre': el.setAttribute('aria-pressed', el.getAttribute('aria-pressed')!=='true'); break;
+    case 'uptag': { const on=el.getAttribute('aria-pressed')==='true';
+      if(!on&&el.parentElement.querySelectorAll('[aria-pressed=true]').length>=TAG_MAX){ toast(`Pick up to ${TAG_MAX}`); break; }
+      el.setAttribute('aria-pressed', on?'false':'true'); break; }
     case 'account': openAccountNames(); break;
     case 'upgrade':
       if(!S.user){ S.artist=null; S.tab='join-supporter'; S.signupPlan='pass'; if(scrim.classList.contains('open')) closeSheet(); render(); break; }
