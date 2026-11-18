@@ -19,6 +19,7 @@ jobs:
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
       SUBMIT: ${{ inputs.submit }}
+      SHOT_SETS: ${{ inputs.submit == 'ipad-shots' && 'store/screenshots-ipad:APP_IPAD_PRO_3GEN_129' || '' }}
     steps:
       - uses: actions/checkout@v4
       - run: pip install -q "pyjwt[crypto]" requests
