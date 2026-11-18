@@ -1,0 +1,34 @@
+Thank you for reviewing Slide Thru. Here is the information you asked for on Nov 10.
+
+1. SCREEN RECORDING
+A screen recording made on an iPhone is attached. It starts at app launch and shows sign-up, login, the map, opening a pop-up, posting a pop-up, joining a group, report and block, opening a purchase, and the Delete my account screen.
+
+2. WHAT THE APP IS FOR
+Slide Thru is a live map of local pop-ups in U.S. cities: food trucks, block parties, open mics, sneaker drops and markets, posted by the people running them. Small local events are hard to find because they only get posted on scattered social media accounts. Audience: people who go out in their city, and the small vendors and hosts who want to be found.
+
+3. HOW TO USE IT / TEST ACCOUNT
+Use the account in the Sign-In fields above. You can browse the map without an account; sign in to post, join groups or tap "I'm pulling up."
+- Map tab: pick Now, Today, This weekend or a date; tap a pin to open a pop-up.
+- Post: tap "+ Post a pop-up" to put a pop-up on the map.
+- Groups tab: join or start a group; members get an alert when someone in the group posts.
+- Report: open a pop-up and tap "Report this post". Block: open a pop-up and tap "Block" with the poster's name.
+- Delete account: Me tab > Delete my account.
+Sign in with Apple and Sign in with Google also work.
+
+4. OUTSIDE SERVICES THE APP USES
+- Our own server (Hetzner) for accounts and posts
+- Stripe: payments on a secure web checkout page
+- Sign in with Apple and Google sign-in
+- Firebase Cloud Messaging: push alerts
+- An email service (SMTP) for sign-up codes and password resets
+- Google Maps links for directions
+
+5. REGIONS
+The app is offered in the United States only and covers 42 U.S. cities. It works the same in every city. Food orders and event tickets are real-world goods and services paid through Stripe. Boosts and the Pro plan for vendors open our website's Stripe checkout through an external link, as allowed on the United States storefront. You do not need to complete a purchase to review the app.
+
+6. REGULATED CONTENT
+Not applicable.
+
+Build 6 (attached) also fixes push alerts on iPhone.
+
+Published by King Jordan Media LLC. Contact: Ahmed Jordan, (215) 758-6832, support@kingjordanapps.com

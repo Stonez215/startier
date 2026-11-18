@@ -1,6 +1,11 @@
 # Shows the App Store status of StarTier, Slide Thru and BookedUp, and adds the account holder to TestFlight on each.
 name: App Store status
-on: workflow_dispatch
+on:
+  workflow_dispatch:
+    inputs:
+      script:
+        description: Which script to run
+        default: asc_status.py
 permissions:
   contents: read
 jobs:
@@ -13,4 +18,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: pip install -q "pyjwt[crypto]" requests
-      - run: python .github/scripts/asc_status.py
+      - run: python .github/scripts/${{ inputs.script || 'asc_status.py' }}

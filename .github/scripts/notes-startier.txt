@@ -1,0 +1,31 @@
+Thank you for reviewing StarTier.
+
+1. SCREEN RECORDING
+A screen recording made on an iPhone is attached. It starts at app launch and shows sign-up, login, the feed, playing a video and song, a Star uploading, report and block, opening a purchase, and the Delete my account screen.
+
+2. WHAT THE APP IS FOR
+StarTier is a place for new, independent artists ("Stars") to share and sell their music, videos and art, and for fans ("Supporters") to discover them. Big platforms pay small artists very little; on StarTier artists keep 85% of their sales. Audience: people 13 and older who like new music.
+
+3. HOW TO USE IT / TEST ACCOUNTS
+There are two account types. Both test accounts have the paid plan turned on, so all content plays in full.
+- Star (artist): the account in the Sign-In fields above. Tap the account circle (top right), then Your studio, to upload and see earnings.
+- Fan (Supporter): mrjordan011+startierfan@gmail.com / [fan password]. Swipe the home feed, play StarTier Radio, open an artist page, follow, comment and message.
+Sign in with Apple and Sign in with Google also work.
+Report and block: open an artist page or post, tap the three dots (More options), then Report or Block.
+Delete account: tap the account circle (top right), then Delete my account at the bottom.
+
+4. OUTSIDE SERVICES THE APP USES
+- Supabase: accounts and database
+- Bunny.net Stream: video and audio hosting
+- Stripe: payments, on a secure web checkout page
+- Sign in with Apple and Google sign-in
+- An AI model that powers the StarTier Help chat (through n8n on our own server)
+- Hetzner: our web server
+
+5. REGIONS
+The app is offered in the United States only and works the same everywhere in the U.S. Digital purchases (All-Access, Galaxies, buying a song or video) open our website's Stripe checkout through an external link, as allowed on the United States storefront. You do not need to complete a purchase to review the app.
+
+6. CONTENT RIGHTS
+Artists upload only their own work and agree to our Terms. We have a Copyright Policy with a DMCA agent (King Jordan Media LLC), and anyone can report stolen work in the app.
+
+Published by King Jordan Media LLC. Contact: Ahmed Jordan, (215) 758-6832, support@kingjordanapps.com
