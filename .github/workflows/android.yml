@@ -8,6 +8,8 @@ on:
   workflow_dispatch:
   push:
     paths: ['mobile/**', '.github/workflows/android.yml']
+permissions:
+  contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -49,3 +51,12 @@ jobs:
         with:
           name: startier-android-${{ github.run_number }}
           path: mobile/android/app/build/outputs/bundle/release/*.aab
+      - name: Draft release with the .aab (private to repo collaborators; easy download for Play upload)
+        if: github.event_name == 'workflow_dispatch'
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          f=$(ls mobile/android/app/build/outputs/bundle/release/*.aab | head -1)
+          cp "$f" "startier-${{ github.run_number }}.aab"
+          gh release create "android-${{ github.run_number }}" "startier-${{ github.run_number }}.aab" --draft --title "StarTier Android ${{ github.run_number }}" --notes "Signed .aab for Google Play upload."
