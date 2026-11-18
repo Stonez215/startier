@@ -1,0 +1,67 @@
+# Builds a test copy of the iPhone app and sends it to BrowserStack (real iPhones online), so it can be
+# opened there without signing in to TestFlight. Run it from: Actions > BrowserStack test copy > Run workflow.
+# Needs the App Store Connect secrets, plus BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY.
+name: BrowserStack test copy
+on: workflow_dispatch
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: mobile
+    env:
+      APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+      ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+      ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+      BS_USER: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: npm ci
+      - run: npx cap sync ios
+      - run: pip3 install --break-system-packages -q "pyjwt[crypto]" requests || pip3 install -q "pyjwt[crypto]" requests
+      - name: Make sure a test device exists
+        run: python3 $GITHUB_WORKSPACE/.github/scripts/register_device.py
+      - name: Build and sign a test copy
+        run: |
+          set -o pipefail
+          T=${APPLE_TEAM_ID:-$TEAM}; KID=${ASC_KEY_ID:-$KEY_ID}; ISS=${ASC_ISSUER_ID:-$ISSUER}; P8=${ASC_KEY_P8:-$KEY_P8}
+          mkdir -p ~/.appstoreconnect/private_keys; K=~/.appstoreconnect/private_keys/AuthKey_$KID.p8; printf '%s' "$P8" > "$K"
+          cd $GITHUB_WORKSPACE/mobile
+          xcodebuild -project ios/App/App.xcodeproj -scheme App -configuration Release -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/StarTier.xcarchive" DEVELOPMENT_TEAM="$T" CODE_SIGN_STYLE=Automatic CODE_SIGNING_ALLOWED=NO archive | tail -30
+          APP=$(ls -d "$RUNNER_TEMP"/StarTier.xcarchive/Products/Applications/*.app)
+          for f in "$APP"/Frameworks/*; do [ -e "$f" ] && codesign --force --sign - "$f"; done
+          codesign --force --sign - --entitlements ios/App/App/App.entitlements "$APP"
+          cat > "$RUNNER_TEMP/opts.plist" <<PLIST
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>method</key><string>release-testing</string>
+            <key>teamID</key><string>$T</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>compileBitcode</key><false/>
+          </dict></plist>
+          PLIST
+          xcodebuild -exportArchive -archivePath "$RUNNER_TEMP/StarTier.xcarchive" -exportOptionsPlist "$RUNNER_TEMP/opts.plist" \
+            -exportPath "$RUNNER_TEMP/out" -allowProvisioningUpdates -authenticationKeyPath "$K" -authenticationKeyID "$KID" -authenticationKeyIssuerID "$ISS"
+          ls -la "$RUNNER_TEMP/out"; cp "$RUNNER_TEMP"/out/*.ipa "$RUNNER_TEMP/StarTier-test.ipa"
+      - name: Send it to BrowserStack
+        run: |
+          if [ -z "$BS_USER" ] || [ -z "$BS_KEY" ]; then echo "::error::Add the BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY secrets first."; exit 1; fi
+          curl -sS -u "$BS_USER:$BS_KEY" -X POST "https://api-cloud.browserstack.com/app-live/upload" -F "file=@$RUNNER_TEMP/StarTier-test.ipa" | tee $RUNNER_TEMP/bs.json
+          grep -q app_url $RUNNER_TEMP/bs.json && echo "Uploaded. In BrowserStack App Live: Upload your App > it is in the list."
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: StarTier-test-ipa
+          path: ${{ runner.temp }}/StarTier-test.ipa
+          if-no-files-found: ignore
