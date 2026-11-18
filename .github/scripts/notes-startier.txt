@@ -9,7 +9,7 @@ StarTier is a place for new, independent artists ("Stars") to share and sell the
 3. HOW TO USE IT / TEST ACCOUNTS
 There are two account types. Both test accounts have the paid plan turned on, so all content plays in full.
 - Star (artist): the account in the Sign-In fields above. Tap the account circle (top right), then Your studio, to upload and see earnings.
-- Fan (Supporter): mrjordan011+startierfan@gmail.com / [fan password]. Swipe the home feed, play StarTier Radio, open an artist page, follow, comment and message.
+- Fan (Supporter): thehotseat718@gmail.com / [fan password]. Swipe the home feed, play StarTier Radio, open an artist page, follow, comment and message.
 Sign in with Apple and Sign in with Google also work.
 Report and block: open an artist page or post, tap the three dots (More options), then Report or Block.
 Delete account: tap the account circle (top right), then Delete my account at the bottom.
