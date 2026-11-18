@@ -6,6 +6,9 @@ on:
       script:
         description: Which script to run
         default: asc_status.py
+      submit:
+        description: Bundle ids to submit (comma list)
+        default: ''
 permissions:
   contents: read
 jobs:
@@ -15,6 +18,7 @@ jobs:
       ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
       ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
       ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+      SUBMIT: ${{ inputs.submit }}
     steps:
       - uses: actions/checkout@v4
       - run: pip install -q "pyjwt[crypto]" requests
